@@ -1,6 +1,6 @@
 # flashcards
 
-A simple console app for practicing user-made flashcards. The following is currently a specification, and may not be fully implemented yet.
+A simple console app for practicing user-made flashcards.
 
 In this program, each flashcard has a string value for the front, a string value for the back, and a list of zero or more string tags.
 
