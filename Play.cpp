@@ -1,6 +1,7 @@
 #include <iostream>
 #include <algorithm>
 #include <time.h>
+#include <random>
 #include "Play.h"
 #include "CmdHandler.h"
 #include "Flashcard.h"
@@ -24,8 +25,7 @@ public:
 	static void startPlay(std::vector<Flashcard> flashcards)
 	{
 		_flashcards = flashcards;
-		std::srand((unsigned int)std::time(NULL));
-		std::random_shuffle(_flashcards.begin(), _flashcards.end(), std::rand);
+		std::shuffle(_flashcards.begin(), _flashcards.end(), std::default_random_engine((unsigned int)time(NULL)));
 		_index = 0;
 		_correct = 0;
 		_wrong = 0;
