@@ -1,4 +1,5 @@
 #pragma once
 #include <string>
 
-void toUpper(std::wstring wstr);
+std::wstring toUpper(std::wstring wstr);
+bool isYes(std::wstring wstr);

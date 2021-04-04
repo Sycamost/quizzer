@@ -8,3 +8,9 @@ std::wstring toUpper(std::wstring wstr)
 		result.push_back(std::toupper(wstr[i]));
 	}
 }
+
+bool isYes(std::wstring str)
+{
+	str = toUpper(str);
+	return (str == L"Y" || str == L"YES" || str == L"1" || str == L"TRUE");
+}

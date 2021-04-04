@@ -1,5 +1,6 @@
 #include <iostream>
 #include "CmdHandler.h"
+#include "util.h"
 
 CmdHandler::Returns defaultCmdHandler(std::wstring userInput);
 CmdHandler::Returns(*cmdHandler)(std::wstring userInput) = &defaultCmdHandler;
@@ -61,11 +62,4 @@ CmdHandler::Returns defaultCmdHandler(std::wstring userInput)
 	}
 
 	return CmdHandler::Returns::CMD_NOT_RECOGNISED;
-}
-
-bool isYes(std::wstring str)
-{
-	return (str == L"Y" || str == L"y"
-		|| str == L"YES" || str == L"YEs" || str == L"YeS" || str == L"Yes" || str == L"yES" || str == L"yEs" || str == L"yeS" || str == L"yes"
-		|| str == L"0" || str == L"true");
 }
