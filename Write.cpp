@@ -82,6 +82,8 @@ void finishWriting()
 	try
 	{
 		std::wofstream file(Globals::flashcardsFileAddress, std::ios::app);
+		if (!file.is_open())
+			throw new std::exception("Couldn't open file.");
 		for (int i = 0; i < newFlashcards.size(); i++)
 			newFlashcards[i].write(file);
 	}
