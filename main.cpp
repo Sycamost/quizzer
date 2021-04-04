@@ -16,8 +16,7 @@ int main() {
 
 	while (true)
 	{
-		std::wstring userInput = L"";
-		std::getline(std::wcin, userInput);
+		std::wstring userInput = getUserInputLine();
 		CmdHandler::Returns ret = (*cmdHandler)(userInput);
 
 		if (ret == CmdHandler::Returns::SUCCESS)
@@ -55,10 +54,8 @@ CmdHandler::Returns defaultCmdHandler(std::wstring userInput)
 	if (userInput == cmdQuit || userInput == cmdExit) {
 
 		std::wcout << L"Are you sure you want to exit the app? [Y/N]\n";
-		std::wstring userInput = L"";
-		std::getline(std::wcin, userInput);
 
-		if (isYes(userInput))
+		if (getUserYesNo())
 		{
 			std::wcout << L"Exiting app...\n";
 			return CmdHandler::Returns::QUIT_APP;

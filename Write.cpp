@@ -101,9 +101,7 @@ CmdHandler::Returns writeCmdHandler(std::wstring userInput)
 		if (userInputUpper == cmdCancel)
 		{
 			std::wcout << L"\nAre you sure you want to cancel adding the current card? [Y/N]\n";
-			std::wstring response = L"";
-			std::getline(std::wcin, response);
-			if (isYes(response))
+			if (getUserYesNo())
 			{
 				WriteStage::setValue(WriteStage::Stage::NEW_CARD);
 				return Returns::SUCCESS;
@@ -128,9 +126,7 @@ CmdHandler::Returns writeCmdHandler(std::wstring userInput)
 		if (userInputUpper == cmdCancel)
 		{
 			std::wcout << L"\nAre you sure you want to cancel adding the current card? [Y/N]\n";
-			std::wstring response = L"";
-			std::getline(std::wcin, response);
-			if (isYes(response))
+			if (getUserYesNo())
 			{
 				WriteStage::setValue(WriteStage::Stage::NEW_CARD);
 				return Returns::SUCCESS;
@@ -155,9 +151,7 @@ CmdHandler::Returns writeCmdHandler(std::wstring userInput)
 		if (userInputUpper == cmdCancel)
 		{
 			std::wcout << L"\nAre you sure you want to cancel adding the current card? [Y/N]\n";
-			std::wstring response = L"";
-			std::getline(std::wcin, response);
-			if (isYes(response))
+			if (getUserYesNo())
 			{
 				WriteStage::setValue(WriteStage::Stage::NEW_CARD);
 				return Returns::SUCCESS;

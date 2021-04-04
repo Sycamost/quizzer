@@ -1,5 +1,18 @@
+#include <iostream>
 #include <string>
 #include "util.h"
+
+std::wstring getUserInputLine()
+{
+	std::wstring userInput = L"";
+	std::getline(std::wcin, userInput);
+	return userInput;
+}
+
+bool getUserYesNo()
+{
+	return isYes(getUserInputLine());
+}
 
 std::wstring toUpper(std::wstring wstr)
 {
