@@ -6,6 +6,8 @@ CmdHandler::Returns(*cmdHandler)(std::wstring userInput) = &defaultCmdHandler;
 
 int main() {
 
+	std::wcout << L"Welcome to flashcards!\n";
+
 	while (true)
 	{
 		std::wstring userInput = L"";
@@ -17,7 +19,7 @@ int main() {
 
 		if (ret == CmdHandler::Returns::CMD_NOT_RECOGNISED)
 		{
-			std::wcout << "Command not recognised. Please enter a valid command.\n";
+			std::wcout << L"Command not recognised. Please enter a valid command.\n";
 			continue;
 		}
 
@@ -44,7 +46,7 @@ CmdHandler::Returns defaultCmdHandler(std::wstring userInput)
 {
 	if (userInput == L"quit" || userInput == L"exit") {
 
-		std::wcout << "Are you sure you want to quit? [Y/N]\n";
+		std::wcout << L"Are you sure you want to quit? [Y/N]\n";
 		std::wstring userInput = L"";
 		std::wcin >> userInput;
 
