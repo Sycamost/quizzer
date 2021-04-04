@@ -9,6 +9,20 @@ std::wstring toUpper(std::wstring wstr);
 std::wstring toLower(std::wstring wstr);
 std::wstring indent(std::wstring wstr, int numTabs);
 bool isYes(std::wstring wstr);
+std::vector<std::wstring> splitByWord(std::wstring wstr);
+
+template <typename T> std::vector<T> slice(std::vector<T> v, int start = 0, int end = -1)
+{
+	std::vector<T> result = std::vector<T>();
+
+	if (end < 0)
+		end = v.size();
+
+	for (int i = start; i < end; i++)
+		result.push_back(v[i]);
+
+	return result;
+}
 
 template <typename T> bool shareAnyElems(std::vector<T> v1, std::vector<T> v2)
 {

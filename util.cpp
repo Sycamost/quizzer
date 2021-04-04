@@ -51,3 +51,30 @@ bool isYes(std::wstring str)
 	str = toUpper(str);
 	return (str == L"Y" || str == L"YES" || str == L"1" || str == L"TRUE");
 }
+
+std::vector<std::wstring> splitByWord(std::wstring wstr)
+{
+	std::vector<std::wstring> result = std::vector<std::wstring>();
+
+	std::wstring currentStr = L"";
+	for (unsigned int i = 0; i < wstr.length(); i++)
+	{
+		if (wstr[i] == L' ')
+		{
+			if (!currentStr.empty())
+			{
+				result.push_back(currentStr);
+				currentStr = L"";
+			}
+			continue;
+		}
+		currentStr.push_back(wstr[i]);
+	}
+	if (!currentStr.empty())
+	{
+		result.push_back(currentStr);
+		currentStr = L"";
+	}
+
+	return result;
+}

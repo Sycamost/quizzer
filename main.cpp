@@ -55,7 +55,11 @@ void CmdHandler::setHandlerDefault()
 
 CmdHandler::Returns defaultCmdHandler(std::wstring userInput)
 {
+	if (userInput.empty())
+		return CmdHandler::Returns::SUCCESS;
+
 	userInput = toUpper(userInput);
+	std::vector<std::wstring> userInputWords = splitByWord(userInput);
 
 	if (userInput == Globals::cmdQuit || userInput == Globals::cmdExit) {
 
@@ -77,9 +81,9 @@ CmdHandler::Returns defaultCmdHandler(std::wstring userInput)
 		return CmdHandler::Returns::SUCCESS;
 	}
 
-	if (userInput == Globals::cmdPlay)
+	if (userInputWords[0] == Globals::cmdPlay)
 	{
-		play(flashcards);
+		play(flashcards, slice(userInputWords, 1));
 		return CmdHandler::Returns::SUCCESS;
 	}
 

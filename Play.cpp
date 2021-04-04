@@ -46,7 +46,7 @@ public:
 				return;
 			}
 
-			std::wcout << _flashcards[_index].getFront() << "\n";
+			std::wcout << L"\n" << _flashcards[_index].getFront() << L"\n";
 			return;
 		}
 
@@ -105,7 +105,7 @@ public:
 
 	static void finishPlay()
 	{
-		std::wcout << L".\n" << Globals::horizontalRule << L"\n";
+		std::wcout << L"\n" << Globals::horizontalRule << L"\n";
 		std::wcout << L"\nEnd of play.\n"
 			<< L"Final scores: "
 			<< _correct << L" correct, "
@@ -148,11 +148,14 @@ void play(std::vector<Flashcard> flashcards, std::vector<std::wstring> tags)
 	{
 		for (unsigned int i = 0; i < flashcards.size(); i++)
 		{
-			if (shareAnyElems<std::wstring>(tags, flashcards[i].getTags()))
+			std::vector<std::wstring> thisCardTags = flashcards[i].getTags();
+			std::transform(thisCardTags.begin(), thisCardTags.end(), thisCardTags.begin(), toUpper);
+			if (shareAnyElems<std::wstring>(tags, thisCardTags))
 				flashcardsInPlay.push_back(flashcards[i]);
 		}
 	}
-	std::wcout << flashcardsInPlay.size() << L" cards...\n\n"
+	std::wcout << flashcardsInPlay.size()
+		<< (flashcardsInPlay.size() > 1 ? L" cards" : L" card") << L"...\n\n"
 		<< Globals::horizontalDoubleRule << L"\n\n"
 		<< L"You'll get given the front of the card, and you'll have to input the back of the card. "
 		<< L"If you think you've been marked down unfairly, type the command <"
