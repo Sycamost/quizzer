@@ -2,10 +2,10 @@
 #include <string>
 #include "util.h"
 
-std::wstring getUserInputLine()
+std::wstring getUserInputLine(std::wistream& stream)
 {
 	std::wstring userInput = L"";
-	std::getline(std::wcin, userInput);
+	std::getline(stream, userInput);
 	return userInput;
 }
 
