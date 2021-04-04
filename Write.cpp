@@ -56,7 +56,7 @@ public:
 
 		if (stage == Stage::TAGS)
 		{
-			std::wcout << L"Tag " + std::to_wstring(tags.size() + 1) + L":\t";
+			std::wcout << L"Tag " << std::to_wstring(tags.size() + 1) << L":\t";
 			_value = stage;
 			return;
 		}

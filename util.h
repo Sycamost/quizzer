@@ -1,5 +1,6 @@
 #pragma once
 #include <string>
+#include <iostream>
 
 std::wstring getUserInputLine(std::wistream &stream = std::wcin);
 bool getUserYesNo();

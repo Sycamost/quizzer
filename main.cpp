@@ -1,8 +1,11 @@
 #include <iostream>
+#include <vector>
 #include "CmdHandler.h"
 #include "Write.h"
 #include "util.h"
 #include "globals.h"
+#include "Read.h"
+#include "Flashcard.h"
 
 CmdHandler::Returns defaultCmdHandler(std::wstring userInput);
 CmdHandler::Returns(*cmdHandler)(std::wstring userInput) = &defaultCmdHandler;
@@ -10,6 +13,9 @@ CmdHandler::Returns(*cmdHandler)(std::wstring userInput) = &defaultCmdHandler;
 int main() {
 
 	std::wcout << L"Welcome to flashcards!\n";
+	std::wcout << L"Reading flashcards from file...\n";
+	std::vector<Flashcard> flashcards = read();
+	std::wcout << L"Read " << flashcards.size() << L" flashcards from file.\n\n";
 
 	while (true)
 	{

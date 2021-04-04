@@ -101,6 +101,7 @@
     <ClCompile Include="Flashcard.cpp" />
     <ClCompile Include="globals.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Read.cpp" />
     <ClCompile Include="util.cpp" />
     <ClCompile Include="Write.cpp" />
   </ItemGroup>
@@ -108,6 +109,7 @@
     <ClInclude Include="CmdHandler.h" />
     <ClInclude Include="Flashcard.h" />
     <ClInclude Include="globals.h" />
+    <ClInclude Include="Read.h" />
     <ClInclude Include="util.h" />
     <ClInclude Include="Write.h" />
   </ItemGroup>
