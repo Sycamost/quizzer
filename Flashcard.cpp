@@ -17,16 +17,16 @@ std::wstring Flashcard::getBack()
 	return _back;
 }
 
-std::vector<std::wstring>::iterator Flashcard::getTags()
+std::vector<std::wstring> Flashcard::getTags()
 {
-	return _tags.begin();;
+	return _tags;
 }
 
 void Flashcard::write(std::wofstream& stream)
 {
 	stream << _front << L"\n";
 	stream << _back << L"\n";
-	for (int i = 0; i < _tags.size(); i++)
+	for (unsigned int i = 0; i < _tags.size(); i++)
 		stream << _tags[i] << L"\n";
 	stream << L"\n";
 }

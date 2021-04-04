@@ -89,7 +89,7 @@ void finishWriting()
 		std::wofstream file(Globals::flashcardsFileAddress, std::ios::app);
 		if (!file.is_open())
 			throw new std::exception("Couldn't open file.");
-		for (int i = 0; i < newFlashcards.size(); i++)
+		for (unsigned int i = 0; i < newFlashcards.size(); i++)
 			newFlashcards[i].write(file);
 	}
 	catch (std::exception e)
@@ -197,6 +197,7 @@ CmdHandler::Returns writeCmdHandler(std::wstring userInput)
 		return Returns::SUCCESS;
 	}
 
+	std::wcout << L"\nSomething went wrong interpreting that input. Exiting write session...\n";
 	CmdHandler::setHandlerDefault();
 	return Returns::CMD_NOT_RECOGNISED;
 }

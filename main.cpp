@@ -6,16 +6,19 @@
 #include "globals.h"
 #include "Read.h"
 #include "Flashcard.h"
+#include "Play.h"
 
 CmdHandler::Returns defaultCmdHandler(std::wstring userInput);
 CmdHandler::Returns(*cmdHandler)(std::wstring userInput) = &defaultCmdHandler;
+std::vector<Flashcard> flashcards = std::vector<Flashcard>();
 
 int main() {
 
 	std::wcout << L"Welcome to flashcards!\n";
 	std::wcout << L"Reading flashcards from file...\n";
-	std::vector<Flashcard> flashcards = read();
+	flashcards = read();
 	std::wcout << L"Read " << flashcards.size() << L" flashcards from file.\n\n";
+	std::wcout << L"Welcome to flashcards!\n\n";
 
 	while (true)
 	{
@@ -71,6 +74,12 @@ CmdHandler::Returns defaultCmdHandler(std::wstring userInput)
 	if (userInput == Globals::cmdWrite)
 	{
 		startWriting();
+		return CmdHandler::Returns::SUCCESS;
+	}
+
+	if (userInput == Globals::cmdPlay)
+	{
+		play(flashcards);
 		return CmdHandler::Returns::SUCCESS;
 	}
 

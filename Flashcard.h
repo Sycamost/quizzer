@@ -1,7 +1,6 @@
 #pragma once
 #include <string>
 #include <vector>
-#include <iterator>
 #include <fstream>
 
 class Flashcard
@@ -14,6 +13,6 @@ public:
 	Flashcard(std::wstring front, std::wstring back, std::vector<std::wstring> tags = std::vector<std::wstring>());
 	std::wstring getFront();
 	std::wstring getBack();
-	std::vector<std::wstring>::iterator getTags();
+	std::vector<std::wstring> getTags();
 	void write(std::wofstream& stream);
 };
