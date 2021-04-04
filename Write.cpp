@@ -2,14 +2,19 @@
 #include <string>
 #include <vector>
 #include <Windows.h>
+#include <fstream>
 #include "Write.h"
 #include "util.h"
+#include "Flashcard.h"
 
 const std::wstring cmdCancel = L"CANCEL";
+
+const std::string flashcardsFileAddress = "flashcards.txt";
 
 std::wstring front = L"";
 std::wstring back = L"";
 std::vector<std::wstring> tags = std::vector<std::wstring>();
+std::vector<Flashcard> newFlashcards = std::vector<Flashcard>();
 
 CmdHandler::Returns writeCmdHandler(std::wstring userInput);
 
@@ -75,7 +80,23 @@ void startWriting()
 
 void finishWriting()
 {
-	std::wcout << "\nFinished writing new flashcards.\n\n";
+	std::wcout << "\nFinished writing new flashcards. Writing to file...\n";
+
+	try
+	{
+		std::wofstream file(flashcardsFileAddress, std::ios::app);
+		for (int i = 0; i < newFlashcards.size(); i++)
+			newFlashcards[i].write(file);
+	}
+	catch (std::exception e)
+	{
+		std::wcout << L"\nWrite failed. Sorry! :p\n";
+		std::wcout << L"We got the following error message: ";
+		std::cout << e.what();
+		std::wcout << L"\n";
+	}
+	std::wcout << L"Finished writing.\n\n";
+
 	CmdHandler::setHandlerDefault();
 }
 
@@ -162,7 +183,7 @@ CmdHandler::Returns writeCmdHandler(std::wstring userInput)
 
 		if (userInput == L"")
 		{
-			throw new std::exception("Actually adding flashcards not implemented yet!");
+			newFlashcards.push_back(Flashcard(front, back, tags));
 			WriteStage::setValue(WriteStage::Stage::NEW_CARD);
 			return Returns::SUCCESS;
 		}

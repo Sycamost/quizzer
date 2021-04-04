@@ -2,6 +2,7 @@
 #include <string>
 #include <vector>
 #include <iterator>
+#include <fstream>
 
 class Flashcard
 {
@@ -14,4 +15,5 @@ public:
 	std::wstring getFront();
 	std::wstring getBack();
 	std::vector<std::wstring>::iterator getTags();
+	void write(std::wofstream& stream);
 };
