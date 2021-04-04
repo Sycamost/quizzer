@@ -101,6 +101,8 @@ void finishWriting()
 	}
 	std::wcout << L"Finished writing.\n\n";
 
+	Flashcard::appendFlashcardsToList(newFlashcards);
+
 	CmdHandler::setHandlerDefault();
 }
 
@@ -192,12 +194,19 @@ CmdHandler::Returns writeCmdHandler(std::wstring userInput)
 			return Returns::SUCCESS;
 		}
 
+		if (userInput.find(L' ') != std::wstring::npos)
+		{
+			std::wcout << L"Tags must be one word only.\n";
+			WriteStage::setValue(WriteStage::Stage::TAGS);
+			return Returns::SUCCESS;
+		}
+
 		tags.push_back(userInput);
 		WriteStage::setValue(WriteStage::Stage::TAGS);
 		return Returns::SUCCESS;
 	}
 
 	std::wcout << L"\nSomething went wrong interpreting that input. Exiting write session...\n";
-	CmdHandler::setHandlerDefault();
+	finishWriting();
 	return Returns::CMD_NOT_RECOGNISED;
 }

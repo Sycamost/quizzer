@@ -3,4 +3,4 @@
 #include <string>
 #include "Flashcard.h"
 
-void play(std::vector<Flashcard> flashcards, std::vector<std::wstring> tags = std::vector<std::wstring>());
+void play(std::vector<std::wstring> tags = std::vector<std::wstring>());

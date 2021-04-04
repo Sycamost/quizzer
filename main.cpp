@@ -4,20 +4,18 @@
 #include "Write.h"
 #include "util.h"
 #include "globals.h"
-#include "Read.h"
 #include "Flashcard.h"
 #include "Play.h"
 
 CmdHandler::Returns defaultCmdHandler(std::wstring userInput);
 CmdHandler::Returns(*cmdHandler)(std::wstring userInput) = &defaultCmdHandler;
-std::vector<Flashcard> flashcards = std::vector<Flashcard>();
 
 int main() {
 
 	std::wcout << L"Welcome to flashcards!\n";
 	std::wcout << L"Reading flashcards from file...\n";
-	flashcards = read();
-	std::wcout << L"Read " << flashcards.size() << L" flashcards from file.\n\n";
+	Flashcard::readFlashcardList();
+	std::wcout << L"Read " << Flashcard::getFlashcardList().size() << L" flashcards from file.\n\n";
 	std::wcout << L"Welcome to flashcards!\n\n";
 
 	while (true)
@@ -83,7 +81,7 @@ CmdHandler::Returns defaultCmdHandler(std::wstring userInput)
 
 	if (userInputWords[0] == Globals::cmdPlay)
 	{
-		play(flashcards, slice(userInputWords, 1));
+		play(slice(userInputWords, 1));
 		return CmdHandler::Returns::SUCCESS;
 	}
 

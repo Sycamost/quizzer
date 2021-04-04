@@ -135,23 +135,24 @@ int PlayStage::_wrong = 0;
 bool PlayStage::_hasAnswered = false;
 bool PlayStage::_isLastCorrect = true;
 
-void play(std::vector<Flashcard> flashcards, std::vector<std::wstring> tags)
+void play(std::vector<std::wstring> tags)
 {
 	std::wcout << L"Starting play with ";
 	std::vector<Flashcard> flashcardsInPlay = std::vector<Flashcard>();
 	if (tags.empty())
 	{
-		flashcardsInPlay = flashcards;
+		flashcardsInPlay = Flashcard::getFlashcardList();
 		std::wcout << L"all ";
 	}
 	else
 	{
-		for (unsigned int i = 0; i < flashcards.size(); i++)
+		std::vector<Flashcard> flashcardList = Flashcard::getFlashcardList();
+		for (unsigned int i = 0; i < flashcardList.size(); i++)
 		{
-			std::vector<std::wstring> thisCardTags = flashcards[i].getTags();
+			std::vector<std::wstring> thisCardTags = flashcardList[i].getTags();
 			std::transform(thisCardTags.begin(), thisCardTags.end(), thisCardTags.begin(), toUpper);
 			if (shareAnyElems<std::wstring>(tags, thisCardTags))
-				flashcardsInPlay.push_back(flashcards[i]);
+				flashcardsInPlay.push_back(flashcardList[i]);
 		}
 	}
 	std::wcout << flashcardsInPlay.size()
