@@ -11,4 +11,5 @@ namespace CmdHandler {
 
 	void setHandler(Returns(*handler)(std::wstring));
 	void setHandlerDefault();
+	bool isYes(std::wstring);
 }
