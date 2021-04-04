@@ -2,13 +2,10 @@
 #include "CmdHandler.h"
 #include "Write.h"
 #include "util.h"
+#include "globals.h"
 
 CmdHandler::Returns defaultCmdHandler(std::wstring userInput);
 CmdHandler::Returns(*cmdHandler)(std::wstring userInput) = &defaultCmdHandler;
-
-const std::wstring cmdQuit = L"QUIT";
-const std::wstring cmdExit = L"EXIT";
-const std::wstring cmdWrite = L"WRITE";
 
 int main() {
 
@@ -51,7 +48,7 @@ CmdHandler::Returns defaultCmdHandler(std::wstring userInput)
 {
 	userInput = toUpper(userInput);
 
-	if (userInput == cmdQuit || userInput == cmdExit) {
+	if (userInput == Globals::cmdQuit || userInput == Globals::cmdExit) {
 
 		std::wcout << L"Are you sure you want to exit the app? [Y/N]\n";
 
@@ -65,7 +62,7 @@ CmdHandler::Returns defaultCmdHandler(std::wstring userInput)
 		return CmdHandler::Returns::SUCCESS;;
 	}
 
-	if (userInput == cmdWrite)
+	if (userInput == Globals::cmdWrite)
 	{
 		startWriting();
 		return CmdHandler::Returns::SUCCESS;

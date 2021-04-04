@@ -6,10 +6,7 @@
 #include "Write.h"
 #include "util.h"
 #include "Flashcard.h"
-
-const std::wstring cmdCancel = L"CANCEL";
-
-const std::string flashcardsFileAddress = "flashcards.txt";
+#include "globals.h"
 
 std::wstring front = L"";
 std::wstring back = L"";
@@ -84,7 +81,7 @@ void finishWriting()
 
 	try
 	{
-		std::wofstream file(flashcardsFileAddress, std::ios::app);
+		std::wofstream file(Globals::flashcardsFileAddress, std::ios::app);
 		for (int i = 0; i < newFlashcards.size(); i++)
 			newFlashcards[i].write(file);
 	}
@@ -119,7 +116,7 @@ CmdHandler::Returns writeCmdHandler(std::wstring userInput)
 
 	else if (WriteStage::getValue() == WriteStage::Stage::FRONT)
 	{
-		if (userInputUpper == cmdCancel)
+		if (userInputUpper == Globals::cmdCancel)
 		{
 			std::wcout << L"\nAre you sure you want to cancel adding the current card? [Y/N]\n";
 			if (getUserYesNo())
@@ -144,7 +141,7 @@ CmdHandler::Returns writeCmdHandler(std::wstring userInput)
 
 	else if (WriteStage::getValue() == WriteStage::Stage::BACK)
 	{
-		if (userInputUpper == cmdCancel)
+		if (userInputUpper == Globals::cmdCancel)
 		{
 			std::wcout << L"\nAre you sure you want to cancel adding the current card? [Y/N]\n";
 			if (getUserYesNo())
@@ -169,7 +166,7 @@ CmdHandler::Returns writeCmdHandler(std::wstring userInput)
 
 	else if (WriteStage::getValue() == WriteStage::Stage::TAGS)
 	{
-		if (userInputUpper == cmdCancel)
+		if (userInputUpper == Globals::cmdCancel)
 		{
 			std::wcout << L"\nAre you sure you want to cancel adding the current card? [Y/N]\n";
 			if (getUserYesNo())
