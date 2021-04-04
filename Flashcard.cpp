@@ -68,6 +68,7 @@ void Flashcard::readFlashcardList()
 				_flashcardList.push_back(Flashcard(front, back, tags));
 			}
 		}
+		file.close();
 	}
 	catch (std::exception) {}
 }

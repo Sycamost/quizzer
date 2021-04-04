@@ -91,6 +91,7 @@ void finishWriting()
 			throw new std::exception("Couldn't open file.");
 		for (unsigned int i = 0; i < newFlashcards.size(); i++)
 			newFlashcards[i].write(file);
+		file.close();
 	}
 	catch (std::exception e)
 	{
