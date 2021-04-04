@@ -1,0 +1,183 @@
+#include <iostream>
+#include <string>
+#include <vector>
+#include <Windows.h>
+#include "Write.h"
+#include "util.h"
+
+const std::wstring cmdCancel = L"CANCEL";
+
+std::wstring front = L"";
+std::wstring back = L"";
+std::vector<std::wstring> tags = std::vector<std::wstring>();
+
+CmdHandler::Returns writeCmdHandler(std::wstring userInput);
+
+class WriteStage {
+public:
+	enum class Stage {
+		NEW_CARD,
+		FRONT,
+		BACK,
+		TAGS
+	};
+
+	static Stage getValue() {
+		return _value;
+	}
+
+	static void setValue(Stage stage) {
+
+		if (stage == Stage::NEW_CARD)
+		{
+			std::wcout << L"Would you like to add another card? [Y/N]\n";
+			_value = stage;
+			return;
+		}
+
+		if (stage == Stage::FRONT)
+		{
+			front = L"";
+			back = L"";
+			tags = std::vector<std::wstring>();
+			std::wcout << L"Front:\t";
+			_value = stage;
+			return;
+		}
+
+		if (stage == Stage::BACK)
+		{
+			std::wcout << L"Back:\t";
+			_value = stage;
+			return;
+		}
+
+		if (stage == Stage::TAGS)
+		{
+			std::wcout << L"Tag " + std::to_wstring(tags.size() + 1) + L":\t";
+			_value = stage;
+			return;
+		}
+	}
+
+private:
+	static WriteStage::Stage _value;
+};
+WriteStage::Stage WriteStage::_value = WriteStage::Stage::NEW_CARD;
+
+void startWriting()
+{
+	std::wcout << "Writing new flashcards...\n\n";
+	std::wcout << "Enter the values for new flashcards' front, back and any tags.\nOnce you're finished adding tags, leave the next tag blank.\nThe front and back cannot be blank.\nUse \"cancel\" to cancel adding the current card.\n";
+	CmdHandler::setHandler(&writeCmdHandler);
+	WriteStage::setValue(WriteStage::Stage::FRONT);
+}
+
+void finishWriting()
+{
+	std::wcout << "\nFinished writing new flashcards.\n\n";
+	CmdHandler::setHandlerDefault();
+}
+
+CmdHandler::Returns writeCmdHandler(std::wstring userInput)
+{
+	std::wstring userInputUpper = toUpper(userInput);
+	using CmdHandler::Returns;
+	
+	if (WriteStage::getValue() == WriteStage::Stage::NEW_CARD)
+	{
+		if (isYes(userInputUpper))
+		{
+			WriteStage::setValue(WriteStage::Stage::FRONT);
+			return Returns::SUCCESS;
+		}
+
+		finishWriting();
+		return Returns::SUCCESS;
+	}
+
+	else if (WriteStage::getValue() == WriteStage::Stage::FRONT)
+	{
+		if (userInputUpper == cmdCancel)
+		{
+			std::wcout << L"\nAre you sure you want to cancel adding the current card? [Y/N]\n";
+			std::wstring response = L"";
+			std::getline(std::wcin, response);
+			if (isYes(response))
+			{
+				WriteStage::setValue(WriteStage::Stage::NEW_CARD);
+				return Returns::SUCCESS;
+			}
+			WriteStage::setValue(WriteStage::Stage::FRONT);
+			return Returns::SUCCESS;
+		}
+
+		if (userInput == L"")
+		{
+			WriteStage::setValue(WriteStage::Stage::FRONT);
+			return Returns::SUCCESS;
+		}
+
+		front = userInput;
+		WriteStage::setValue(WriteStage::Stage::BACK);
+		return Returns::SUCCESS;
+	}
+
+	else if (WriteStage::getValue() == WriteStage::Stage::BACK)
+	{
+		if (userInputUpper == cmdCancel)
+		{
+			std::wcout << L"\nAre you sure you want to cancel adding the current card? [Y/N]\n";
+			std::wstring response = L"";
+			std::getline(std::wcin, response);
+			if (isYes(response))
+			{
+				WriteStage::setValue(WriteStage::Stage::NEW_CARD);
+				return Returns::SUCCESS;
+			}
+			WriteStage::setValue(WriteStage::Stage::BACK);
+			return Returns::SUCCESS;
+		}
+
+		if (userInput == L"")
+		{
+			WriteStage::setValue(WriteStage::Stage::BACK);
+			return Returns::SUCCESS;
+		}
+
+		back = userInput;
+		WriteStage::setValue(WriteStage::Stage::TAGS);
+		return Returns::SUCCESS;
+	}
+
+	else if (WriteStage::getValue() == WriteStage::Stage::TAGS)
+	{
+		if (userInputUpper == cmdCancel)
+		{
+			std::wcout << L"\nAre you sure you want to cancel adding the current card? [Y/N]\n";
+			std::wstring response = L"";
+			std::getline(std::wcin, response);
+			if (isYes(response))
+			{
+				WriteStage::setValue(WriteStage::Stage::NEW_CARD);
+				return Returns::SUCCESS;
+			}
+			WriteStage::setValue(WriteStage::Stage::TAGS);
+			return Returns::SUCCESS;
+		}
+
+		if (userInput == L"")
+		{
+			throw new std::exception("Actually adding flashcards not implemented yet!");
+			WriteStage::setValue(WriteStage::Stage::NEW_CARD);
+			return Returns::SUCCESS;
+		}
+
+		tags.push_back(userInput);
+		WriteStage::setValue(WriteStage::Stage::TAGS);
+		return Returns::SUCCESS;
+	}
+
+	CmdHandler::setHandlerDefault();
+	return Returns::CMD_NOT_RECOGNISED;
+}

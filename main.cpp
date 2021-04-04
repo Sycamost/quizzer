@@ -1,9 +1,14 @@
 #include <iostream>
 #include "CmdHandler.h"
+#include "Write.h"
 #include "util.h"
 
 CmdHandler::Returns defaultCmdHandler(std::wstring userInput);
 CmdHandler::Returns(*cmdHandler)(std::wstring userInput) = &defaultCmdHandler;
+
+const std::wstring cmdQuit = L"QUIT";
+const std::wstring cmdExit = L"EXIT";
+const std::wstring cmdWrite = L"WRITE";
 
 int main() {
 
@@ -12,7 +17,7 @@ int main() {
 	while (true)
 	{
 		std::wstring userInput = L"";
-		std::wcin >> userInput;
+		std::getline(std::wcin, userInput);
 		CmdHandler::Returns ret = (*cmdHandler)(userInput);
 
 		if (ret == CmdHandler::Returns::SUCCESS)
@@ -45,11 +50,13 @@ void CmdHandler::setHandlerDefault()
 
 CmdHandler::Returns defaultCmdHandler(std::wstring userInput)
 {
-	if (userInput == L"quit" || userInput == L"exit") {
+	userInput = toUpper(userInput);
 
-		std::wcout << L"Are you sure you want to quit? [Y/N]\n";
+	if (userInput == cmdQuit || userInput == cmdExit) {
+
+		std::wcout << L"Are you sure you want to exit the app? [Y/N]\n";
 		std::wstring userInput = L"";
-		std::wcin >> userInput;
+		std::getline(std::wcin, userInput);
 
 		if (isYes(userInput))
 		{
@@ -59,6 +66,12 @@ CmdHandler::Returns defaultCmdHandler(std::wstring userInput)
 
 		std::wcout << L"Not exiting app.\n";
 		return CmdHandler::Returns::SUCCESS;;
+	}
+
+	if (userInput == cmdWrite)
+	{
+		startWriting();
+		return CmdHandler::Returns::SUCCESS;
 	}
 
 	return CmdHandler::Returns::CMD_NOT_RECOGNISED;
