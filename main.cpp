@@ -85,10 +85,18 @@ CmdHandler::Returns defaultCmdHandler(std::wstring userInput)
 		return CmdHandler::Returns::SUCCESS;;
 	}
 
-	if (userInput == Globals::cmdWrite)
+	if (userInputWords[0] == Globals::cmdWrite)
 	{
-		startWriting();
-		return CmdHandler::Returns::SUCCESS;
+		if (userInputWords.size() <= 1)
+			return CmdHandler::Returns::TOO_FEW_ARGS;
+
+		if (userInputWords[1] == Globals::cmdWriteOptFlashcard)
+		{
+			startWritingFlashcards();
+			return CmdHandler::Returns::SUCCESS;
+		}
+
+		return CmdHandler::Returns::INVALID_ARGS;
 	}
 
 	if (userInputWords[0] == Globals::cmdPlay)
