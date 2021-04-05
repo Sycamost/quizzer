@@ -32,18 +32,6 @@ int main() {
 			continue;
 		}
 
-		if (ret == CmdHandler::Returns::TOO_FEW_ARGS)
-		{
-			std::wcout << L"Too few arguments were provided for that command.\n";
-			continue;
-		}
-
-		if (ret == CmdHandler::Returns::INVALID_ARGS)
-		{
-			std::wcout << L"Invalid arguments were provided for that command.\n";
-			continue;
-		}
-		
 		if (ret == CmdHandler::Returns::QUIT_APP)
 		{
 			break;
@@ -85,17 +73,10 @@ CmdHandler::Returns defaultCmdHandler(std::wstring userInput)
 		return CmdHandler::Returns::SUCCESS;;
 	}
 
-	if (userInputWords[0] == Globals::cmdWrite)
+	if (userInput == Globals::cmdWrite)
 	{
-		if (userInputWords.size() <= 1)
-			return CmdHandler::Returns::TOO_FEW_ARGS;
-
-		if (userInputWords[1] == Globals::cmdWriteOptFlashcard)
-		{
-			return CmdHandler::Returns::SUCCESS;
-		}
-
-		return CmdHandler::Returns::INVALID_ARGS;
+		startWriting();
+		return CmdHandler::Returns::SUCCESS;
 	}
 
 	if (userInputWords[0] == Globals::cmdPlay)
