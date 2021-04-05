@@ -3,4 +3,4 @@
 #include <string>
 #include "Flashcard.h"
 
-void play(std::vector<std::wstring> tags = std::vector<std::wstring>());
+void startPlaying(std::vector<std::wstring> tags = std::vector<std::wstring>());

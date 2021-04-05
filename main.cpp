@@ -93,7 +93,7 @@ CmdHandler::Returns defaultCmdHandler(std::wstring userInput)
 
 	if (userInputWords[0] == Globals::cmdPlay)
 	{
-		play(slice(userInputWords, 1));
+		startPlaying(slice(userInputWords, 1));
 		return CmdHandler::Returns::SUCCESS;
 	}
 

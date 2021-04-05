@@ -135,7 +135,7 @@ int PlayStage::_wrong = 0;
 bool PlayStage::_hasAnswered = false;
 bool PlayStage::_isLastCorrect = true;
 
-void play(std::vector<std::wstring> tags)
+void startPlaying(std::vector<std::wstring> tags)
 {
 	std::wcout << L"Starting play with ";
 	std::vector<Flashcard> flashcardsInPlay = std::vector<Flashcard>();
