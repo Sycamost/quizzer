@@ -13,12 +13,12 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav</Extensions>
     </Filter>
+    <Filter Include="Source Files\Write">
+      <UniqueIdentifier>{6766a8d4-1d47-4e67-9366-99f135c0fb60}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Write.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="util.cpp">
@@ -33,12 +33,12 @@
     <ClCompile Include="Play.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="WriteFlashcard.cpp">
+      <Filter>Source Files\Write</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CmdHandler.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Write.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="util.h">
@@ -51,6 +51,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Play.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Write.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

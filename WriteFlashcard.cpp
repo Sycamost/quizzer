@@ -24,7 +24,7 @@ public:
 		TAGS
 	};
 
-	static void startWriting()
+	static void startWritingFlashcards()
 	{
 		setValue(Stage::FRONT);
 	}
@@ -72,12 +72,12 @@ private:
 };
 WriteStage::Stage WriteStage::_value = WriteStage::Stage::NEW_CARD;
 
-void startWriting()
+void startWritingFlashcards()
 {
 	std::wcout << "Writing new flashcards...\n\n";
 	std::wcout << "Enter the values for new flashcards' front, back and any tags.\nOnce you're finished adding tags, leave the next tag blank.\nThe front and back cannot be blank.\nUse \"cancel\" to cancel adding the current card.\n";
 	CmdHandler::setHandler(&writeCmdHandler);
-	WriteStage::startWriting();
+	WriteStage::startWritingFlashcards();
 }
 
 void finishWriting()

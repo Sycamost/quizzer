@@ -1,4 +1,4 @@
 #pragma once
 #include "CmdHandler.h"
 
-void startWriting();
+void startWritingFlashcards();
