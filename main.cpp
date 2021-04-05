@@ -36,6 +36,18 @@ int main() {
 		{
 			break;
 		}
+
+		if (ret == CmdHandler::Returns::TOO_FEW_ARGS)
+		{
+			std::wcout << L"Too few arguments were provided for that command.\n";
+			continue;
+		}
+
+		if (ret == CmdHandler::Returns::INVALID_ARGS)
+		{
+			std::wcout << L"Invalid arguments were provided for that command.\n";
+			continue;
+		}
 	}
 
 	return 0;
