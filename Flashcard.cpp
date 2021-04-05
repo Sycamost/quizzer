@@ -2,47 +2,35 @@
 #include "globals.h"
 #include "util.h"
 
-std::vector<Flashcard> Flashcard::_flashcardList = std::vector<Flashcard>();
-
-Flashcard::Flashcard(std::wstring front, std::wstring back, std::vector<std::wstring> tags)
+Flashcard::Flashcard(std::wstring question, std::wstring answer, std::vector<std::wstring> tags)
+	: Question(tags)
 {
-	_front = front;
-	_back = back;
-	_tags = tags;
+	_question = question;
+	_answer = answer;
 }
 
-std::wstring Flashcard::getFront()
+std::wstring Flashcard::getQuestion()
 {
-	return _front;
+	return _question;
 }
 
-std::wstring Flashcard::getBack()
+std::wstring Flashcard::getAnswer()
 {
-	return _back;
-}
-
-std::vector<std::wstring> Flashcard::getTags()
-{
-	return _tags;
+	return _answer;
 }
 
 void Flashcard::write(std::wofstream& stream)
 {
-	stream << _front << L"\n";
-	stream << _back << L"\n";
+	stream << _question << L"\n";
+	stream << _answer << L"\n";
 	for (unsigned int i = 0; i < _tags.size(); i++)
 		stream << _tags[i] << L"\n";
 	stream << L"\n";
 }
 
-std::vector<Flashcard> Flashcard::getFlashcardList()
+std::vector<Question&> Flashcard::readFlashcardList()
 {
-	return _flashcardList;
-}
-
-void Flashcard::readFlashcardList()
-{
-	_flashcardList = std::vector<Flashcard>();
+	std::vector<Question&> _flashcardList = std::vector<Question&>();
 
 	try
 	{
@@ -51,10 +39,10 @@ void Flashcard::readFlashcardList()
 		{
 			while (!file.eof())
 			{
-				std::wstring front = getUserInputLine(file);
+				std::wstring question = getUserInputLine(file);
 
 				if (file.eof()) break;
-				std::wstring back = getUserInputLine(file);
+				std::wstring answer = getUserInputLine(file);
 
 				std::vector<std::wstring> tags = std::vector<std::wstring>();
 				while (!file.eof())
@@ -65,15 +53,12 @@ void Flashcard::readFlashcardList()
 					tags.push_back(tag);
 				}
 
-				_flashcardList.push_back(Flashcard(front, back, tags));
+				_flashcardList.push_back(Flashcard(question, answer, tags));
 			}
 		}
 		file.close();
 	}
 	catch (std::exception) {}
-}
 
-void Flashcard::appendFlashcardsToList(std::vector<Flashcard> flashcards)
-{
-	_flashcardList.insert(_flashcardList.end(), flashcards.begin(), flashcards.end());
+	return _flashcardList;
 }

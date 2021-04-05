@@ -2,21 +2,17 @@
 #include <string>
 #include <vector>
 #include <fstream>
+#include "Question.h"
 
-class Flashcard
+class Flashcard : Question
 {
 private:
-	std::wstring _front;
-	std::wstring _back;
-	std::vector<std::wstring> _tags;
-	static std::vector<Flashcard> _flashcardList;
+	std::wstring _question;
+	std::wstring _answer;
 public:
-	Flashcard(std::wstring front, std::wstring back, std::vector<std::wstring> tags = std::vector<std::wstring>());
-	std::wstring getFront();
-	std::wstring getBack();
-	std::vector<std::wstring> getTags();
+	Flashcard(std::wstring question, std::wstring answer, std::vector<std::wstring> tags = std::vector<std::wstring>());
+	std::wstring getQuestion();
+	std::wstring getAnswer();
 	void write(std::wofstream& stream);
-	static std::vector<Flashcard> getFlashcardList();
-	static void readFlashcardList();
-	static void appendFlashcardsToList(std::vector<Flashcard> flashcards);
+	static std::vector<Question&> readFlashcardList();
 };
