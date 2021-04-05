@@ -102,6 +102,7 @@
     <ClCompile Include="globals.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Play.cpp" />
+    <ClCompile Include="Question.cpp" />
     <ClCompile Include="util.cpp" />
     <ClCompile Include="WriteFlashcard.cpp" />
   </ItemGroup>
@@ -110,6 +111,7 @@
     <ClInclude Include="Flashcard.h" />
     <ClInclude Include="globals.h" />
     <ClInclude Include="Play.h" />
+    <ClInclude Include="Question.h" />
     <ClInclude Include="util.h" />
     <ClInclude Include="Write.h" />
   </ItemGroup>
