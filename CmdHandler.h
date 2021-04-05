@@ -6,7 +6,9 @@ namespace CmdHandler {
 	enum class Returns {
 		SUCCESS,
 		CMD_NOT_RECOGNISED,
-		QUIT_APP
+		QUIT_APP,
+		TOO_FEW_ARGS,
+		INVALID_ARGS
 	};
 
 	void setHandler(Returns(*handler)(std::wstring));
