@@ -71,7 +71,7 @@ CmdHandler::Returns defaultCmdHandler(std::wstring userInput)
 	userInput = toUpper(userInput);
 	std::vector<std::wstring> userInputWords = splitByWord(userInput);
 
-	if (userInput == Globals::cmdQuit || userInput == Globals::cmdExit) {
+	if (userInputWords[0] == Globals::cmdQuit || userInputWords[0] == Globals::cmdExit) {
 
 		std::wcout << L"Are you sure you want to exit the app? [Y/N]\n";
 
@@ -85,7 +85,7 @@ CmdHandler::Returns defaultCmdHandler(std::wstring userInput)
 		return CmdHandler::Returns::SUCCESS;;
 	}
 
-	if (userInput == Globals::cmdWrite)
+	if (userInputWords[0] == Globals::cmdWrite)
 	{
 		startWriting();
 		return CmdHandler::Returns::SUCCESS;
