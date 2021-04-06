@@ -15,7 +15,7 @@ int main() {
 	std::wcout << L"Welcome to flashcards!\n";
 	std::wcout << L"Reading questions from file...\n";
 	Question::readQuestionList();
-	std::wcout << L"Read " << Question::getQuestionList().size() << L" flashcards from file.\n\n";
+	std::wcout << L"Read " << Question::getQuestionList().size() << L" questions from file.\n\n";
 	std::wcout << L"Welcome to flashcards!\n\n";
 
 	while (true)
