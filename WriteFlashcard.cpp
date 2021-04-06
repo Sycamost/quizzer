@@ -3,6 +3,7 @@
 #include <vector>
 #include <Windows.h>
 #include <fstream>
+#include <algorithm>
 #include "Write.h"
 #include "util.h"
 #include "Flashcard.h"
@@ -102,10 +103,15 @@ void finishWriting()
 	}
 	std::wcout << L"Finished writing.\n\n";
 
-	Flashcard::appendFlashcardsToList(newFlashcards);
+	std::vector<Question*> newQuestions = std::vector<Question*>();
+	Question* flash2pq(Flashcard);
+	std::transform(newFlashcards.begin(), newFlashcards.end(), &newQuestions, flash2pq);
+	Question::appendQuestionsToList(newQuestions);
 
 	CmdHandler::setHandlerDefault();
 }
+
+Question* flash2pq(Flashcard flash) { return (Question*)&flash; }
 
 CmdHandler::Returns writeCmdHandler(std::wstring userInput)
 {
