@@ -80,8 +80,6 @@ void startWritingFlashcards()
 	WriteStage::startWriting();
 }
 
-Question* pflash2pq(Flashcard* flash) { return (Question*)flash; }
-
 void finishWriting()
 {
 	std::wcout << "\nFinished writing new flashcards. Writing to file...\n";
