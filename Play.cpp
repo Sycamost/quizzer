@@ -61,14 +61,14 @@ public:
 	{
 		if (!_hasAnswered)
 		{
-			_isLastCorrect = (answer == _questions[_index].getAnswer());
-			if (_isLastCorrect)
+			_isCorrect = _questions[_index].isCorrect(answer);
+			if (_isCorrect)
 				_correct++;
 			else
 				_wrong++;
 			_hasAnswered = true;
 		}
-		return _isLastCorrect;
+		return _isCorrect;
 	}
 
 	static void boost()

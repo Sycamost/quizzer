@@ -13,6 +13,7 @@ public:
 	Question(std::vector<std::wstring> tags = std::vector<std::wstring>());
 	virtual std::wstring getQuestion() = 0;
 	virtual std::wstring getAnswer() = 0;
+	virtual bool isCorrect(std::wstring guess) = 0;
 	virtual void write(std::wofstream& stream) = 0;
 	static std::vector<Question&> getQuestionList();
 	static void readQuestionList();

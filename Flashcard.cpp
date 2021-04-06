@@ -19,6 +19,11 @@ std::wstring Flashcard::getAnswer()
 	return _answer;
 }
 
+bool Flashcard::isCorrect(std::wstring guess)
+{
+	return (toUpper(guess) == toUpper(_answer));
+}
+
 void Flashcard::write(std::wofstream& stream)
 {
 	stream << _question << L"\n";

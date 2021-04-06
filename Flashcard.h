@@ -13,6 +13,7 @@ public:
 	Flashcard(std::wstring question, std::wstring answer, std::vector<std::wstring> tags = std::vector<std::wstring>());
 	std::wstring getQuestion();
 	std::wstring getAnswer();
+	bool isCorrect(std::wstring guess);
 	void write(std::wofstream& stream);
 	static std::vector<Question&> readFlashcardList();
 };
