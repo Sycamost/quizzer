@@ -16,7 +16,7 @@ std::vector<Question*> Question::getQuestionList()
 void Question::readQuestionList()
 {
 	_questionList = std::vector<Question*>();
-	_questionList += Flashcard::readFlashcardList();
+	appendQuestionsToList(Flashcard::readFlashcardList());
 }
 
 void Question::appendQuestionToList(Question* question)
