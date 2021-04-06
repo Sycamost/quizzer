@@ -65,5 +65,7 @@ std::vector<Question*> Flashcard::readFlashcardList()
 	}
 	catch (std::exception) {}
 
+	std::wcout << "\tRead " << _flashcardList.size() << " flashcards from file...\n";
+
 	return _flashcardList;
 }
