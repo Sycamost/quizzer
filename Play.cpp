@@ -4,7 +4,7 @@
 #include <random>
 #include "Play.h"
 #include "CmdHandler.h"
-#include "Flashcard.h"
+#include "Question&.h"
 #include "util.h"
 #include "globals.h"
 
@@ -22,10 +22,10 @@ public:
 		return _value;
 	}
 
-	static void startPlay(std::vector<Flashcard> flashcards)
+	static void startPlay(std::vector<Question&> questions)
 	{
-		_flashcards = flashcards;
-		std::shuffle(_flashcards.begin(), _flashcards.end(), std::default_random_engine((unsigned int)time(NULL)));
+		_questions = questions;
+		std::shuffle(_questions.begin(), _questions.end(), std::default_random_engine((unsigned int)time(NULL)));
 		_index = 0;
 		_correct = 0;
 		_wrong = 0;
@@ -40,13 +40,13 @@ public:
 
 			_hasAnswered = false;
 
-			if (_index >= _flashcards.size())
+			if (_index >= _questions.size())
 			{
 				finishPlay();
 				return;
 			}
 
-			std::wcout << L"\n" << _flashcards[_index].getFront() << L"\n";
+			std::wcout << L"\n" << _questions[_index].getQuestion() << L"\n";
 			return;
 		}
 
@@ -61,7 +61,7 @@ public:
 	{
 		if (!_hasAnswered)
 		{
-			_isLastCorrect = (answer == _flashcards[_index].getBack());
+			_isLastCorrect = (answer == _questions[_index].getAnswer());
 			if (_isLastCorrect)
 				_correct++;
 			else
@@ -95,12 +95,12 @@ public:
 
 	static int getNumSkipped()
 	{
-		return _flashcards.size() - (_correct + _wrong);
+		return _questions.size() - (_correct + _wrong);
 	}
 
 	static std::wstring getCurrentCorrectAnswer()
 	{
-		return _flashcards[_index].getBack();
+		return _questions[_index].getAnswer();
 	}
 
 	static void finishPlay()
@@ -120,7 +120,7 @@ public:
 
 private:
 	static PlayStage::Stage _value;
-	static std::vector<Flashcard> _flashcards;
+	static std::vector<Question&> _questions;
 	static unsigned int _index;
 	static int _correct;
 	static int _wrong;
@@ -128,7 +128,7 @@ private:
 	static bool _isLastCorrect;
 };
 PlayStage::Stage PlayStage::_value = PlayStage::Stage::QUESTION;
-std::vector<Flashcard> PlayStage::_flashcards = std::vector<Flashcard>();
+std::vector<Question&> PlayStage::_questions = std::vector<Question&>();
 unsigned int PlayStage::_index = 0;
 int PlayStage::_correct = 0;
 int PlayStage::_wrong = 0;
@@ -138,33 +138,33 @@ bool PlayStage::_isLastCorrect = true;
 void play(std::vector<std::wstring> tags)
 {
 	std::wcout << L"Starting play with ";
-	std::vector<Flashcard> flashcardsInPlay = std::vector<Flashcard>();
+	std::vector<Question&> questionsInPlay = std::vector<Question&>();
 	if (tags.empty())
 	{
-		flashcardsInPlay = Flashcard::getFlashcardList();
+		questionsInPlay = Question::getQuestion&List();
 		std::wcout << L"all ";
 	}
 	else
 	{
-		std::vector<Flashcard> flashcardList = Flashcard::getFlashcardList();
-		for (unsigned int i = 0; i < flashcardList.size(); i++)
+		std::vector<Question&> questionList = Question::getQuestion&List();
+		for (unsigned int i = 0; i < questionList.size(); i++)
 		{
-			std::vector<std::wstring> thisCardTags = flashcardList[i].getTags();
-			std::transform(thisCardTags.begin(), thisCardTags.end(), thisCardTags.begin(), toUpper);
-			if (shareAnyElems<std::wstring>(tags, thisCardTags))
-				flashcardsInPlay.push_back(flashcardList[i]);
+			std::vector<std::wstring> thisQuestionTags = questionList[i].getTags();
+			std::transform(thisQuestionTags.begin(), thisQuestionTags.end(), thisQuestionTags.begin(), toUpper);
+			if (shareAnyElems<std::wstring>(tags, thisQuestionTags))
+				questionsInPlay.push_back(questionList[i]);
 		}
 	}
-	std::wcout << flashcardsInPlay.size()
-		<< (flashcardsInPlay.size() > 1 ? L" cards" : L" card") << L"...\n\n"
+	std::wcout << questionsInPlay.size()
+		<< (questionsInPlay.size() > 1 ? L" cards" : L" card") << L"...\n\n"
 		<< Globals::horizontalDoubleRule << L"\n\n"
-		<< L"You'll get given the front of the card, and you'll have to input the back of the card. "
+		<< L"You'll get given questions, and you'll have to answer correctly. "
 		<< L"If you think you've been marked down unfairly, type the command <"
 		<< toLower(Globals::cmdBoost) << L"> before the next card rolls on. Good luck!\n\n"
 		<< Globals::horizontalRule << L"\n\n";
 
 
-	PlayStage::startPlay(flashcardsInPlay);
+	PlayStage::startPlay(questionsInPlay);
 
 	CmdHandler::setHandler(playHandler);
 }
