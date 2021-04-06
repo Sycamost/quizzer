@@ -46,7 +46,7 @@ public:
 				return;
 			}
 
-			std::wcout << L"\n" << _questions[_index].getQuestion() << L"\n";
+			std::wcout << L"\n" << _questions[_index]->getQuestion() << L"\n";
 			return;
 		}
 
@@ -61,7 +61,7 @@ public:
 	{
 		if (!_hasAnswered)
 		{
-			_isCorrect = _questions[_index].isCorrect(answer);
+			_isCorrect = _questions[_index]->isCorrect(answer);
 			if (_isCorrect)
 				_correct++;
 			else
@@ -73,9 +73,9 @@ public:
 
 	static void boost()
 	{
-		if (_hasAnswered && !_isLastCorrect)
+		if (_hasAnswered && !_isCorrect)
 		{
-			_isLastCorrect = true;
+			_isCorrect = true;
 			_correct++;
 			_wrong--;
 			return;
@@ -100,7 +100,7 @@ public:
 
 	static std::wstring getCurrentCorrectAnswer()
 	{
-		return _questions[_index].getAnswer();
+		return _questions[_index]->getAnswer();
 	}
 
 	static void finishPlay()
@@ -125,7 +125,7 @@ private:
 	static int _correct;
 	static int _wrong;
 	static bool _hasAnswered;
-	static bool _isLastCorrect;
+	static bool _isCorrect;
 };
 PlayStage::Stage PlayStage::_value = PlayStage::Stage::QUESTION;
 std::vector<Question*> PlayStage::_questions = std::vector<Question*>();
@@ -133,7 +133,7 @@ unsigned int PlayStage::_index = 0;
 int PlayStage::_correct = 0;
 int PlayStage::_wrong = 0;
 bool PlayStage::_hasAnswered = false;
-bool PlayStage::_isLastCorrect = true;
+bool PlayStage::_isCorrect = true;
 
 void play(std::vector<std::wstring> tags)
 {
@@ -149,7 +149,7 @@ void play(std::vector<std::wstring> tags)
 		std::vector<Question*> questionList = Question::getQuestionList();
 		for (unsigned int i = 0; i < questionList.size(); i++)
 		{
-			std::vector<std::wstring> thisQuestionTags = questionList[i].getTags();
+			std::vector<std::wstring> thisQuestionTags = questionList[i]->getTags();
 			std::transform(thisQuestionTags.begin(), thisQuestionTags.end(), thisQuestionTags.begin(), toUpper);
 			if (shareAnyElems<std::wstring>(tags, thisQuestionTags))
 				questionsInPlay.push_back(questionList[i]);

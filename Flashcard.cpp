@@ -58,7 +58,7 @@ std::vector<Question*> Flashcard::readFlashcardList()
 					tags.push_back(tag);
 				}
 
-				_flashcardList.push_back(Flashcard(question, answer, tags));
+				_flashcardList.push_back(new Flashcard(question, answer, tags));
 			}
 		}
 		file.close();

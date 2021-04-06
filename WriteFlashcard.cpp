@@ -12,7 +12,7 @@
 std::wstring front = L"";
 std::wstring back = L"";
 std::vector<std::wstring> tags = std::vector<std::wstring>();
-std::vector<Flashcard> newFlashcards = std::vector<Flashcard>();
+std::vector<Flashcard*> newFlashcards = std::vector<Flashcard*>();
 
 CmdHandler::Returns writeCmdHandler(std::wstring userInput);
 
@@ -91,7 +91,7 @@ void finishWriting()
 		if (!file.is_open())
 			throw new std::exception("Couldn't open file.");
 		for (unsigned int i = 0; i < newFlashcards.size(); i++)
-			newFlashcards[i].write(file);
+			newFlashcards[i]->write(file);
 		file.close();
 	}
 	catch (std::exception e)
@@ -104,14 +104,14 @@ void finishWriting()
 	std::wcout << L"Finished writing.\n\n";
 
 	std::vector<Question*> newQuestions = std::vector<Question*>();
-	Question* flash2pq(Flashcard);
-	std::transform(newFlashcards.begin(), newFlashcards.end(), &newQuestions, flash2pq);
+	Question* pflash2pq(Flashcard*);
+	std::transform(newFlashcards.begin(), newFlashcards.end(), newQuestions.begin(), pflash2pq);
 	Question::appendQuestionsToList(newQuestions);
 
 	CmdHandler::setHandlerDefault();
 }
 
-Question* flash2pq(Flashcard flash) { return (Question*)&flash; }
+Question* pflash2pq(Flashcard* flash) { return (Question*)flash; }
 
 CmdHandler::Returns writeCmdHandler(std::wstring userInput)
 {
@@ -196,7 +196,7 @@ CmdHandler::Returns writeCmdHandler(std::wstring userInput)
 
 		if (userInput == L"")
 		{
-			newFlashcards.push_back(Flashcard(front, back, tags));
+			newFlashcards.push_back(new Flashcard(front, back, tags));
 			WriteStage::setValue(WriteStage::Stage::NEW_CARD);
 			return Returns::SUCCESS;
 		}
