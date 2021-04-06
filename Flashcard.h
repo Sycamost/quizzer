@@ -4,7 +4,7 @@
 #include <fstream>
 #include "Question.h"
 
-class Flashcard : Question
+class Flashcard : public Question
 {
 private:
 	std::wstring _question;
