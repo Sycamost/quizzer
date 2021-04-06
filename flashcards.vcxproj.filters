@@ -13,18 +13,21 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav</Extensions>
     </Filter>
+    <Filter Include="Source Files\Write">
+      <UniqueIdentifier>{6766a8d4-1d47-4e67-9366-99f135c0fb60}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Question">
+      <UniqueIdentifier>{0a732eb5-a6f7-4845-91f2-fd9a27a8cb91}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Question">
+      <UniqueIdentifier>{6e57697c-725f-4fbc-913b-2358b01b60b6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Write.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="util.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Flashcard.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="globals.cpp">
@@ -33,18 +36,21 @@
     <ClCompile Include="Play.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="WriteFlashcard.cpp">
+      <Filter>Source Files\Write</Filter>
+    </ClCompile>
+    <ClCompile Include="Flashcard.cpp">
+      <Filter>Source Files\Question</Filter>
+    </ClCompile>
+    <ClCompile Include="Question.cpp">
+      <Filter>Source Files\Question</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CmdHandler.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Write.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="util.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Flashcard.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="globals.h">
@@ -52,6 +58,15 @@
     </ClInclude>
     <ClInclude Include="Play.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Write.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Question.h">
+      <Filter>Header Files\Question</Filter>
+    </ClInclude>
+    <ClInclude Include="Flashcard.h">
+      <Filter>Header Files\Question</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

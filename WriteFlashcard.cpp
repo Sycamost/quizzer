@@ -11,7 +11,7 @@
 std::wstring front = L"";
 std::wstring back = L"";
 std::vector<std::wstring> tags = std::vector<std::wstring>();
-std::vector<Flashcard> newFlashcards = std::vector<Flashcard>();
+std::vector<Flashcard*> newFlashcards = std::vector<Flashcard*>();
 
 CmdHandler::Returns writeCmdHandler(std::wstring userInput);
 
@@ -82,7 +82,7 @@ private:
 };
 WriteStage::Stage WriteStage::_value = WriteStage::Stage::NEW_CARD;
 
-void startWriting()
+void startWritingFlashcards()
 {
 	std::wcout << "Writing new flashcards...\n\n";
 	std::wcout << "Enter the values for new flashcards' front, back and any tags.\nOnce you're finished adding tags, leave the next tag blank.\nThe front and back cannot be blank.\nUse \"cancel\" to cancel adding the current card.\n";
@@ -100,7 +100,7 @@ void finishWriting()
 		if (!file.is_open())
 			throw new std::exception("Couldn't open file.");
 		for (unsigned int i = 0; i < newFlashcards.size(); i++)
-			newFlashcards[i].write(file);
+			newFlashcards[i]->write(file);
 		file.close();
 	}
 	catch (std::exception e)
@@ -112,7 +112,10 @@ void finishWriting()
 	}
 	std::wcout << L"Finished writing.\n\n";
 
-	Flashcard::appendFlashcardsToList(newFlashcards);
+	std::vector<Question*> newQuestions = std::vector<Question*>();
+	for (int i = 0; i < newFlashcards.size(); i++)
+		newQuestions.push_back(newFlashcards[i]);
+	Question::appendQuestionsToList(newQuestions);
 
 	CmdHandler::setHandlerDefault();
 }
@@ -207,7 +210,7 @@ CmdHandler::Returns writeCmdHandler(std::wstring userInput)
 
 		if (userInput == L"")
 		{
-			newFlashcards.push_back(Flashcard(front, back, tags));
+			newFlashcards.push_back(new Flashcard(front, back, tags));
 			WriteStage::setValue(WriteStage::Stage::NEW_CARD);
 			return Returns::SUCCESS;
 		}

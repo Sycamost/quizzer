@@ -6,26 +6,26 @@ const std::wstring Flashcard::_optCaseSensitive = L"case_sensitive";
 std::vector<Flashcard> Flashcard::_flashcardList = std::vector<Flashcard>();
 
 Flashcard::Flashcard(std::wstring question, std::wstring answer, std::vector<std::wstring> tags)
+	: Question(tags)
 {
 	_question = question;
 	_answer = answer;
-	_tags = tags;
 	_caseSensitive = false;
 }
 
-std::wstring Flashcard::getFront()
+std::wstring Flashcard::getQuestion()
 {
 	return _question;
 }
 
-std::wstring Flashcard::getBack()
+std::wstring Flashcard::getAnswer()
 {
 	return _answer;
 }
 
-std::vector<std::wstring> Flashcard::getTags()
+bool Flashcard::isCorrect(std::wstring guess)
 {
-	return _tags;
+	return (toUpper(guess) == toUpper(_answer));
 }
 
 void Flashcard::write(std::wofstream& stream)
@@ -54,9 +54,9 @@ void Flashcard::setCaseInsensitive()
 	_caseSensitive = false;
 }
 
-std::vector<Flashcard> Flashcard::readFlashcardList()
+std::vector<Question*> Flashcard::readFlashcardList()
 {
-	_flashcardList = std::vector<Flashcard>();
+	std::vector<Question*> _flashcardList = std::vector<Question*>();
 
 	try
 	{
@@ -88,21 +88,14 @@ std::vector<Flashcard> Flashcard::readFlashcardList()
 					tags.push_back(tag);
 				}
 
-				_flashcardList.push_back(Flashcard(question, answer, tags));
+				_flashcardList.push_back(new Flashcard(question, answer, tags));
 			}
 		}
 		file.close();
 	}
 	catch (std::exception) {}
-	return _flashcardList;
-}
 
-std::vector<Flashcard> Flashcard::getFlashcardList()
-{
-	return _flashcardList;
-}
+	std::wcout << "\tRead " << _flashcardList.size() << " flashcards from file...\n";
 
-void Flashcard::appendFlashcardsToList(std::vector<Flashcard> flashcards)
-{
-	_flashcardList.insert(_flashcardList.end(), flashcards.begin(), flashcards.end());
+	return _flashcardList;
 }

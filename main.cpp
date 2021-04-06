@@ -13,9 +13,9 @@ CmdHandler::Returns(*cmdHandler)(std::wstring userInput) = &defaultCmdHandler;
 int main() {
 
 	std::wcout << L"Welcome to flashcards!\n";
-	std::wcout << L"Reading flashcards from file...\n";
-	Flashcard::readFlashcardList();
-	std::wcout << L"Read " << Flashcard::getFlashcardList().size() << L" flashcards from file.\n\n";
+	std::wcout << L"Reading questions from file...\n";
+	Question::readQuestionList();
+	std::wcout << L"Read " << Question::getQuestionList().size() << L" questions from file.\n\n";
 	std::wcout << L"Welcome to flashcards!\n\n";
 
 	while (true)
@@ -87,8 +87,16 @@ CmdHandler::Returns defaultCmdHandler(std::wstring userInput)
 
 	if (userInputWords[0] == Globals::cmdWrite)
 	{
-		startWriting();
-		return CmdHandler::Returns::SUCCESS;
+		if (userInputWords.size() <= 1)
+			return CmdHandler::Returns::TOO_FEW_ARGS;
+
+		if (userInputWords[1] == Globals::cmdWriteOptFlashcard)
+		{
+			startWritingFlashcards();
+			return CmdHandler::Returns::SUCCESS;
+		}
+
+		return CmdHandler::Returns::INVALID_ARGS;
 	}
 
 	if (userInputWords[0] == Globals::cmdPlay)
