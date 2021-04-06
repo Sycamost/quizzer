@@ -37,7 +37,7 @@ public:
 
 		if (stage == Stage::NEW_CARD)
 		{
-			if (newFlashcards[newFlashcards.size() - 1].isCaseSensitive())
+			if (newFlashcards[newFlashcards.size() - 1]->isCaseSensitive())
 			{
 				std::wcout << L"W";
 			}
@@ -129,7 +129,7 @@ CmdHandler::Returns writeCmdHandler(std::wstring userInput)
 	{
 		if (userInputUpper == Globals::cmdCase)
 		{
-			newFlashcards[newFlashcards.size() - 1].setCaseSensitive();
+			newFlashcards[newFlashcards.size() - 1]->setCaseSensitive();
 			WriteStage::setValue(WriteStage::Stage::FRONT);
 			return Returns::SUCCESS;
 		}

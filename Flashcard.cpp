@@ -3,7 +3,6 @@
 #include "util.h"
 
 const std::wstring Flashcard::_optCaseSensitive = L"case_sensitive";
-std::vector<Flashcard> Flashcard::_flashcardList = std::vector<Flashcard>();
 
 Flashcard::Flashcard(std::wstring question, std::wstring answer, std::vector<std::wstring> tags)
 	: Question(tags)
