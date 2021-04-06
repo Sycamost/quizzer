@@ -196,7 +196,7 @@ CmdHandler::Returns playHandler(std::wstring userInput)
 			std::wcout << L"Incorrect! The correct answer was:\n"
 				<< indent(PlayStage::getCurrentCorrectAnswer(), 1)
 				<< "\nPress enter to continue, or enter the command <"
-				<< Globals::cmdBoost
+				<< toLower(Globals::cmdBoost)
 				<< "> if you have been marked down unfairly.\n";
 			PlayStage::setValue(PlayStage::Stage::ANSWER);
 			return CmdHandler::Returns::SUCCESS;
