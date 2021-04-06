@@ -15,5 +15,5 @@ public:
 	std::wstring getAnswer();
 	bool isCorrect(std::wstring guess);
 	void write(std::wofstream& stream);
-	static std::vector<Question&> readFlashcardList();
+	static std::vector<Question*> readFlashcardList();
 };

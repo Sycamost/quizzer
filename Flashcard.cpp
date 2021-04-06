@@ -33,9 +33,9 @@ void Flashcard::write(std::wofstream& stream)
 	stream << L"\n";
 }
 
-std::vector<Question&> Flashcard::readFlashcardList()
+std::vector<Question*> Flashcard::readFlashcardList()
 {
-	std::vector<Question&> _flashcardList = std::vector<Question&>();
+	std::vector<Question*> _flashcardList = std::vector<Question*>();
 
 	try
 	{

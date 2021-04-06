@@ -4,7 +4,7 @@
 #include <random>
 #include "Play.h"
 #include "CmdHandler.h"
-#include "Question&.h"
+#include "Question.h"
 #include "util.h"
 #include "globals.h"
 
@@ -22,7 +22,7 @@ public:
 		return _value;
 	}
 
-	static void startPlay(std::vector<Question&> questions)
+	static void startPlay(std::vector<Question*> questions)
 	{
 		_questions = questions;
 		std::shuffle(_questions.begin(), _questions.end(), std::default_random_engine((unsigned int)time(NULL)));
@@ -120,7 +120,7 @@ public:
 
 private:
 	static PlayStage::Stage _value;
-	static std::vector<Question&> _questions;
+	static std::vector<Question*> _questions;
 	static unsigned int _index;
 	static int _correct;
 	static int _wrong;
@@ -128,7 +128,7 @@ private:
 	static bool _isLastCorrect;
 };
 PlayStage::Stage PlayStage::_value = PlayStage::Stage::QUESTION;
-std::vector<Question&> PlayStage::_questions = std::vector<Question&>();
+std::vector<Question*> PlayStage::_questions = std::vector<Question*>();
 unsigned int PlayStage::_index = 0;
 int PlayStage::_correct = 0;
 int PlayStage::_wrong = 0;
@@ -138,15 +138,15 @@ bool PlayStage::_isLastCorrect = true;
 void play(std::vector<std::wstring> tags)
 {
 	std::wcout << L"Starting play with ";
-	std::vector<Question&> questionsInPlay = std::vector<Question&>();
+	std::vector<Question*> questionsInPlay = std::vector<Question*>();
 	if (tags.empty())
 	{
-		questionsInPlay = Question::getQuestion&List();
+		questionsInPlay = Question::getQuestionList();
 		std::wcout << L"all ";
 	}
 	else
 	{
-		std::vector<Question&> questionList = Question::getQuestion&List();
+		std::vector<Question*> questionList = Question::getQuestionList();
 		for (unsigned int i = 0; i < questionList.size(); i++)
 		{
 			std::vector<std::wstring> thisQuestionTags = questionList[i].getTags();

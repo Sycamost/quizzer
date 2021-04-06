@@ -6,7 +6,7 @@
 class Question
 {
 private:
-	static std::vector<Question&> _questionList;
+	static std::vector<Question*> _questionList;
 protected:
 	std::vector<std::wstring> _tags;
 public:
@@ -15,9 +15,9 @@ public:
 	virtual std::wstring getAnswer() = 0;
 	virtual bool isCorrect(std::wstring guess) = 0;
 	virtual void write(std::wofstream& stream) = 0;
-	static std::vector<Question&> getQuestionList();
+	static std::vector<Question*> getQuestionList();
 	static void readQuestionList();
-	static void appendQuestionToList(Question& question);
-	static void appendQuestionsToList(std::vector<Question&> questions);
+	static void appendQuestionToList(Question* question);
+	static void appendQuestionsToList(std::vector<Question*> questions);
 	std::vector<std::wstring> getTags();
 };
