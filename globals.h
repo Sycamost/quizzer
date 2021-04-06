@@ -8,6 +8,7 @@ public:
 	static const std::wstring cmdQuit;
 	static const std::wstring cmdExit;
 	static const std::wstring cmdWrite;
+	static const std::wstring cmdCase;
 	static const std::wstring cmdBoost;
 	static const std::wstring cmdFinishPlay;
 	static const std::wstring cmdPlay;

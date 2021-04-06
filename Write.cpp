@@ -37,7 +37,17 @@ public:
 
 		if (stage == Stage::NEW_CARD)
 		{
-			std::wcout << L"Would you like to add another card? [Y/N]\n";
+			if (newFlashcards[newFlashcards.size() - 1].isCaseSensitive())
+			{
+				std::wcout << L"W";
+			}
+			else
+			{
+				std::wcout << L"If the previous card should be checked as case-sensitive, enter <"
+					<< toLower(Globals::cmdCase) <<
+					L">. Otherwise, w";
+			}
+			std::wcout << "ould you like to add another card ? [Y/N]\n";
 			_value = stage;
 			return;
 		}
@@ -114,6 +124,13 @@ CmdHandler::Returns writeCmdHandler(std::wstring userInput)
 	
 	if (WriteStage::getValue() == WriteStage::Stage::NEW_CARD)
 	{
+		if (userInputUpper == Globals::cmdCase)
+		{
+			newFlashcards[newFlashcards.size() - 1].setCaseSensitive();
+			WriteStage::setValue(WriteStage::Stage::FRONT);
+			return Returns::SUCCESS;
+		}
+
 		if (isYes(userInputUpper))
 		{
 			WriteStage::setValue(WriteStage::Stage::FRONT);
