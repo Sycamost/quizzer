@@ -3,7 +3,6 @@
 #include <vector>
 #include <Windows.h>
 #include <fstream>
-#include <algorithm>
 #include "Write.h"
 #include "util.h"
 #include "Flashcard.h"
@@ -81,6 +80,8 @@ void startWritingFlashcards()
 	WriteStage::startWriting();
 }
 
+Question* pflash2pq(Flashcard* flash) { return (Question*)flash; }
+
 void finishWriting()
 {
 	std::wcout << "\nFinished writing new flashcards. Writing to file...\n";
@@ -104,14 +105,12 @@ void finishWriting()
 	std::wcout << L"Finished writing.\n\n";
 
 	std::vector<Question*> newQuestions = std::vector<Question*>();
-	Question* pflash2pq(Flashcard*);
-	std::transform(newFlashcards.begin(), newFlashcards.end(), newQuestions.begin(), pflash2pq);
+	for (int i = 0; i < newFlashcards.size(); i++)
+		newQuestions.push_back(newFlashcards[i]);
 	Question::appendQuestionsToList(newQuestions);
 
 	CmdHandler::setHandlerDefault();
 }
-
-Question* pflash2pq(Flashcard* flash) { return (Question*)flash; }
 
 CmdHandler::Returns writeCmdHandler(std::wstring userInput)
 {
