@@ -7,7 +7,7 @@ std::vector<Question*> Question::_questionList = std::vector<Question*>();
 void Question::writeTags(std::wofstream& stream)
 {
 	stream << L"%tags\n";
-	for (int i = 0; i < _tags.size(); i++)
+	for (unsigned int i = 0; i < _tags.size(); i++)
 		stream << _tags[i] << L"\n";
 }
 

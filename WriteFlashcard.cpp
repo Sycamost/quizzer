@@ -113,7 +113,7 @@ void finishWriting()
 	std::wcout << L"Finished writing.\n\n";
 
 	std::vector<Question*> newQuestions = std::vector<Question*>();
-	for (int i = 0; i < newFlashcards.size(); i++)
+	for (unsigned int i = 0; i < newFlashcards.size(); i++)
 		newQuestions.push_back(newFlashcards[i]);
 	Question::appendQuestionsToList(newQuestions);
 

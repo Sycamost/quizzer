@@ -53,7 +53,7 @@ std::wstring Option::getOption() const
 	return _option;
 }
 
-std::wstring Option::getArgument(int n) const
+std::wstring Option::getArgument(unsigned int n) const
 {
 	if (n >= _args.size())
 		return L"";
@@ -68,7 +68,7 @@ std::vector<std::wstring> Option::getArguments() const
 void Option::write(std::wofstream& stream)
 {
 	stream << Globals::fileEscapeChar << _option;
-	for (int i = 0; i < _args.size(); i++)
+	for (unsigned int i = 0; i < _args.size(); i++)
 		stream << L" " << _args[i];
 	stream << L"\n";
 }
