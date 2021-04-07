@@ -12,7 +12,7 @@ private:
 	bool _caseSensitive;
 	static const std::wstring _optCaseSensitive;
 public:
-	Flashcard(std::wstring question, std::wstring answer, std::vector<std::wstring> tags = std::vector<std::wstring>());
+	Flashcard(std::wstring question, std::wstring answer, bool caseSensitive, std::vector<std::wstring> tags = std::vector<std::wstring>());
 	std::wstring getQuestion();
 	std::wstring getAnswer();
 	bool isCorrect(std::wstring guess);

@@ -6,12 +6,12 @@
 
 const std::wstring Flashcard::_optCaseSensitive = L"case_sensitive";
 
-Flashcard::Flashcard(std::wstring question, std::wstring answer, std::vector<std::wstring> tags)
+Flashcard::Flashcard(std::wstring question, std::wstring answer, bool caseSensitive, std::vector<std::wstring> tags)
 	: Question(tags)
 {
 	_question = question;
 	_answer = answer;
-	_caseSensitive = false;
+	_caseSensitive = caseSensitive;
 }
 
 std::wstring Flashcard::getQuestion()
@@ -83,7 +83,7 @@ std::vector<Question*> Flashcard::readFlashcardList()
 					tags.push_back(tag);
 				}
 
-				_flashcardList.push_back(new Flashcard(question, answer, tags));
+				_flashcardList.push_back(new Flashcard(question, answer, caseSensitive, tags));
 			}
 		}
 		file.close();

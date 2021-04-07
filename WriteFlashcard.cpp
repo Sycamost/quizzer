@@ -210,7 +210,7 @@ CmdHandler::Returns writeCmdHandler(std::wstring userInput)
 
 		if (userInput == L"")
 		{
-			newFlashcards.push_back(new Flashcard(front, back, tags));
+			newFlashcards.push_back(new Flashcard(front, back, false, tags));
 			WriteStage::setValue(WriteStage::Stage::NEW_CARD);
 			return Returns::SUCCESS;
 		}
