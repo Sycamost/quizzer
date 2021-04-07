@@ -130,7 +130,7 @@ CmdHandler::Returns writeCmdHandler(std::wstring userInput)
 		if (userInputUpper == Globals::cmdCase)
 		{
 			newFlashcards[newFlashcards.size() - 1]->setCaseSensitive();
-			WriteStage::setValue(WriteStage::Stage::FRONT);
+			WriteStage::setValue(WriteStage::Stage::NEW_CARD);
 			return Returns::SUCCESS;
 		}
 
