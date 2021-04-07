@@ -101,6 +101,7 @@
     <ClCompile Include="Flashcard.cpp" />
     <ClCompile Include="globals.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Option.cpp" />
     <ClCompile Include="Play.cpp" />
     <ClCompile Include="Question.cpp" />
     <ClCompile Include="util.cpp" />
@@ -110,6 +111,7 @@
     <ClInclude Include="CmdHandler.h" />
     <ClInclude Include="Flashcard.h" />
     <ClInclude Include="globals.h" />
+    <ClInclude Include="Option.h" />
     <ClInclude Include="Play.h" />
     <ClInclude Include="Question.h" />
     <ClInclude Include="util.h" />

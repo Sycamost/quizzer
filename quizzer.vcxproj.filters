@@ -45,6 +45,9 @@
     <ClCompile Include="Question.cpp">
       <Filter>Source Files\Question</Filter>
     </ClCompile>
+    <ClCompile Include="Option.cpp">
+      <Filter>Source Files\Question</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CmdHandler.h">
@@ -66,6 +69,9 @@
       <Filter>Header Files\Question</Filter>
     </ClInclude>
     <ClInclude Include="Flashcard.h">
+      <Filter>Header Files\Question</Filter>
+    </ClInclude>
+    <ClInclude Include="Option.h">
       <Filter>Header Files\Question</Filter>
     </ClInclude>
   </ItemGroup>
