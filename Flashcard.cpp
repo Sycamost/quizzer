@@ -26,7 +26,7 @@ std::wstring Flashcard::getAnswer()
 
 bool Flashcard::isCorrect(std::wstring guess)
 {
-	return (toUpper(guess) == toUpper(_answer));
+	return _caseSensitive ? (guess == _answer) : (toUpper(guess) == toUpper(_answer));
 }
 
 void Flashcard::write(std::wofstream& stream)
