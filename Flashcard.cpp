@@ -1,6 +1,8 @@
+#include <algorithm>
 #include "Flashcard.h"
 #include "globals.h"
 #include "util.h"
+#include "Option.h"
 
 const std::wstring Flashcard::_optCaseSensitive = L"case_sensitive";
 
@@ -30,7 +32,7 @@ bool Flashcard::isCorrect(std::wstring guess)
 void Flashcard::write(std::wofstream& stream)
 {
 	if (_caseSensitive)
-		stream << L"%" << _optCaseSensitive;
+		Option(_optCaseSensitive).write(stream);
 	stream << _question << L"\n";
 	stream << _answer << L"\n";
 	for (unsigned int i = 0; i < _tags.size(); i++)
@@ -64,16 +66,10 @@ std::vector<Question*> Flashcard::readFlashcardList()
 		{
 			while (!file.eof())
 			{
-				bool caseSensitive;
+				std::vector<Option> options = Option::readOptions(file);
+				bool caseSensitive = std::find_if(options.begin(), options.end(), [](Option opt) -> bool {return opt.getOption() == _optCaseSensitive; }) != options.end();
 
 				std::wstring question = getUserInputLine(file);
-
-				if (question == L"%" + _optCaseSensitive)
-				{
-					caseSensitive = true;
-					if (file.eof()) break;
-					question = getUserInputLine(file);
-				}
 
 				if (file.eof()) break;
 				std::wstring answer = getUserInputLine(file);
