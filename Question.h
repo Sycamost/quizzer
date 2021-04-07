@@ -10,6 +10,7 @@ private:
 protected:
 	std::vector<std::wstring> _tags;
 	void writeTags(std::wofstream& stream);
+	std::vector<std::wstring> readTags(std::wifstream& stream);
 public:
 	Question(std::vector<std::wstring> tags = std::vector<std::wstring>());
 	virtual std::wstring getQuestion() = 0;
