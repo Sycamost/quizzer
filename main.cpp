@@ -1,7 +1,7 @@
 #include <iostream>
 #include <vector>
 #include "CmdHandler.h"
-#include "Write.h"
+#include "CmdWrite.h"
 #include "util.h"
 #include "globals.h"
 #include "Flashcard.h"

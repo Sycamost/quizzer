@@ -3,7 +3,7 @@
 #include <vector>
 #include <Windows.h>
 #include <fstream>
-#include "Write.h"
+#include "CmdWrite.h"
 #include "util.h"
 #include "Flashcard.h"
 #include "globals.h"

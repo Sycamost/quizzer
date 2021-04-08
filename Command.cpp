@@ -1,6 +1,6 @@
 #include <utility>
 #include "Command.h"
-#include "Write.h"
+#include "CmdWrite.h"
 #include "main.h"
 #include "Play.h"
 #include "util.h"
@@ -63,5 +63,5 @@ const mapCodeCmdInfo Command::_commandInfos = mapCodeCmdInfo({
 	pairCodeCmdInfo(L"CASE", CommandType::CASE, setCaseSensitive),
 	pairCodeCmdInfo(L"BOOST", CommandType::BOOST, boost),
 	pairCodeCmdInfo(L"FINISH", CommandType::FINISH, finish),
-	pairCodeCmdInfo(L"PLAY", CommandType::PLAY, startPlaying)});
-const std::wstring Command::cmdWriteOptFlashcard = L"FLASHCARD";
+	pairCodeCmdInfo(L"PLAY", CommandType::PLAY, startPlaying)
+});

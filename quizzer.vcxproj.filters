@@ -54,7 +54,7 @@
     <ClCompile Include="Command.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Write.cpp">
+    <ClCompile Include="CmdWrite.cpp">
       <Filter>Source Files\Write</Filter>
     </ClCompile>
     <ClCompile Include="WriteQuestion.cpp">
@@ -89,7 +89,7 @@
     <ClInclude Include="main.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Write.h">
+    <ClInclude Include="CmdWrite.h">
       <Filter>Header Files\Write</Filter>
     </ClInclude>
     <ClInclude Include="WriteFlashcard.h">
