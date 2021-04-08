@@ -24,37 +24,44 @@ Command* Command::read(std::wstring userInput)
 		return NULL;
 	std::wstring cmd = words[0].substr(1);
 
-	auto cmdFuncIter = Command::_cmdFuncs.find(cmd);
-	if (cmdFuncIter == Command::_cmdFuncs.end())
+	auto cmdInfoIter = Command::_commandInfos.find(cmd);
+	if (cmdInfoIter == Command::_commandInfos.end())
 		return NULL;
 
 	return new Command(
 		cmd,
 		std::vector<std::wstring>(words.begin() + 1, words.end(), std::allocator<std::wstring>()),
-		cmdFuncIter->second);
+		cmdInfoIter->second);
 }
 
-CmdHandler::Returns Command::doCmdFunc()
+CmdHandler::Returns Command::doCommandFunc()
 {
-	return _cmdFunc(_args);
+	return _commandInfo.func(_args);
 }
 
-Command::Command(std::wstring cmd, std::vector<std::wstring> args, CmdFunc cmdFunc)
+CommandInfo Command::getCommandInfo()
 {
-	_cmd = cmd;
+	return _commandInfo;
+}
+
+Command::Command(std::wstring code, std::vector<std::wstring> args, CommandInfo commandInfo)
+{
+	_code = code;
 	_args = args;
-	_cmdFunc = cmdFunc;
+	_commandInfo = commandInfo;
 }
 
-typedef std::map<std::wstring, Command::CmdFunc> mapWstrCmdfunc;
-typedef std::pair<std::wstring, Command::CmdFunc> pairWstrCmdfunc;
-const mapWstrCmdfunc Command::_cmdFuncs = mapWstrCmdfunc({
-	pairWstrCmdfunc(L"CANCEL", cancelCurrentWrite),
-	pairWstrCmdfunc(L"QUIT", quitApp),
-	pairWstrCmdfunc(L"EXIT", quitApp),
-	pairWstrCmdfunc(L"WRITE", startWriting),
-	pairWstrCmdfunc(L"CASE", setCaseSensitive),
-	pairWstrCmdfunc(L"BOOST", boost),
-	pairWstrCmdfunc(L"FINISH", finish),
-	pairWstrCmdfunc(L"PLAY", startPlaying)});
+typedef std::map<const std::wstring, const CommandInfo> mapCodeCmdInfo;
+inline const std::pair<const std::wstring, const CommandInfo> pairCodeCmdInfo(const std::wstring code, const CommandType type, const CommandFunc func) {
+	return std::pair<const std::wstring, const CommandInfo>(code, CommandInfo(type, func));
+}
+const mapCodeCmdInfo Command::_commandInfos = mapCodeCmdInfo({
+	pairCodeCmdInfo(L"CANCEL", CommandType::CANCEL, cancelCurrentWrite),
+	pairCodeCmdInfo(L"QUIT", CommandType::QUIT, quitApp),
+	pairCodeCmdInfo(L"EXIT", CommandType::EXIT, quitApp),
+	pairCodeCmdInfo(L"WRITE", CommandType::WRITE, startWriting),
+	pairCodeCmdInfo(L"CASE", CommandType::CASE, setCaseSensitive),
+	pairCodeCmdInfo(L"BOOST", CommandType::BOOST, boost),
+	pairCodeCmdInfo(L"FINISH", CommandType::FINISH, finish),
+	pairCodeCmdInfo(L"PLAY", CommandType::PLAY, startPlaying)});
 const std::wstring Command::cmdWriteOptFlashcard = L"FLASHCARD";
