@@ -12,12 +12,11 @@ DECLARE_CMD_FUNC(startWriting) {
 
 	std::wstring type = toUpper(args[0]);
 
-	if (type == L"FLASHCARD")
+	if (type == questionTypeCode.at(QuestionType::FLASHCARD))
 	{
 		startWritingFlashcards();
 		return CmdHandler::Returns::SUCCESS;
 	}
-	// ... other types
 
 	return CmdHandler::Returns::INVALID_ARGS;
 };
@@ -26,40 +25,41 @@ DECLARE_CMD_FUNC(cancelCurrentWrite) {
 	std::wcout << L"\nAre you sure you want to cancel writing the current question? [Y/N]\n";
 	if (getUserYesNo())
 	{
-		WriteFlashcard::setValue(WriteFlashcard::Stage::NEW_CARD);
+		WriteQuestion::setStage(WriteQuestion::Stage::NEXT_QUESTION);
 		return CmdHandler::Returns::SUCCESS;
 	}
-	WriteFlashcard::setValue(WriteFlashcard::Stage::FRONT);
+	WriteQuestion::resetLastStep();
 	return CmdHandler::Returns::SUCCESS;
 };
 
 DECLARE_CMD_FUNC(setCaseSensitive) {
-	
+	throw new std::exception("setCaseSensitive() not implemented yet!");
 };
 
 CmdHandler::Returns writeCmdHandler(std::wstring userInput)
 {
 	using CmdHandler::Returns;
 	typedef WriteQuestion::Stage Stage;
-	WriteQuestion writer = WriteQuestion::getCurrentInstance();
-	Stage stage = WriteQuestion::getCurrentStage();
+	Stage stage = WriteQuestion::getStage();
 
 	Command* cmd = Command::read(userInput);
 	if (cmd != NULL && cmd->getCommandInfo().type == CommandType::CANCEL)
 	{
-		std::wcout << L"Are you sure you want to cancel writing the current question? [Y/N]\n";
+		std::wcout << L"Are you sure you want to cancel writing the current "
+			<< toLower(questionTypeDisplay.at(WriteQuestion::getCurrentType()))
+			<< L"? [Y/N]\n";
 		if (getUserYesNo())
 		{
-			writer.cancel();
+			WriteQuestion::cancel();
 			return CmdHandler::Returns::SUCCESS;
 		}
-		writer.resetLastStep();
+		WriteQuestion::resetLastStep();
 		return CmdHandler::Returns::SUCCESS;
 	}
 
 	if (stage == Stage::INPUT_DATA)
 	{
-		WriteQuestion::getCurrentInstance().inputData(userInput);
+		WriteQuestion::inputData(userInput);
 		return Returns::SUCCESS;
 	}
 
@@ -79,7 +79,7 @@ CmdHandler::Returns writeCmdHandler(std::wstring userInput)
 		}
 
 		WriteQuestion::pushTag(userInput);
-		WriteQuestion::setCurrentStage(Stage::INPUT_TAGS);
+		WriteQuestion::setStage(Stage::INPUT_TAGS);
 		return Returns::SUCCESS;
 	}
 

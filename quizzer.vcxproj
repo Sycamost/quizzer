@@ -108,6 +108,7 @@
     <ClCompile Include="util.cpp" />
     <ClCompile Include="Write.cpp" />
     <ClCompile Include="WriteFlashcard.cpp" />
+    <ClCompile Include="WriteQuestion.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CmdHandler.h" />

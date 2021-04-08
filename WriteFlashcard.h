@@ -4,25 +4,25 @@ void startWritingFlashcards();
 
 class WriteFlashcard {
 public:
-	enum class Stage {
-		NEW_CARD,
+	enum class InputStage {
 		FRONT,
 		BACK,
+		CASE_SENSITIVE,
 		TAGS
 	};
 
 	static void startWriting()
 	{
-		setValue(Stage::FRONT);
+		setStage(InputStage::FRONT);
 	}
 
-	static Stage getValue() {
+	static InputStage getValue() {
 		return _value;
 	}
 
-	static void setValue(Stage stage) {
+	static void setStage(InputStage stage) {
 
-		if (stage == Stage::NEW_CARD)
+		if (stage == InputStage::NEW_CARD)
 		{
 			if (newFlashcards[newFlashcards.size() - 1]->isCaseSensitive())
 			{
@@ -39,7 +39,7 @@ public:
 			return;
 		}
 
-		if (stage == Stage::FRONT)
+		if (stage == InputStage::FRONT)
 		{
 			front = L"";
 			back = L"";
@@ -49,14 +49,14 @@ public:
 			return;
 		}
 
-		if (stage == Stage::BACK)
+		if (stage == InputStage::BACK)
 		{
 			std::wcout << L"Back:\t";
 			_value = stage;
 			return;
 		}
 
-		if (stage == Stage::TAGS)
+		if (stage == InputStage::TAGS)
 		{
 			std::wcout << L"Tag " << std::to_wstring(tags.size() + 1) << L":\t";
 			_value = stage;
@@ -65,5 +65,5 @@ public:
 	}
 
 private:
-	static WriteFlashcard::Stage _value;
+	static WriteFlashcard::InputStage _value;
 };

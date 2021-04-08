@@ -2,10 +2,14 @@
 #include <vector>
 #include <string>
 #include <fstream>
+#include <map>
 
 enum class QuestionType {
 	FLASHCARD
 };
+
+const std::map<const QuestionType, const std::wstring> questionTypeDisplay;
+const std::map<const QuestionType, const std::wstring> questionTypeCode;
 
 class Question
 {

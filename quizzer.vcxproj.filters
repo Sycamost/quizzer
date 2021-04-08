@@ -57,6 +57,9 @@
     <ClCompile Include="Write.cpp">
       <Filter>Source Files\Write</Filter>
     </ClCompile>
+    <ClCompile Include="WriteQuestion.cpp">
+      <Filter>Source Files\Write</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CmdHandler.h">

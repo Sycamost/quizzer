@@ -4,6 +4,15 @@
 
 std::vector<Question*> Question::_questionList = std::vector<Question*>();
 
+typedef std::map<const QuestionType, const std::wstring> MapQtWstr;
+typedef std::pair<const QuestionType, const std::wstring> PairQtWstr;
+const MapQtWstr questionTypeDisplay = MapQtWstr({
+	PairQtWstr(QuestionType::FLASHCARD, L"flashcard")
+});
+const MapQtWstr questionTypeCode = MapQtWstr({
+	PairQtWstr(QuestionType::FLASHCARD, L"FLASHCARD")
+});
+
 void Question::writeTags(std::wofstream& stream)
 {
 	stream << L"%tags\n";
