@@ -46,13 +46,15 @@ CmdHandler::Returns writeCmdHandler(std::wstring userInput)
 	if (cmd != NULL && cmd->getCommandInfo().type == CommandType::CANCEL)
 	{
 		std::wcout << L"Are you sure you want to cancel writing the current "
-			<< toLower(questionTypeDisplay.at(WriteQuestion::getCurrentType()))
+			<< questionTypeDisplay.at(WriteQuestion::getCurrentType())
 			<< L"? [Y/N]\n";
+
 		if (getUserYesNo())
 		{
 			WriteQuestion::cancel();
 			return CmdHandler::Returns::SUCCESS;
 		}
+
 		WriteQuestion::resetLastStep();
 		return CmdHandler::Returns::SUCCESS;
 	}
@@ -84,6 +86,6 @@ CmdHandler::Returns writeCmdHandler(std::wstring userInput)
 	}
 
 	std::wcout << L"\nSomething went wrong interpreting that input. Exiting write session...\n";
-	finishWriting();
+	WriteQuestion::finishWriting();
 	return Returns::CMD_NOT_RECOGNISED;
 }
