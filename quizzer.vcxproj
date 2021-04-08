@@ -98,6 +98,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Command.cpp" />
     <ClCompile Include="Flashcard.cpp" />
     <ClCompile Include="globals.cpp" />
     <ClCompile Include="main.cpp" />
@@ -109,8 +110,10 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CmdHandler.h" />
+    <ClInclude Include="Command.h" />
     <ClInclude Include="Flashcard.h" />
     <ClInclude Include="globals.h" />
+    <ClInclude Include="main.h" />
     <ClInclude Include="Option.h" />
     <ClInclude Include="Play.h" />
     <ClInclude Include="Question.h" />

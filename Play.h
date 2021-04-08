@@ -2,5 +2,8 @@
 #include <vector>
 #include <string>
 #include "Flashcard.h"
+#include "Command.h"
 
-void startPlaying(std::vector<std::wstring> tags = std::vector<std::wstring>());
+Command::CmdFunc startPlaying;
+Command::CmdFunc boost;
+Command::CmdFunc finish;

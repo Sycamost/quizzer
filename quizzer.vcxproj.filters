@@ -48,6 +48,9 @@
     <ClCompile Include="Option.cpp">
       <Filter>Source Files\Question</Filter>
     </ClCompile>
+    <ClCompile Include="Command.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CmdHandler.h">
@@ -73,6 +76,12 @@
     </ClInclude>
     <ClInclude Include="Option.h">
       <Filter>Header Files\Question</Filter>
+    </ClInclude>
+    <ClInclude Include="Command.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="main.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
