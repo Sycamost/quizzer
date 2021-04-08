@@ -22,6 +22,9 @@
     <Filter Include="Source Files\Question">
       <UniqueIdentifier>{6e57697c-725f-4fbc-913b-2358b01b60b6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Write">
+      <UniqueIdentifier>{da734bbf-e062-46af-a0ee-c0c9f0f9fb78}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -51,6 +54,9 @@
     <ClCompile Include="Command.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Write.cpp">
+      <Filter>Source Files\Write</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CmdHandler.h">
@@ -63,9 +69,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Play.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Write.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Question.h">
@@ -82,6 +85,12 @@
     </ClInclude>
     <ClInclude Include="main.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Write.h">
+      <Filter>Header Files\Write</Filter>
+    </ClInclude>
+    <ClInclude Include="WriteFlashcard.h">
+      <Filter>Header Files\Write</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

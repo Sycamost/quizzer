@@ -106,6 +106,7 @@
     <ClCompile Include="Play.cpp" />
     <ClCompile Include="Question.cpp" />
     <ClCompile Include="util.cpp" />
+    <ClCompile Include="Write.cpp" />
     <ClCompile Include="WriteFlashcard.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -119,6 +120,7 @@
     <ClInclude Include="Question.h" />
     <ClInclude Include="util.h" />
     <ClInclude Include="Write.h" />
+    <ClInclude Include="WriteFlashcard.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
