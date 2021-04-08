@@ -39,49 +39,47 @@ DECLARE_CMD_FUNC(setCaseSensitive) {
 
 CmdHandler::Returns writeCmdHandler(std::wstring userInput)
 {
-	WriteQuestion& writer = WriteQuestion::getCurrentInstance();
 	using CmdHandler::Returns;
 	typedef WriteQuestion::Stage Stage;
+	WriteQuestion writer = WriteQuestion::getCurrentInstance();
+	Stage stage = WriteQuestion::getCurrentStage();
 
 	Command* cmd = Command::read(userInput);
-	if (cmd != NULL && cmd->
+	if (cmd != NULL && cmd->getCommandInfo().type == CommandType::CANCEL)
+	{
+		std::wcout << L"Are you sure you want to cancel writing the current question? [Y/N]\n";
+		if (getUserYesNo())
+		{
+			writer.cancel();
+			return CmdHandler::Returns::SUCCESS;
+		}
+		writer.resetLastStep();
+		return CmdHandler::Returns::SUCCESS;
+	}
 
-	if (writer.getStage() == Stage::INPUT_DATA)
+	if (stage == Stage::INPUT_DATA)
 	{
 		WriteQuestion::getCurrentInstance().inputData(userInput);
 		return Returns::SUCCESS;
 	}
 
-	else if (WriteQuestion::getCurrentInstance().getStage() == Stage::INPUT_DATA)
+	else if (stage == Stage::INPUT_TAGS)
 	{
-		if (userInputUpper == Globals::cmdCancel)
-		{
-			std::wcout << L"\nAre you sure you want to cancel adding the current card? [Y/N]\n";
-			if (getUserYesNo())
-			{
-				WriteFlashcard::setValue(Stage::NEW_CARD);
-				return Returns::SUCCESS;
-			}
-			WriteFlashcard::setValue(Stage::TAGS);
-			return Returns::SUCCESS;
-		}
-
 		if (userInput == L"")
 		{
-			newFlashcards.push_back(new Flashcard(front, back, false, tags));
-			WriteFlashcard::setValue(WriteFlashcard::Stage::NEW_CARD);
+			WriteQuestion::pushCurrent();
 			return Returns::SUCCESS;
 		}
 
 		if (userInput.find(L' ') != std::wstring::npos)
 		{
 			std::wcout << L"Tags must be one word only.\n";
-			WriteFlashcard::setValue(WriteFlashcard::Stage::TAGS);
+			WriteQuestion::resetLastStep();
 			return Returns::SUCCESS;
 		}
 
-		tags.push_back(userInput);
-		WriteFlashcard::setValue(WriteFlashcard::Stage::TAGS);
+		WriteQuestion::pushTag(userInput);
+		WriteQuestion::setCurrentStage(Stage::INPUT_TAGS);
 		return Returns::SUCCESS;
 	}
 
