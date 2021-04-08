@@ -8,7 +8,7 @@
 Command* Command::read(std::wifstream& stream)
 {
 	std::streampos pos = stream.tellg();
-	std::wstring line = getUserInputLine(stream);
+	std::wstring line = getInputLine(stream);
 	if (line.size() == 0 || line[0] != L'\\')
 	{
 		stream.seekg(pos);

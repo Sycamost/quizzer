@@ -16,7 +16,7 @@ std::vector<std::wstring> Question::readTags(std::wifstream& stream)
 	std::vector<std::wstring> tags = std::vector<std::wstring>();
 	while (!stream.eof())
 	{
-		std::wstring line = getUserInputLine(stream);
+		std::wstring line = getInputLine(stream);
 		if (line == L"")
 			break;
 		if (line == L"%tags")

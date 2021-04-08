@@ -3,7 +3,7 @@
 #include <iostream>
 #include <vector>
 
-std::wstring getUserInputLine(std::wistream &stream = std::wcin);
+std::wstring getInputLine(std::wistream &stream = std::wcin);
 bool getUserYesNo();
 std::wstring toUpper(std::wstring wstr);
 std::wstring toLower(std::wstring wstr);

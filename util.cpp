@@ -2,7 +2,7 @@
 #include <string>
 #include "util.h"
 
-std::wstring getUserInputLine(std::wistream& stream)
+std::wstring getInputLine(std::wistream& stream)
 {
 	std::wstring userInput = L"";
 	std::getline(stream, userInput);
@@ -11,7 +11,7 @@ std::wstring getUserInputLine(std::wistream& stream)
 
 bool getUserYesNo()
 {
-	return isYes(getUserInputLine());
+	return isYes(getInputLine());
 }
 
 std::wstring toUpper(std::wstring wstr)

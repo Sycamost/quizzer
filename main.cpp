@@ -19,7 +19,7 @@ int main() {
 
 	while (true)
 	{
-		std::wstring userInput = getUserInputLine();
+		std::wstring userInput = getInputLine();
 		CmdHandler::Returns ret = (*cmdHandler)(userInput);
 
 		if (ret == CmdHandler::Returns::SUCCESS)

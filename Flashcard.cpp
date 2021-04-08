@@ -69,15 +69,15 @@ std::vector<Question*> Flashcard::readFlashcardList()
 				std::vector<Option> options = Option::readOptions(file);
 				bool caseSensitive = std::find_if(options.begin(), options.end(), [](Option opt) -> bool {return opt.getOption() == _optCaseSensitive; }) != options.end();
 
-				std::wstring question = getUserInputLine(file);
+				std::wstring question = getInputLine(file);
 
 				if (file.eof()) break;
-				std::wstring answer = getUserInputLine(file);
+				std::wstring answer = getInputLine(file);
 
 				std::vector<std::wstring> tags = std::vector<std::wstring>();
 				while (!file.eof())
 				{
-					std::wstring tag = getUserInputLine(file);
+					std::wstring tag = getInputLine(file);
 					if (tag == L"")
 						break;
 					tags.push_back(tag);

@@ -10,7 +10,7 @@ std::vector<Option> Option::readOptions(std::wifstream& stream)
 	while (!stream.eof())
 	{
 		std::streampos pos = stream.tellg();
-		std::vector<std::wstring> lineWords = splitByWord(getUserInputLine(stream));
+		std::vector<std::wstring> lineWords = splitByWord(getInputLine(stream));
 		if (lineWords.size() == 0)
 			break;
 
