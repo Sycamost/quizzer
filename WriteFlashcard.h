@@ -2,7 +2,7 @@
 
 void startWritingFlashcards();
 
-class WriteFlashcardStage {
+class WriteFlashcard {
 public:
 	enum class Stage {
 		NEW_CARD,
@@ -65,5 +65,5 @@ public:
 	}
 
 private:
-	static WriteFlashcardStage::Stage _value;
+	static WriteFlashcard::Stage _value;
 };

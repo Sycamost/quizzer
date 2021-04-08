@@ -21,12 +21,16 @@ DECLARE_CMD_FUNC(startWriting) {
 };
 
 DECLARE_CMD_FUNC(cancelCurrentWrite) {
-	std::wcout << L"\nAre you sure you want to cancel adding the current card? [Y/N]\n";
+	std::wcout << L"\nAre you sure you want to cancel writing the current question? [Y/N]\n";
 	if (getUserYesNo())
 	{
-		WriteFlashcardStage::setValue(WriteFlashcardStage::Stage::NEW_CARD);
+		WriteFlashcard::setValue(WriteFlashcard::Stage::NEW_CARD);
 		return CmdHandler::Returns::SUCCESS;
 	}
-	WriteFlashcardStage::setValue(WriteFlashcardStage::Stage::FRONT);
+	WriteFlashcard::setValue(WriteFlashcard::Stage::FRONT);
 	return CmdHandler::Returns::SUCCESS;
+};
+
+DECLARE_CMD_FUNC(setCaseSensitive) {
+	
 };

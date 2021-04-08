@@ -16,16 +16,16 @@ std::vector<Flashcard*> newFlashcards = std::vector<Flashcard*>();
 
 CmdHandler::Returns writeCmdHandler(std::wstring userInput);
 
-void WriteFlashcardStage::startWriting()
+void WriteFlashcard::startWriting()
 {
 	setValue(Stage::FRONT);
 }
 
-WriteFlashcardStage::Stage WriteFlashcardStage::getValue() {
+WriteFlashcard::Stage WriteFlashcard::getValue() {
 	return _value;
 }
 
-void WriteFlashcardStage::setValue(WriteFlashcardStage::Stage stage) {
+void WriteFlashcard::setValue(WriteFlashcard::Stage stage) {
 
 	if (stage == Stage::NEW_CARD)
 	{
@@ -68,14 +68,14 @@ void WriteFlashcardStage::setValue(WriteFlashcardStage::Stage stage) {
 		return;
 	}
 }
-WriteFlashcardStage::Stage WriteFlashcardStage::_value = WriteFlashcardStage::Stage::NEW_CARD;
+WriteFlashcard::Stage WriteFlashcard::_value = WriteFlashcard::Stage::NEW_CARD;
 
 void startWritingFlashcards()
 {
 	std::wcout << "Writing new flashcards...\n\n";
 	std::wcout << "Enter the values for new flashcards' front, back and any tags.\nOnce you're finished adding tags, leave the next tag blank.\nThe front and back cannot be blank.\nUse \"cancel\" to cancel adding the current card.\n";
 	CmdHandler::setHandler(&writeCmdHandler);
-	WriteFlashcardStage::startWriting();
+	WriteFlashcard::startWriting();
 }
 
 void finishWriting()
@@ -113,18 +113,18 @@ CmdHandler::Returns writeCmdHandler(std::wstring userInput)
 	std::wstring userInputUpper = toUpper(userInput);
 	using CmdHandler::Returns;
 	
-	if (WriteFlashcardStage::getValue() == WriteFlashcardStage::Stage::NEW_CARD)
+	if (WriteFlashcard::getValue() == WriteFlashcard::Stage::NEW_CARD)
 	{
 		if (userInputUpper == Globals::cmdCase)
 		{
 			newFlashcards[newFlashcards.size() - 1]->setCaseSensitive();
-			WriteFlashcardStage::setValue(WriteFlashcardStage::Stage::NEW_CARD);
+			WriteFlashcard::setValue(WriteFlashcard::Stage::NEW_CARD);
 			return Returns::SUCCESS;
 		}
 
 		if (isYes(userInputUpper))
 		{
-			WriteFlashcardStage::setValue(WriteFlashcardStage::Stage::FRONT);
+			WriteFlashcard::setValue(WriteFlashcard::Stage::FRONT);
 			return Returns::SUCCESS;
 		}
 
@@ -132,86 +132,86 @@ CmdHandler::Returns writeCmdHandler(std::wstring userInput)
 		return Returns::SUCCESS;
 	}
 
-	else if (WriteFlashcardStage::getValue() == WriteFlashcardStage::Stage::FRONT)
+	else if (WriteFlashcard::getValue() == WriteFlashcard::Stage::FRONT)
 	{
 		if (userInputUpper == Globals::cmdCancel)
 		{
 			std::wcout << L"\nAre you sure you want to cancel adding the current card? [Y/N]\n";
 			if (getUserYesNo())
 			{
-				WriteFlashcardStage::setValue(WriteFlashcardStage::Stage::NEW_CARD);
+				WriteFlashcard::setValue(WriteFlashcard::Stage::NEW_CARD);
 				return Returns::SUCCESS;
 			}
-			WriteFlashcardStage::setValue(WriteFlashcardStage::Stage::FRONT);
+			WriteFlashcard::setValue(WriteFlashcard::Stage::FRONT);
 			return Returns::SUCCESS;
 		}
 
 		if (userInput == L"")
 		{
-			WriteFlashcardStage::setValue(WriteFlashcardStage::Stage::FRONT);
+			WriteFlashcard::setValue(WriteFlashcard::Stage::FRONT);
 			return Returns::SUCCESS;
 		}
 
 		front = userInput;
-		WriteFlashcardStage::setValue(WriteFlashcardStage::Stage::BACK);
+		WriteFlashcard::setValue(WriteFlashcard::Stage::BACK);
 		return Returns::SUCCESS;
 	}
 
-	else if (WriteFlashcardStage::getValue() == WriteFlashcardStage::Stage::BACK)
+	else if (WriteFlashcard::getValue() == WriteFlashcard::Stage::BACK)
 	{
 		if (userInputUpper == Globals::cmdCancel)
 		{
 			std::wcout << L"\nAre you sure you want to cancel adding the current card? [Y/N]\n";
 			if (getUserYesNo())
 			{
-				WriteFlashcardStage::setValue(WriteFlashcardStage::Stage::NEW_CARD);
+				WriteFlashcard::setValue(WriteFlashcard::Stage::NEW_CARD);
 				return Returns::SUCCESS;
 			}
-			WriteFlashcardStage::setValue(WriteFlashcardStage::Stage::BACK);
+			WriteFlashcard::setValue(WriteFlashcard::Stage::BACK);
 			return Returns::SUCCESS;
 		}
 
 		if (userInput == L"")
 		{
-			WriteFlashcardStage::setValue(WriteFlashcardStage::Stage::BACK);
+			WriteFlashcard::setValue(WriteFlashcard::Stage::BACK);
 			return Returns::SUCCESS;
 		}
 
 		back = userInput;
-		WriteFlashcardStage::setValue(WriteFlashcardStage::Stage::TAGS);
+		WriteFlashcard::setValue(WriteFlashcard::Stage::TAGS);
 		return Returns::SUCCESS;
 	}
 
-	else if (WriteFlashcardStage::getValue() == WriteFlashcardStage::Stage::TAGS)
+	else if (WriteFlashcard::getValue() == WriteFlashcard::Stage::TAGS)
 	{
 		if (userInputUpper == Globals::cmdCancel)
 		{
 			std::wcout << L"\nAre you sure you want to cancel adding the current card? [Y/N]\n";
 			if (getUserYesNo())
 			{
-				WriteFlashcardStage::setValue(WriteFlashcardStage::Stage::NEW_CARD);
+				WriteFlashcard::setValue(WriteFlashcard::Stage::NEW_CARD);
 				return Returns::SUCCESS;
 			}
-			WriteFlashcardStage::setValue(WriteFlashcardStage::Stage::TAGS);
+			WriteFlashcard::setValue(WriteFlashcard::Stage::TAGS);
 			return Returns::SUCCESS;
 		}
 
 		if (userInput == L"")
 		{
 			newFlashcards.push_back(new Flashcard(front, back, false, tags));
-			WriteFlashcardStage::setValue(WriteFlashcardStage::Stage::NEW_CARD);
+			WriteFlashcard::setValue(WriteFlashcard::Stage::NEW_CARD);
 			return Returns::SUCCESS;
 		}
 
 		if (userInput.find(L' ') != std::wstring::npos)
 		{
 			std::wcout << L"Tags must be one word only.\n";
-			WriteFlashcardStage::setValue(WriteFlashcardStage::Stage::TAGS);
+			WriteFlashcard::setValue(WriteFlashcard::Stage::TAGS);
 			return Returns::SUCCESS;
 		}
 
 		tags.push_back(userInput);
-		WriteFlashcardStage::setValue(WriteFlashcardStage::Stage::TAGS);
+		WriteFlashcard::setValue(WriteFlashcard::Stage::TAGS);
 		return Returns::SUCCESS;
 	}
 
