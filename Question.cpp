@@ -26,8 +26,9 @@ std::vector<std::wstring> Question::readTags(std::wifstream& stream)
 	return tags;
 }
 
-Question::Question(std::vector<std::wstring> tags)
+Question::Question(QuestionType type, std::vector<std::wstring> tags)
 {
+	_type = type;
 	_tags = tags;
 }
 
@@ -55,4 +56,9 @@ void Question::appendQuestionsToList(std::vector<Question*> questions)
 std::vector<std::wstring> Question::getTags()
 {
 	return _tags;
+}
+
+QuestionType Question::getType()
+{
+	return _type;
 }

@@ -7,7 +7,7 @@
 const std::wstring Flashcard::_optCaseSensitive = L"case_sensitive";
 
 Flashcard::Flashcard(std::wstring question, std::wstring answer, bool caseSensitive, std::vector<std::wstring> tags)
-	: Question(tags)
+	: Question(QuestionType::FLASHCARD, tags)
 {
 	_question = question;
 	_answer = answer;

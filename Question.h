@@ -3,16 +3,21 @@
 #include <string>
 #include <fstream>
 
+enum class QuestionType {
+	FLASHCARD
+};
+
 class Question
 {
 private:
 	static std::vector<Question*> _questionList;
 protected:
+	QuestionType _type;
 	std::vector<std::wstring> _tags;
 	void writeTags(std::wofstream& stream);
 	std::vector<std::wstring> readTags(std::wifstream& stream);
 public:
-	Question(std::vector<std::wstring> tags = std::vector<std::wstring>());
+	Question(QuestionType type, std::vector<std::wstring> tags = std::vector<std::wstring>());
 	virtual std::wstring getQuestion() = 0;
 	virtual std::wstring getAnswer() = 0;
 	virtual bool isCorrect(std::wstring guess) = 0;
@@ -22,4 +27,5 @@ public:
 	static void appendQuestionToList(Question* question);
 	static void appendQuestionsToList(std::vector<Question*> questions);
 	std::vector<std::wstring> getTags();
+	QuestionType getType();
 };
