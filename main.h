@@ -1,4 +1,4 @@
 #pragma once
 #include "Command.h"
 
-Command::CmdFunc quitApp;
+DEFINE_CMD_FUNC(quitApp);

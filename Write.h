@@ -2,6 +2,6 @@
 #include "CmdHandler.h"
 #include "Command.h"
 
-const Command::CmdFunc startWriting;
-const Command::CmdFunc cancelCurrentWrite;
-const Command::CmdFunc setCaseSensitive;
+DEFINE_CMD_FUNC(startWriting);
+DEFINE_CMD_FUNC(cancelCurrentWrite);
+DEFINE_CMD_FUNC(setCaseSensitive);

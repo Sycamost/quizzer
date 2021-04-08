@@ -5,6 +5,9 @@
 #include <map>
 #include "CmdHandler.h"
 
+#define DEFINE_CMD_FUNC(func) const Command::CmdFunc func;
+#define DECLARE_CMD_FUNC(func) const Command::CmdFunc func = [](std::vector<std::wstring> args) -> CmdHandler::Returns
+
 class Command
 {
 public:

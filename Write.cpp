@@ -3,7 +3,7 @@
 #include "util.h"
 #include "WriteFlashcard.h"
 
-const Command::CmdFunc startWriting = [](std::vector<std::wstring> args) -> CmdHandler::Returns {
+const DECLARE_CMD_FUNC(startWriting) {
 
 	if (args.size() == 0)
 		return CmdHandler::Returns::TOO_FEW_ARGS;
