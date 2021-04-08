@@ -14,8 +14,14 @@ Command* Command::read(std::wifstream& stream)
 		stream.seekg(pos);
 		return NULL;
 	}
+	return read(line);
+}
 
-	std::vector<std::wstring> words = splitByWord(line);
+Command* Command::read(std::wstring userInput)
+{
+	std::vector<std::wstring> words = splitByWord(userInput);
+	if (words.size() == 0)
+		return NULL;
 	std::wstring cmd = words[0].substr(1);
 
 	auto cmdFuncIter = Command::_cmdFuncs.find(cmd);

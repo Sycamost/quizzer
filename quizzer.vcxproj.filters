@@ -92,5 +92,8 @@
     <ClInclude Include="WriteFlashcard.h">
       <Filter>Header Files\Write</Filter>
     </ClInclude>
+    <ClInclude Include="WriteQuestion.h">
+      <Filter>Header Files\Write</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

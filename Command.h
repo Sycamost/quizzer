@@ -12,6 +12,7 @@ class Command
 {
 public:
 	static Command* read(std::wifstream& stream);
+	static Command* read(std::wstring userInput);
 	CmdHandler::Returns doCmdFunc();
 	typedef CmdHandler::Returns (*CmdFunc) (std::vector<std::wstring> args);
 	static const std::wstring cmdWriteOptFlashcard;
