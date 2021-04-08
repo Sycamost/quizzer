@@ -2,27 +2,38 @@
 #include <iostream>
 #include "Question.h"
 #include "WriteQuestion.h"
+#include "Command.h"
+#include "WriteFlashcard.h"
 #include "CmdHandler.h"
 #include "util.h"
 
 const std::vector<const WriteQuestion> WriteQuestion::_instances = std::vector<const WriteQuestion>({
-	WriteQuestion(/* flashcard */)
+	WriteQuestion(
+		QuestionType::FLASHCARD,
+		WriteFlashcard::startWriting,
+		WriteFlashcard::inputData,
+		WriteFlashcard::cancel,
+		WriteFlashcard::resetLastInputStep,
+		WriteFlashcard::pushCurrent,
+		WriteFlashcard::writeToFile)
 });
 
 WriteQuestion::WriteQuestion(
 	QuestionType type,
+	void(*startWriting)(),
 	void(*inputData)(std::wstring),
 	void(*cancel)(),
-	void(*resetLastStep)(),
+	void(*resetLastInputStep)(),
 	void(*pushCurrent)(),
 	std::vector<Question*>(*writeToFile)())
 {
 	_type = type;
 	_stage = Stage::NEXT_QUESTION;
 	_tags = std::vector<std::wstring>();
+	_startWriting = startWriting;
 	_inputData = inputData;
 	_cancel = cancel;
-	_resetLastStep = resetLastStep;
+	_resetLastInputStep = resetLastInputStep;
 	_pushCurrent = pushCurrent;
 	_writeToFile = writeToFile;
 }
@@ -91,6 +102,14 @@ const std::vector<std::wstring> WriteQuestion::getTags()
 	return _currentInstance._tags;
 }
 
+void WriteQuestion::startWriting(const QuestionType qt)
+{
+	std::wstring qtDisp = questionTypeDisplay.at(qt);
+	std::wcout << "Writing new " << qtDisp << L"s...\n\n";
+	setCurrentType(qt);
+	_currentInstance.startWriting();
+}
+
 void WriteQuestion::pushTag(std::wstring tag)
 {
 	_currentInstance._tags.push_back(tag);
@@ -103,7 +122,23 @@ const void WriteQuestion::cancel()
 
 const void WriteQuestion::resetLastStep()
 {
-	_currentInstance._resetLastStep();
+	switch (getStage())
+	{
+	case Stage::NEXT_QUESTION:
+		setStage(Stage::NEXT_QUESTION);
+		break;
+
+	case Stage::INPUT_DATA:
+		_currentInstance._resetLastInputStep();
+		break;
+
+	case Stage::INPUT_TAGS:
+		setStage(Stage::INPUT_TAGS);
+		break;
+
+	default:
+		break;
+	}
 }
 
 const void WriteQuestion::pushCurrent()

@@ -12,9 +12,10 @@ public:
 	};
 	WriteQuestion(
 		QuestionType type,
+		void (*startWriting)(),
 		void (*inputData)(std::wstring),
 		void (*cancel)(),
-		void (*resetLastStep)(),
+		void (*_resetLastInputStep)(),
 		void (*pushCurrent)(),
 		std::vector<Question*> (*writeToFile)()
 	);
@@ -23,6 +24,7 @@ public:
 	static const Stage getStage();
 	static void setStage(Stage stage);
 	static const std::vector<std::wstring> getTags();
+	static void startWriting(const QuestionType qt);
 	static void pushTag(std::wstring tag);
 	static const void inputData(std::wstring);
 	static const void finishWriting();
@@ -35,9 +37,10 @@ private:
 	QuestionType _type;
 	std::vector<std::wstring> _tags;
 	Stage _stage;
+	void (*_startWriting)();
 	void (*_inputData)(std::wstring);
 	void (*_cancel)();
-	void (*_resetLastStep)();
+	void (*_resetLastInputStep)();
 	void (*_pushCurrent)();
 	std::vector<Question*> (*_writeToFile)();
 };

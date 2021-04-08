@@ -9,8 +9,10 @@ typedef std::pair<const QuestionType, const std::wstring> PairQtWstr;
 const MapQtWstr questionTypeDisplay = MapQtWstr({
 	PairQtWstr(QuestionType::FLASHCARD, L"flashcard")
 });
-const MapQtWstr questionTypeCode = MapQtWstr({
-	PairQtWstr(QuestionType::FLASHCARD, L"FLASHCARD")
+typedef std::map<const std::wstring, const QuestionType> MapWstrQt;
+typedef std::pair<const std::wstring, const QuestionType> PairWstrQt;
+const MapWstrQt questionCodeType = MapWstrQt({
+	PairWstrQt(L"FLASHCARD", QuestionType::FLASHCARD)
 });
 
 void Question::writeTags(std::wofstream& stream)

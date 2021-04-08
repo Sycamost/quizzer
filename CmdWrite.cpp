@@ -5,37 +5,6 @@
 #include "WriteFlashcard.h"
 #include "globals.h"
 
-DECLARE_CMD_FUNC(startWriting) {
-
-	if (args.size() == 0)
-		return CmdHandler::Returns::TOO_FEW_ARGS;
-
-	std::wstring type = toUpper(args[0]);
-
-	if (type == questionTypeCode.at(QuestionType::FLASHCARD))
-	{
-		startWritingFlashcards();
-		return CmdHandler::Returns::SUCCESS;
-	}
-
-	return CmdHandler::Returns::INVALID_ARGS;
-};
-
-DECLARE_CMD_FUNC(cancelCurrentWrite) {
-	std::wcout << L"\nAre you sure you want to cancel writing the current question? [Y/N]\n";
-	if (getUserYesNo())
-	{
-		WriteQuestion::setStage(WriteQuestion::Stage::NEXT_QUESTION);
-		return CmdHandler::Returns::SUCCESS;
-	}
-	WriteQuestion::resetLastStep();
-	return CmdHandler::Returns::SUCCESS;
-};
-
-DECLARE_CMD_FUNC(setCaseSensitive) {
-	throw new std::exception("setCaseSensitive() not implemented yet!");
-};
-
 CmdHandler::Returns writeCmdHandler(std::wstring userInput)
 {
 	using CmdHandler::Returns;
@@ -89,3 +58,32 @@ CmdHandler::Returns writeCmdHandler(std::wstring userInput)
 	WriteQuestion::finishWriting();
 	return Returns::CMD_NOT_RECOGNISED;
 }
+
+DECLARE_CMD_FUNC(startWriting) {
+
+	if (args.size() == 0)
+		return CmdHandler::Returns::TOO_FEW_ARGS;
+
+	auto typeIter = questionCodeType.find(toUpper(args[0]));
+	if (typeIter == questionCodeType.end())
+		return CmdHandler::Returns::INVALID_ARGS;
+
+	CmdHandler::setHandler(writeCmdHandler);
+	WriteQuestion::startWriting(typeIter->second);
+	return CmdHandler::Returns::SUCCESS;
+};
+
+DECLARE_CMD_FUNC(cancelCurrentWrite) {
+	std::wcout << L"\nAre you sure you want to cancel writing the current question? [Y/N]\n";
+	if (getUserYesNo())
+	{
+		WriteQuestion::setStage(WriteQuestion::Stage::NEXT_QUESTION);
+		return CmdHandler::Returns::SUCCESS;
+	}
+	WriteQuestion::resetLastStep();
+	return CmdHandler::Returns::SUCCESS;
+};
+
+DECLARE_CMD_FUNC(setCaseSensitive) {
+	throw new std::exception("setCaseSensitive() not implemented yet!");
+};
