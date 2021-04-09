@@ -11,7 +11,7 @@ const std::vector<WriteQuestion> WriteQuestion::_instances = std::vector<WriteQu
 	WriteQuestion(
 		QuestionType::FLASHCARD,
 		WriteFlashcard::startWritingMessage,
-		WriteFlashcard::startNextInputData,
+		WriteFlashcard::startInputData,
 		WriteFlashcard::inputData,
 		WriteFlashcard::cancel,
 		WriteFlashcard::resetLastInputStep,

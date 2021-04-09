@@ -166,8 +166,8 @@ DECLARE_CMD_FUNC(startPlaying)
 
 
 	PlayStage::startPlay(questionsInPlay);
-
 	CmdHandler::setHandler(playHandler);
+	return CmdHandler::Returns::SUCCESS;
 };
 
 CmdHandler::Returns playHandler(std::wstring userInput)
