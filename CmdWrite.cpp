@@ -20,8 +20,7 @@ CmdHandler::Returns writeCmdHandler(std::wstring userInput)
 
 		if (getUserYesNo())
 		{
-			WriteQuestion::cancel();
-			return CmdHandler::Returns::SUCCESS;
+			return WriteQuestion::cancel();
 		}
 
 		WriteQuestion::resetLastStep();
@@ -30,8 +29,7 @@ CmdHandler::Returns writeCmdHandler(std::wstring userInput)
 
 	if (stage == Stage::INPUT_DATA)
 	{
-		WriteQuestion::inputData(userInput);
-		return Returns::SUCCESS;
+		return WriteQuestion::inputData(userInput);
 	}
 
 	else if (stage == Stage::INPUT_TAGS)

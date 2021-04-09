@@ -4,13 +4,13 @@
 
 std::vector<Question*> Question::_questionList = std::vector<Question*>();
 
-typedef std::map<const QuestionType, const std::wstring> MapQtWstr;
-typedef std::pair<const QuestionType, const std::wstring> PairQtWstr;
+typedef std::map<QuestionType, std::wstring> MapQtWstr;
+typedef std::pair<QuestionType, std::wstring> PairQtWstr;
 const MapQtWstr questionTypeDisplay = MapQtWstr({
 	PairQtWstr(QuestionType::FLASHCARD, L"flashcard")
 });
-typedef std::map<const std::wstring, const QuestionType> MapWstrQt;
-typedef std::pair<const std::wstring, const QuestionType> PairWstrQt;
+typedef std::map<std::wstring, QuestionType> MapWstrQt;
+typedef std::pair<std::wstring, QuestionType> PairWstrQt;
 const MapWstrQt questionCodeType = MapWstrQt({
 	PairWstrQt(L"FLASHCARD", QuestionType::FLASHCARD)
 });

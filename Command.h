@@ -46,6 +46,6 @@ private:
 	CommandInfo _commandInfo;
 	std::wstring _code;
 	std::vector<std::wstring> _args;
-	static const std::map<const std::wstring, const CommandInfo> _commandInfos;
+	static const std::map<std::wstring, CommandInfo> _commandInfos;
 	Command(std::wstring code, std::vector<std::wstring> args, CommandInfo commandInfo);
 };

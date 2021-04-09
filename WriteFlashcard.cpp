@@ -14,6 +14,7 @@
 WriteFlashcard::InputDataStage WriteFlashcard::_inputDataStage = WriteFlashcard::InputDataStage::FRONT;
 std::wstring WriteFlashcard::_currentFront = L"";
 std::wstring WriteFlashcard::_currentBack = L"";
+bool WriteFlashcard::_currentCaseSensitive = false;
 std::vector<Flashcard*> WriteFlashcard::_newFlashcards = std::vector<Flashcard*>();
 
 CmdHandler::Returns writeCmdHandler(std::wstring userInput);
@@ -24,6 +25,7 @@ void WriteFlashcard::setInputDataStage(InputDataStage inputDataStage) {
 	{
 		_currentFront = L"";
 		_currentBack = L"";
+		_currentCaseSensitive = false;
 		std::wcout << L"Front:\t";
 		_inputDataStage = inputDataStage;
 		return;
@@ -73,61 +75,46 @@ std::vector<Question*> WriteFlashcard::writeToFile()
 	return convv<Flashcard*, Question*>(_newFlashcards);
 }
 
-void WriteFlashcard::inputData(std::wstring)
+void WriteFlashcard::inputData(std::wstring userInput)
 {
-	std::wstring userInputUpper = toUpper(userInput);
-	using CmdHandler::Returns;
-
-	if (WriteFlashcard::getValue() == WriteFlashcard::InputStage::FRONT)
-	{
-		if (userInput == L"")
+	bool isEmpty = (userInput == L"");
+	auto resetIfEmpty = [isEmpty]() -> bool {
+		if (isEmpty)
 		{
-			WriteFlashcard::setStage(WriteFlashcard::InputStage::FRONT);
-			return Returns::SUCCESS;
+			resetLastInputStep();
+			return true;
 		}
+		return false;
+	};
 
-		front = userInput;
-		WriteFlashcard::setStage(WriteFlashcard::InputStage::BACK);
-		return Returns::SUCCESS;
+	if (_inputDataStage == InputDataStage::FRONT)
+	{
+		if (resetIfEmpty())
+			return;
+		_currentFront = userInput;
+		setInputDataStage(InputDataStage::BACK);
+		return;
 	}
 
-	else if (WriteFlashcard::getValue() == WriteFlashcard::InputStage::BACK)
+	if (_inputDataStage == InputDataStage::BACK)
 	{
-
-		if (userInput == L"")
-		{
-			WriteFlashcard::setStage(WriteFlashcard::InputStage::BACK);
-			return Returns::SUCCESS;
-		}
-
-		back = userInput;
-		WriteFlashcard::setStage(WriteFlashcard::InputStage::TAGS);
-		return Returns::SUCCESS;
+		if (resetIfEmpty())
+			return;
+		_currentBack = userInput;
+		setInputDataStage(InputDataStage::CASE_SENSITIVE);
+		return;
 	}
 
-	else if (WriteFlashcard::getValue() == WriteFlashcard::InputStage::TAGS)
+	if (_inputDataStage == InputDataStage::CASE_SENSITIVE)
 	{
-		if (userInput == L"")
-		{
-			newFlashcards.push_back(new Flashcard(front, back, false, tags));
-			WriteFlashcard::setStage(WriteFlashcard::InputStage::NEW_CARD);
-			return Returns::SUCCESS;
-		}
-
-		if (userInput.find(L' ') != std::wstring::npos)
-		{
-			std::wcout << L"Tags must be one word only.\n";
-			WriteFlashcard::setStage(WriteFlashcard::InputStage::TAGS);
-			return Returns::SUCCESS;
-		}
-
-		tags.push_back(userInput);
-		WriteFlashcard::setStage(WriteFlashcard::InputStage::TAGS);
-		return Returns::SUCCESS;
+		_currentCaseSensitive = isYes(userInput);
+		WriteQuestion::setStage(WriteQuestion::Stage::INPUT_TAGS);
+		setInputDataStage(InputDataStage::FRONT);
+		return;
 	}
 
 	std::wcout << L"\nSomething went wrong interpreting that input. Exiting write session...\n";
-	finishWriting();
+	WriteQuestion::finishWriting();
 }
 
 void WriteFlashcard::cancel()

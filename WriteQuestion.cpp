@@ -7,7 +7,7 @@
 #include "CmdHandler.h"
 #include "util.h"
 
-const std::vector<const WriteQuestion> WriteQuestion::_instances = std::vector<const WriteQuestion>({
+const std::vector<WriteQuestion> WriteQuestion::_instances = std::vector<WriteQuestion>({
 	WriteQuestion(
 		QuestionType::FLASHCARD,
 		WriteFlashcard::startWriting,
@@ -45,7 +45,7 @@ const QuestionType WriteQuestion::getCurrentType()
 
 const void WriteQuestion::inputData(std::wstring userInput)
 {
-	_currentInstance._inputData(userInput);
+	return _currentInstance._inputData(userInput);
 }
 
 void WriteQuestion::setCurrentType(const QuestionType qt)
@@ -107,7 +107,7 @@ void WriteQuestion::startWriting(const QuestionType qt)
 	std::wstring qtDisp = questionTypeDisplay.at(qt);
 	std::wcout << "Writing new " << qtDisp << L"s...\n\n";
 	setCurrentType(qt);
-	_currentInstance.startWriting();
+	_currentInstance.startWriting(qt);
 }
 
 void WriteQuestion::pushTag(std::wstring tag)

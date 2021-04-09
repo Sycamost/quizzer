@@ -8,8 +8,8 @@ enum class QuestionType {
 	FLASHCARD
 };
 
-const std::map<const QuestionType, const std::wstring> questionTypeDisplay;
-const std::map<const std::wstring, const QuestionType> questionCodeType;
+const std::map<QuestionType, std::wstring> questionTypeDisplay;
+const std::map<std::wstring, QuestionType> questionCodeType;
 
 class Question
 {

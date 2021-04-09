@@ -33,7 +33,7 @@ public:
 	static const void pushCurrent();
 private:
 	static WriteQuestion _currentInstance;
-	static const std::vector<const WriteQuestion> _instances;
+	static const std::vector<WriteQuestion> _instances;
 	QuestionType _type;
 	std::vector<std::wstring> _tags;
 	Stage _stage;

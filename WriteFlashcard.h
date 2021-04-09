@@ -4,7 +4,7 @@
 class WriteFlashcard {
 public:
 	static void startWriting();
-	static void inputData(std::wstring);
+	static void inputData(std::wstring userInput);
 	static void cancel();
 	static void resetLastInputStep();
 	static void pushCurrent();
@@ -19,5 +19,6 @@ private:
 	static WriteFlashcard::InputDataStage _inputDataStage;
 	static std::wstring _currentFront;
 	static std::wstring _currentBack;
+	static bool _currentCaseSensitive;
 	static std::vector<Flashcard*> _newFlashcards;
 };

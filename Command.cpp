@@ -51,9 +51,9 @@ Command::Command(std::wstring code, std::vector<std::wstring> args, CommandInfo 
 	_commandInfo = commandInfo;
 }
 
-typedef std::map<const std::wstring, const CommandInfo> mapCodeCmdInfo;
-inline const std::pair<const std::wstring, const CommandInfo> pairCodeCmdInfo(const std::wstring code, const CommandType type, const CommandFunc func) {
-	return std::pair<const std::wstring, const CommandInfo>(code, CommandInfo(type, func));
+typedef std::map<std::wstring, CommandInfo> mapCodeCmdInfo;
+inline const std::pair<std::wstring, CommandInfo> pairCodeCmdInfo(std::wstring code, CommandType type, CommandFunc func) {
+	return std::pair<std::wstring, CommandInfo>(code, CommandInfo(type, func));
 }
 const mapCodeCmdInfo Command::_commandInfos = mapCodeCmdInfo({
 	pairCodeCmdInfo(L"CANCEL", CommandType::CANCEL, cancelCurrentWrite),
