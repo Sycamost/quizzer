@@ -4,7 +4,7 @@
 class WriteFlashcard {
 public:
 	static const std::wstring startWritingMessage;
-	static void startNextInputData();
+	static void startInputData();
 	static void inputData(std::wstring userInput);
 	static void cancel();
 	static void resetLastInputStep();
