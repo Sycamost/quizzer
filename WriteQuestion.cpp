@@ -11,7 +11,7 @@ const std::vector<WriteQuestion> WriteQuestion::_instances = std::vector<WriteQu
 	WriteQuestion(
 		QuestionType::FLASHCARD,
 		WriteFlashcard::startWritingMessage,
-		WriteFlashcard::startNextInputData,
+		WriteFlashcard::startInputData,
 		WriteFlashcard::inputData,
 		WriteFlashcard::cancel,
 		WriteFlashcard::resetLastInputStep,
@@ -64,7 +64,7 @@ void WriteQuestion::setCurrentType(const QuestionType qt)
 
 const WriteQuestion::Stage WriteQuestion::getStage()
 {
-	_currentInstance._stage;
+	return _currentInstance._stage;
 }
 
 void WriteQuestion::setStage(Stage stage)

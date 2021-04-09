@@ -148,8 +148,3 @@ void WriteFlashcard::pushCurrent(std::vector<std::wstring> tags)
 	_currentBack = L"";
 	_currentCaseSensitive = false;
 }
-
-std::vector<Question*> WriteFlashcard::writeToFile()
-{
-	return std::vector<Question*>();
-}

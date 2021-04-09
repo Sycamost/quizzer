@@ -95,7 +95,7 @@ public:
 
 	static int getNumSkipped()
 	{
-		return _questions.size() - (_correct + _wrong);
+		return (int)_questions.size() - (_correct + _wrong);
 	}
 
 	static std::wstring getCurrentCorrectAnswer()
@@ -166,8 +166,8 @@ DECLARE_CMD_FUNC(startPlaying)
 
 
 	PlayStage::startPlay(questionsInPlay);
-
 	CmdHandler::setHandler(playHandler);
+	return CmdHandler::Returns::SUCCESS;
 };
 
 CmdHandler::Returns playHandler(std::wstring userInput)

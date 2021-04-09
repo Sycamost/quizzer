@@ -78,7 +78,8 @@ const std::wstring questionTypeCode(const QuestionType qt)
 {
 	auto iter = std::find_if(
 		questionCodeType.begin(),
-		questionCodeType.end(), [qt](std::pair<std::wstring, QuestionType> pair) -> bool { return pair.second == qt; });
+		questionCodeType.end(),
+		[qt](std::pair<std::wstring, QuestionType> pair) -> bool { return pair.second == qt; });
 	if (iter == questionCodeType.end())
 		return L"";
 	return iter->first;
