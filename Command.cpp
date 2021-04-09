@@ -1,4 +1,4 @@
-#include <utility>
+#include <algorithm>
 #include "Command.h"
 #include "CmdWrite.h"
 #include "main.h"
@@ -24,14 +24,29 @@ Command* Command::read(std::wstring userInput)
 		return NULL;
 	std::wstring cmd = words[0].substr(1);
 
-	auto cmdInfoIter = Command::_commandInfos.find(cmd);
+	auto cmdInfoIter = std::find(_commandInfos.begin(), _commandInfos.end(), cmd);
 	if (cmdInfoIter == Command::_commandInfos.end())
 		return NULL;
 
 	return new Command(
-		cmd,
 		std::vector<std::wstring>(words.begin() + 1, words.end(), std::allocator<std::wstring>()),
-		cmdInfoIter->second);
+		*cmdInfoIter);
+}
+
+const CommandInfo* Command::getCommandInfo(CommandType type)
+{
+	auto ciIter = std::find_if(_commandInfos.begin(), _commandInfos.end(), CommandInfo::isType);
+	if (ciIter == _commandInfos.end())
+		return nullptr;
+	return &(*ciIter);
+}
+
+const CommandInfo* Command::getCommandInfo(std::wstring code)
+{
+	auto ciIter = std::find_if(_commandInfos.begin(), _commandInfos.end(), CommandInfo::isCode);
+	if (ciIter == _commandInfos.end())
+		return nullptr;
+	return &(*ciIter);
 }
 
 CmdHandler::Returns Command::doCommandFunc()
@@ -44,24 +59,19 @@ CommandInfo Command::getCommandInfo()
 	return _commandInfo;
 }
 
-Command::Command(std::wstring code, std::vector<std::wstring> args, CommandInfo commandInfo)
+Command::Command(std::vector<std::wstring> args, CommandInfo commandInfo)
 {
-	_code = code;
 	_args = args;
 	_commandInfo = commandInfo;
 }
 
-typedef std::map<std::wstring, CommandInfo> mapCodeCmdInfo;
-inline const std::pair<std::wstring, CommandInfo> pairCodeCmdInfo(std::wstring code, CommandType type, CommandFunc func) {
-	return std::pair<std::wstring, CommandInfo>(code, CommandInfo(type, func));
-}
-const mapCodeCmdInfo Command::_commandInfos = mapCodeCmdInfo({
-	pairCodeCmdInfo(L"CANCEL", CommandType::CANCEL, cancelCurrentWrite),
-	pairCodeCmdInfo(L"QUIT", CommandType::QUIT, quitApp),
-	pairCodeCmdInfo(L"EXIT", CommandType::EXIT, quitApp),
-	pairCodeCmdInfo(L"WRITE", CommandType::WRITE, startWriting),
-	pairCodeCmdInfo(L"CASE", CommandType::CASE, setCaseSensitive),
-	pairCodeCmdInfo(L"BOOST", CommandType::BOOST, boost),
-	pairCodeCmdInfo(L"FINISH", CommandType::FINISH, finish),
-	pairCodeCmdInfo(L"PLAY", CommandType::PLAY, startPlaying)
+const std::vector<CommandInfo> Command::_commandInfos = std::vector<CommandInfo>({
+	CommandInfo(CommandType::CANCEL, L"CANCEL", cancelCurrentWrite),
+	CommandInfo(CommandType::QUIT, L"QUIT", quitApp),
+	CommandInfo(CommandType::EXIT, L"EXIT", quitApp),
+	CommandInfo(CommandType::WRITE, L"WRITE", startWriting),
+	CommandInfo(CommandType::CASE, L"CASE", setCaseSensitive),
+	CommandInfo(CommandType::BOOST, L"BOOST", boost),
+	CommandInfo(CommandType::FINISH, L"FINISH", finish),
+	CommandInfo(CommandType::PLAY, L"PLAY", startPlaying)
 });

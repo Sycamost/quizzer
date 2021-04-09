@@ -11,7 +11,7 @@
 #include "WriteFlashcard.h"
 #include "WriteQuestion.h"
 
-WriteFlashcard::InputDataStage WriteFlashcard::_inputDataStage = WriteFlashcard::InputDataStage::FRONT;
+WriteFlashcard::InputDataStage WriteFlashcard::_inputDataStage = WriteFlashcard::InputDataStage::SLEEP;
 std::wstring WriteFlashcard::_currentFront = L"";
 std::wstring WriteFlashcard::_currentBack = L"";
 bool WriteFlashcard::_currentCaseSensitive = false;
@@ -46,9 +46,13 @@ void WriteFlashcard::setInputDataStage(InputDataStage inputDataStage) {
 	}
 }
 
-void WriteFlashcard::startWriting()
+const std::wstring WriteFlashcard::startWritingMessage =
+	L"Enter the values for new flashcards' front, back and any tags.\nOnce you're finished adding tags, leave the next tag blank.\nThe front and back cannot be blank.\nUse <"
+	+ toLower(Command::getCommandInfo(CommandType::CANCEL)->code)
+	+ L"> to cancel adding the current card.\n";
+
+void WriteFlashcard::startInputData()
 {
-	std::wcout << "Enter the values for new flashcards' front, back and any tags.\nOnce you're finished adding tags, leave the next tag blank.\nThe front and back cannot be blank.\nUse \"cancel\" to cancel adding the current card.\n";
 	setInputDataStage(InputDataStage::FRONT);
 }
 
@@ -87,6 +91,13 @@ void WriteFlashcard::inputData(std::wstring userInput)
 		return false;
 	};
 
+	if (_inputDataStage == InputDataStage::SLEEP)
+	{
+		std::wcout << L"Error - I was asked to take user input for a new flashcard, but I was asleep at the time. Exiting write session...\n";
+		WriteQuestion::finishWriting();
+		return;
+	}
+
 	if (_inputDataStage == InputDataStage::FRONT)
 	{
 		if (resetIfEmpty())
@@ -109,7 +120,7 @@ void WriteFlashcard::inputData(std::wstring userInput)
 	{
 		_currentCaseSensitive = isYes(userInput);
 		WriteQuestion::setStage(WriteQuestion::Stage::INPUT_TAGS);
-		setInputDataStage(InputDataStage::FRONT);
+		setInputDataStage(InputDataStage::SLEEP);
 		return;
 	}
 
@@ -119,14 +130,23 @@ void WriteFlashcard::inputData(std::wstring userInput)
 
 void WriteFlashcard::cancel()
 {
+	_currentFront = L"";
+	_currentBack = L"";
+	_currentCaseSensitive = false;
+	_inputDataStage = InputDataStage::SLEEP;
 }
 
 void WriteFlashcard::resetLastInputStep()
 {
+	setInputDataStage(_inputDataStage);
 }
 
-void WriteFlashcard::pushCurrent()
+void WriteFlashcard::pushCurrent(std::vector<std::wstring> tags)
 {
+	_newFlashcards.push_back(new Flashcard(_currentFront, _currentBack, _currentCaseSensitive, tags));
+	_currentFront = L"";
+	_currentBack = L"";
+	_currentCaseSensitive = false;
 }
 
 std::vector<Question*> WriteFlashcard::writeToFile()

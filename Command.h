@@ -2,8 +2,6 @@
 #include <string>
 #include <vector>
 #include <fstream>
-#include <map>
-#include <utility>
 #include "CmdHandler.h"
 
 #define DEFINE_CMD_FUNC(func) const CommandFunc func
@@ -24,13 +22,23 @@ typedef CmdHandler::Returns (*CommandFunc) (std::vector<std::wstring> args);
 
 struct CommandInfo {
 	CommandType type;
+	std::wstring code;
 	CommandFunc func;
 	CommandInfo() {
 		throw new std::exception("CommandInfo not initialized properly.");
 	}
-	CommandInfo(CommandType ty, CommandFunc fn) {
+	CommandInfo(CommandType ty, std::wstring c, CommandFunc fn) {
 		type = ty;
+		code = c;
 		func = fn;
+	}
+	bool isType(CommandType ty)
+	{
+		return type == ty;
+	}
+	bool isCode(std::wstring wstr)
+	{
+		return code == wstr;
 	}
 };
 
@@ -39,13 +47,13 @@ class Command
 public:
 	static Command* read(std::wifstream& stream);
 	static Command* read(std::wstring userInput);
+	static const CommandInfo* getCommandInfo(CommandType type);
+	static const CommandInfo* getCommandInfo(std::wstring code);
 	CmdHandler::Returns doCommandFunc();
 	CommandInfo getCommandInfo();
-	static const std::wstring cmdWriteOptFlashcard;
 private:
 	CommandInfo _commandInfo;
-	std::wstring _code;
 	std::vector<std::wstring> _args;
-	static const std::map<std::wstring, CommandInfo> _commandInfos;
-	Command(std::wstring code, std::vector<std::wstring> args, CommandInfo commandInfo);
+	static const std::vector<CommandInfo> _commandInfos;
+	Command(std::vector<std::wstring> args, CommandInfo commandInfo);
 };

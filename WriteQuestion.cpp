@@ -10,7 +10,8 @@
 const std::vector<WriteQuestion> WriteQuestion::_instances = std::vector<WriteQuestion>({
 	WriteQuestion(
 		QuestionType::FLASHCARD,
-		WriteFlashcard::startWriting,
+		WriteFlashcard::startWritingMessage,
+		WriteFlashcard::startNextInputData,
 		WriteFlashcard::inputData,
 		WriteFlashcard::cancel,
 		WriteFlashcard::resetLastInputStep,
@@ -20,17 +21,19 @@ const std::vector<WriteQuestion> WriteQuestion::_instances = std::vector<WriteQu
 
 WriteQuestion::WriteQuestion(
 	QuestionType type,
-	void(*startWriting)(),
+	std::wstring startWritingMessage,
+	void(*startInputData)(),
 	void(*inputData)(std::wstring),
 	void(*cancel)(),
 	void(*resetLastInputStep)(),
-	void(*pushCurrent)(),
+	void(*pushCurrent)(std::vector<std::wstring>),
 	std::vector<Question*>(*writeToFile)())
 {
 	_type = type;
 	_stage = Stage::NEXT_QUESTION;
 	_tags = std::vector<std::wstring>();
-	_startWriting = startWriting;
+	_startWritingMessage = startWritingMessage;
+	_startInputData = startInputData;
 	_inputData = inputData;
 	_cancel = cancel;
 	_resetLastInputStep = resetLastInputStep;
@@ -43,7 +46,7 @@ const QuestionType WriteQuestion::getCurrentType()
 	return _currentInstance._type;
 }
 
-const void WriteQuestion::inputData(std::wstring userInput)
+void WriteQuestion::inputData(std::wstring userInput)
 {
 	return _currentInstance._inputData(userInput);
 }
@@ -107,7 +110,8 @@ void WriteQuestion::startWriting(const QuestionType qt)
 	std::wstring qtDisp = questionTypeDisplay.at(qt);
 	std::wcout << "Writing new " << qtDisp << L"s...\n\n";
 	setCurrentType(qt);
-	_currentInstance.startWriting(qt);
+	std::wcout << _currentInstance._startWritingMessage << "L\n";
+	_currentInstance._startInputData();
 }
 
 void WriteQuestion::pushTag(std::wstring tag)
@@ -115,12 +119,12 @@ void WriteQuestion::pushTag(std::wstring tag)
 	_currentInstance._tags.push_back(tag);
 }
 
-const void WriteQuestion::cancel()
+void WriteQuestion::cancel()
 {
 	_currentInstance._cancel();
 }
 
-const void WriteQuestion::resetLastStep()
+void WriteQuestion::resetLastStep()
 {
 	switch (getStage())
 	{
@@ -141,12 +145,13 @@ const void WriteQuestion::resetLastStep()
 	}
 }
 
-const void WriteQuestion::pushCurrent()
+void WriteQuestion::pushCurrent()
 {
-	_currentInstance._pushCurrent();
+	_currentInstance._pushCurrent(_currentInstance._tags);
+	_currentInstance._tags = std::vector<std::wstring>();
 }
 
-const void WriteQuestion::finishWriting()
+void WriteQuestion::finishWriting()
 {
 	std::wcout << L"\nFinished writing new " << questionTypeDisplay.at(getCurrentType()) << L"s.\n";
 

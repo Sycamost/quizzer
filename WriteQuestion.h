@@ -12,11 +12,12 @@ public:
 	};
 	WriteQuestion(
 		QuestionType type,
-		void (*startWriting)(),
+		std::wstring startWritingMessage,
+		void (*startInputData)(),
 		void (*inputData)(std::wstring),
 		void (*cancel)(),
 		void (*_resetLastInputStep)(),
-		void (*pushCurrent)(),
+		void (*pushCurrent)(std::vector<std::wstring>),
 		std::vector<Question*> (*writeToFile)()
 	);
 	static const QuestionType getCurrentType();
@@ -26,21 +27,22 @@ public:
 	static const std::vector<std::wstring> getTags();
 	static void startWriting(const QuestionType qt);
 	static void pushTag(std::wstring tag);
-	static const void inputData(std::wstring);
-	static const void finishWriting();
-	static const void cancel();
-	static const void resetLastStep();
-	static const void pushCurrent();
+	static void inputData(std::wstring);
+	static void finishWriting();
+	static void cancel();
+	static void resetLastStep();
+	static void pushCurrent();
 private:
 	static WriteQuestion _currentInstance;
 	static const std::vector<WriteQuestion> _instances;
 	QuestionType _type;
 	std::vector<std::wstring> _tags;
 	Stage _stage;
-	void (*_startWriting)();
-	void (*_inputData)(std::wstring);
+	std::wstring _startWritingMessage;
+	void (*_startInputData)();
+	void (*_inputData)(std::wstring userInput);
 	void (*_cancel)();
 	void (*_resetLastInputStep)();
-	void (*_pushCurrent)();
+	void (*_pushCurrent)(std::vector<std::wstring> tags);
 	std::vector<Question*> (*_writeToFile)();
 };

@@ -3,17 +3,19 @@
 
 class WriteFlashcard {
 public:
-	static void startWriting();
+	static const std::wstring startWritingMessage;
+	static void startNextInputData();
 	static void inputData(std::wstring userInput);
 	static void cancel();
 	static void resetLastInputStep();
-	static void pushCurrent();
+	static void pushCurrent(std::vector<std::wstring> tags);
 	static std::vector<Question*> writeToFile();
 private:
 	enum class InputDataStage {
 		FRONT,
 		BACK,
-		CASE_SENSITIVE
+		CASE_SENSITIVE,
+		SLEEP
 	};
 	static void setInputDataStage(const InputDataStage inputDataStage);
 	static WriteFlashcard::InputDataStage _inputDataStage;

@@ -12,24 +12,31 @@ CmdHandler::Returns writeCmdHandler(std::wstring userInput)
 	Stage stage = WriteQuestion::getStage();
 
 	Command* cmd = Command::read(userInput);
-	if (cmd != NULL && cmd->getCommandInfo().type == CommandType::CANCEL)
+	if (cmd != NULL)
 	{
-		std::wcout << L"Are you sure you want to cancel writing the current "
-			<< questionTypeDisplay.at(WriteQuestion::getCurrentType())
-			<< L"? [Y/N]\n";
-
-		if (getUserYesNo())
+		if (cmd->getCommandInfo().type == CommandType::CANCEL)
 		{
-			return WriteQuestion::cancel();
+			std::wcout << L"Are you sure you want to cancel writing the current "
+				<< questionTypeDisplay.at(WriteQuestion::getCurrentType())
+				<< L"? [Y/N]\n";
+
+			if (getUserYesNo())
+			{
+				WriteQuestion::cancel();
+				return CmdHandler::Returns::SUCCESS;
+			}
+
+			WriteQuestion::resetLastStep();
+			return CmdHandler::Returns::SUCCESS;
 		}
 
-		WriteQuestion::resetLastStep();
-		return CmdHandler::Returns::SUCCESS;
+		return CmdHandler::Returns::CMD_NOT_RECOGNISED;
 	}
 
 	if (stage == Stage::INPUT_DATA)
 	{
-		return WriteQuestion::inputData(userInput);
+		WriteQuestion::inputData(userInput);
+		return CmdHandler::Returns::SUCCESS;
 	}
 
 	else if (stage == Stage::INPUT_TAGS)
