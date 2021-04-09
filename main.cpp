@@ -2,6 +2,7 @@
 #include <vector>
 #include "CmdHandler.h"
 #include "CmdWrite.h"
+#include "WriteQuestion.h"
 #include "util.h"
 #include "globals.h"
 #include "Flashcard.h"
@@ -67,10 +68,12 @@ CmdHandler::Returns defaultCmdHandler(std::wstring userInput)
 	if (userInput.empty())
 		return CmdHandler::Returns::SUCCESS;
 
-	userInput = toUpper(userInput);
-	std::vector<std::wstring> userInputWords = splitByWord(userInput);
+	Command* command = Command::read(userInput);
+	if (command == nullptr)
+		return CmdHandler::Returns::CMD_NOT_RECOGNISED;
+	CommandInfo commandInfo = command->getCommandInfo();
 
-	if (userInputWords[0] == Globals::cmdQuit || userInputWords[0] == Globals::cmdExit) {
+	if (commandInfo.isType(CommandType::EXIT) || commandInfo.isType(CommandType::QUIT)) {
 
 		std::wcout << L"Are you sure you want to exit the app? [Y/N]\n";
 
@@ -84,24 +87,25 @@ CmdHandler::Returns defaultCmdHandler(std::wstring userInput)
 		return CmdHandler::Returns::SUCCESS;;
 	}
 
-	if (userInputWords[0] == Globals::cmdWrite)
+	std::vector<std::wstring> args = command->getArgs();
+
+	if (commandInfo.isType(CommandType::WRITE))
 	{
-		if (userInputWords.size() <= 1)
+		if (args.size() == 0)
 			return CmdHandler::Returns::TOO_FEW_ARGS;
 
-		if (userInputWords[1] == Globals::cmdWriteOptFlashcard)
+		if (args[0] == questionTypeCode(QuestionType::FLASHCARD))
 		{
-			startWritingFlashcards();
+			WriteQuestion::startWriting(QuestionType::FLASHCARD);
 			return CmdHandler::Returns::SUCCESS;
 		}
 
 		return CmdHandler::Returns::INVALID_ARGS;
 	}
 
-	if (userInputWords[0] == Globals::cmdPlay)
+	if (commandInfo.isType(CommandType::PLAY))
 	{
-		startPlaying(slice(userInputWords, 1));
-		return CmdHandler::Returns::SUCCESS;
+		return startPlaying(args);
 	}
 
 	return CmdHandler::Returns::CMD_NOT_RECOGNISED;

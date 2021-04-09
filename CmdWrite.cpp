@@ -12,7 +12,7 @@ CmdHandler::Returns writeCmdHandler(std::wstring userInput)
 	Stage stage = WriteQuestion::getStage();
 
 	Command* cmd = Command::read(userInput);
-	if (cmd != NULL)
+	if (cmd != nullptr)
 	{
 		if (cmd->getCommandInfo().type == CommandType::CANCEL)
 		{

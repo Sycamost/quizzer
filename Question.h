@@ -10,6 +10,7 @@ enum class QuestionType {
 
 const std::map<QuestionType, std::wstring> questionTypeDisplay;
 const std::map<std::wstring, QuestionType> questionCodeType;
+const std::wstring questionTypeCode(const QuestionType qt);
 
 class Question
 {

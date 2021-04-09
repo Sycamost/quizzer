@@ -51,6 +51,7 @@ public:
 	static const CommandInfo* getCommandInfo(std::wstring code);
 	CmdHandler::Returns doCommandFunc();
 	CommandInfo getCommandInfo();
+	const std::vector<std::wstring> getArgs() const;
 private:
 	CommandInfo _commandInfo;
 	std::vector<std::wstring> _args;

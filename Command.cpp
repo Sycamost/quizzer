@@ -12,21 +12,21 @@ Command* Command::read(std::wifstream& stream)
 	if (line.size() == 0 || line[0] != L'\\')
 	{
 		stream.seekg(pos);
-		return NULL;
+		return nullptr;
 	}
 	return read(line);
 }
 
 Command* Command::read(std::wstring userInput)
 {
-	std::vector<std::wstring> words = splitByWord(userInput);
+	std::vector<std::wstring> words = splitByWord(toUpper(userInput));
 	if (words.size() == 0)
-		return NULL;
+		return nullptr;
 	std::wstring cmd = words[0].substr(1);
 
 	auto cmdInfoIter = std::find(_commandInfos.begin(), _commandInfos.end(), cmd);
 	if (cmdInfoIter == Command::_commandInfos.end())
-		return NULL;
+		return nullptr;
 
 	return new Command(
 		std::vector<std::wstring>(words.begin() + 1, words.end(), std::allocator<std::wstring>()),
@@ -57,6 +57,11 @@ CmdHandler::Returns Command::doCommandFunc()
 CommandInfo Command::getCommandInfo()
 {
 	return _commandInfo;
+}
+
+const std::vector<std::wstring> Command::getArgs() const
+{
+	return _args;
 }
 
 Command::Command(std::vector<std::wstring> args, CommandInfo commandInfo)
