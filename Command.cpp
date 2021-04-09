@@ -35,18 +35,20 @@ Command* Command::read(std::wstring userInput)
 
 const CommandInfo* Command::getCommandInfo(CommandType type)
 {
-	auto ciIter = std::find_if(_commandInfos.begin(), _commandInfos.end(), CommandInfo::isType);
+	auto ciIter = std::find_if(_commandInfos.begin(), _commandInfos.end(), &CommandInfo::isType);
 	if (ciIter == _commandInfos.end())
 		return nullptr;
-	return &(*ciIter);
+	CommandInfo ci = *ciIter;
+	return &ci;
 }
 
 const CommandInfo* Command::getCommandInfo(std::wstring code)
 {
-	auto ciIter = std::find_if(_commandInfos.begin(), _commandInfos.end(), CommandInfo::isCode);
+	auto ciIter = std::find_if(_commandInfos.begin(), _commandInfos.end(), &CommandInfo::isCode);
 	if (ciIter == _commandInfos.end())
 		return nullptr;
-	return &(*ciIter);
+	CommandInfo ci = *ciIter;
+	return &ci;
 }
 
 CmdHandler::Returns Command::doCommandFunc()

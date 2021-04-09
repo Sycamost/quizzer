@@ -135,11 +135,11 @@ int PlayStage::_wrong = 0;
 bool PlayStage::_hasAnswered = false;
 bool PlayStage::_isCorrect = true;
 
-void startPlaying(std::vector<std::wstring> tags)
+DECLARE_CMD_FUNC(startPlaying)
 {
 	std::wcout << L"Starting play with ";
 	std::vector<Question*> questionsInPlay = std::vector<Question*>();
-	if (tags.empty())
+	if (args.empty())
 	{
 		questionsInPlay = Question::getQuestionList();
 		std::wcout << L"all ";
@@ -151,7 +151,7 @@ void startPlaying(std::vector<std::wstring> tags)
 		{
 			std::vector<std::wstring> thisQuestionTags = questionList[i]->getTags();
 			std::transform(thisQuestionTags.begin(), thisQuestionTags.end(), thisQuestionTags.begin(), toUpper);
-			if (shareAnyElems<std::wstring>(tags, thisQuestionTags))
+			if (shareAnyElems<std::wstring>(args, thisQuestionTags))
 				questionsInPlay.push_back(questionList[i]);
 		}
 	}
@@ -160,25 +160,33 @@ void startPlaying(std::vector<std::wstring> tags)
 		<< Globals::horizontalDoubleRule << L"\n\n"
 		<< L"You'll get given questions, and you'll have to answer correctly. "
 		<< L"If you think you've been marked down unfairly, type the command <"
-		<< toLower(Globals::cmdBoost) << L"> before the next card rolls on. Good luck!\n\n"
+		<< toLower(Command::getCommandInfo(CommandType::BOOST)->code)
+		<< L"> before the next card rolls on. Good luck!\n\n"
 		<< Globals::horizontalRule << L"\n\n";
 
 
 	PlayStage::startPlay(questionsInPlay);
 
 	CmdHandler::setHandler(playHandler);
-}
+};
 
 CmdHandler::Returns playHandler(std::wstring userInput)
 {
-	if (toUpper(userInput) == Globals::cmdFinishPlay)
+	Command* command = Command::read(userInput);
+
+	if (command != nullptr)
 	{
-		std::wcout << L"You still have " << PlayStage::getNumSkipped() << L" questions to answer. Are you sure you want to finish play here? [Y/N]\n";
-		if (getUserYesNo())
+		CommandInfo commandInfo = command->getCommandInfo();
+		if (commandInfo.isType(CommandType::FINISH))
 		{
-			PlayStage::finishPlay();
-			return CmdHandler::Returns::SUCCESS;
+			std::wcout << L"You still have " << PlayStage::getNumSkipped() << L" questions to answer. Are you sure you want to finish play here? [Y/N]\n";
+			if (getUserYesNo())
+			{
+				PlayStage::finishPlay();
+				return CmdHandler::Returns::SUCCESS;
+			}
 		}
+		return CmdHandler::Returns::CMD_NOT_RECOGNISED;
 	}
 
 	if (PlayStage::getValue() == PlayStage::Stage::QUESTION)
@@ -196,7 +204,7 @@ CmdHandler::Returns playHandler(std::wstring userInput)
 			std::wcout << L"Incorrect! The correct answer was:\n"
 				<< indent(PlayStage::getCurrentCorrectAnswer(), 1)
 				<< "\nPress enter to continue, or enter the command <"
-				<< toLower(Globals::cmdBoost)
+				<< toLower(Command::getCommandInfo(CommandType::BOOST)->code)
 				<< "> if you have been marked down unfairly.\n";
 			PlayStage::setValue(PlayStage::Stage::ANSWER);
 			return CmdHandler::Returns::SUCCESS;
@@ -205,7 +213,7 @@ CmdHandler::Returns playHandler(std::wstring userInput)
 
 	if (PlayStage::getValue() == PlayStage::Stage::ANSWER)
 	{
-		if (toUpper(userInput) == Globals::cmdBoost)
+		if (command != nullptr && command->getCommandInfo().isType(CommandType::BOOST))
 			PlayStage::boost();
 
 		PlayStage::setValue(PlayStage::Stage::QUESTION);
