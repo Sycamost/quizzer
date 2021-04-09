@@ -12,7 +12,6 @@ enum class CommandType {
 	QUIT,
 	EXIT,
 	WRITE,
-	CASE,
 	BOOST,
 	FINISH,
 	PLAY

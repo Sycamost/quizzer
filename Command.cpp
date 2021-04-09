@@ -75,7 +75,6 @@ const std::vector<CommandInfo> Command::_commandInfos = std::vector<CommandInfo>
 	CommandInfo(CommandType::QUIT, L"QUIT", quitApp),
 	CommandInfo(CommandType::EXIT, L"EXIT", quitApp),
 	CommandInfo(CommandType::WRITE, L"WRITE", startWriting),
-	CommandInfo(CommandType::CASE, L"CASE", setCaseSensitive),
 	CommandInfo(CommandType::BOOST, L"BOOST", boost),
 	CommandInfo(CommandType::FINISH, L"FINISH", finish),
 	CommandInfo(CommandType::PLAY, L"PLAY", startPlaying)
