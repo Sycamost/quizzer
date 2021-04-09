@@ -22,9 +22,12 @@ Command* Command::read(std::wstring userInput)
 	std::vector<std::wstring> words = splitByWord(toUpper(userInput));
 	if (words.size() == 0)
 		return nullptr;
-	std::wstring cmd = words[0].substr(1);
+	std::wstring code = words[0].substr(1);
 
-	auto cmdInfoIter = std::find(_commandInfos.begin(), _commandInfos.end(), cmd);
+	auto cmdInfoIter = std::find_if(
+		_commandInfos.begin(),
+		_commandInfos.end(),
+		[code](CommandInfo ci) -> bool { return ci.isCode(code); });
 	if (cmdInfoIter == Command::_commandInfos.end())
 		return nullptr;
 
@@ -41,8 +44,7 @@ const CommandInfo* Command::getCommandInfo(CommandType type)
 		[type](CommandInfo ci) -> bool { return ci.isType(type); });
 	if (ciIter == _commandInfos.end())
 		return nullptr;
-	CommandInfo ci = *ciIter;
-	return &ci;
+	return ciIter._Ptr;
 }
 
 const CommandInfo* Command::getCommandInfo(std::wstring code)
@@ -53,8 +55,7 @@ const CommandInfo* Command::getCommandInfo(std::wstring code)
 		[code](CommandInfo ci) -> bool { return ci.isCode(code); });
 	if (ciIter == _commandInfos.end())
 		return nullptr;
-	CommandInfo ci = *ciIter;
-	return &ci;
+	return ciIter._Ptr;
 }
 
 CmdHandler::Returns Command::doCommandFunc()
