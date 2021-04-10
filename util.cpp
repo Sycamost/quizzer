@@ -9,7 +9,7 @@ std::wstring getInputLine(std::wistream& stream)
 	return userInput;
 }
 
-bool getUserYesNo(bool doPrintResult = true)
+bool getUserYesNo(bool doPrintResult)
 {
 	if (isYes(getInputLine()))
 	{

@@ -4,7 +4,7 @@
 #include <vector>
 
 std::wstring getInputLine(std::wistream &stream = std::wcin);
-bool getUserYesNo();
+bool getUserYesNo(bool doPrintResult = true);
 std::wstring toUpper(std::wstring wstr);
 std::wstring toLower(std::wstring wstr);
 std::wstring indent(std::wstring wstr, int numTabs);
