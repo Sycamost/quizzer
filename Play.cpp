@@ -175,7 +175,7 @@ CmdHandler::Returns playHandler(std::wstring userInput)
 {
 	Command* command = Command::read(userInput);
 	if (command != nullptr)
-		command->doCommandFunc();
+		return command->doCommandFunc();
 
 	if (Play::getStage() == PlayStage::QUESTION)
 	{
