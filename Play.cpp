@@ -137,6 +137,7 @@ DECLARE_CMD_FUNC(Play::cmdFuncBoost)
 		_isCorrect = true;
 		_correct++;
 		_wrong--;
+		std::wcout << L"Boosted!\n";
 		Play::setStage(PlayStage::QUESTION);
 		return CmdHandler::Returns::SUCCESS;
 	}
