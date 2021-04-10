@@ -48,6 +48,12 @@ int main() {
 			std::wcout << L"Invalid arguments were provided for that command.\n";
 			continue;
 		}
+
+		if (ret == CmdHandler::Returns::INVALID_STATE)
+		{
+			std::wcout << L"That command is invalid right now.\n";
+			continue;
+		}
 	}
 
 	return 0;
