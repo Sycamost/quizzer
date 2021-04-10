@@ -117,7 +117,7 @@ void WriteQuestion::startWriting(const QuestionType qt)
 	setCurrentType(qt);
 	_stage = Stage::INPUT_DATA;
 	_tags = std::vector<std::wstring>();
-	std::wcout << _currentInstance._startWritingMessage << "L\n";
+	std::wcout << _currentInstance._startWritingMessage << L"\n";
 	_currentInstance._startInputData();
 }
 

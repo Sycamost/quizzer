@@ -13,7 +13,8 @@ std::vector<std::wstring> splitByWord(std::wstring wstr);
 
 template <typename T1, typename T2> std::vector<T2> convv(std::vector<T1> v)
 {
-	std::vector<T2> result = std::vector<T2>(v.size());
+	std::vector<T2> result = std::vector<T2>();
+	result.reserve(v.size());
 	for (int i = 0; i < v.size(); i++)
 		result.push_back((T2)v[i]);
 	return result;

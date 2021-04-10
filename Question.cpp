@@ -37,10 +37,12 @@ std::vector<std::wstring> Question::readTags(std::wifstream& stream)
 	return tags;
 }
 
-Question::Question(QuestionType type, std::vector<std::wstring> tags)
+Question::Question(QuestionType type, std::vector<std::wstring> tags) :
+	_type(type),
+	_tags(tags)
 {
-	_type = type;
-	_tags = tags;
+	tags.size();
+	_tags.size();
 }
 
 std::vector<Question*> Question::getQuestionList()
