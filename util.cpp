@@ -9,9 +9,17 @@ std::wstring getInputLine(std::wistream& stream)
 	return userInput;
 }
 
-bool getUserYesNo()
+bool getUserYesNo(bool doPrintResult = true)
 {
-	return isYes(getInputLine());
+	if (isYes(getInputLine()))
+	{
+		if (doPrintResult)
+			std::wcout << L"I interpreted that as a \"yes\".\n";
+		return true;
+	}
+	if (doPrintResult)
+		std::wcout << L"I interpreted that as a \"no\".\n";
+	return false;
 }
 
 std::wstring toUpper(std::wstring wstr)
