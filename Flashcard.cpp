@@ -29,15 +29,12 @@ bool Flashcard::isCorrect(std::wstring guess)
 	return _caseSensitive ? (guess == _answer) : (toUpper(guess) == toUpper(_answer));
 }
 
-void Flashcard::write(std::wofstream& stream)
+void Flashcard::writeChildData(std::wofstream& stream)
 {
 	if (_caseSensitive)
 		Option(_optCaseSensitive).write(stream);
 	stream << _question << L"\n";
 	stream << _answer << L"\n";
-	for (unsigned int i = 0; i < _tags.size(); i++)
-		stream << _tags[i] << L"\n";
-	stream << L"\n";
 }
 
 bool Flashcard::isCaseSensitive()

@@ -19,14 +19,14 @@ private:
 protected:
 	QuestionType _type;
 	std::vector<std::wstring> _tags;
-	void writeTags(std::wofstream& stream);
 	std::vector<std::wstring> readTags(std::wifstream& stream);
+	virtual void writeChildData(std::wofstream& stream) = 0;
 public:
 	Question(QuestionType type, std::vector<std::wstring> tags = std::vector<std::wstring>());
 	virtual std::wstring getQuestion() = 0;
 	virtual std::wstring getAnswer() = 0;
 	virtual bool isCorrect(std::wstring guess) = 0;
-	virtual void write(std::wofstream& stream) = 0;
+	void write(std::wofstream& stream);
 	static std::vector<Question*> getQuestionList();
 	static void readQuestionList();
 	static void appendQuestionToList(Question* question);
