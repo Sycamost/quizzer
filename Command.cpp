@@ -80,11 +80,11 @@ Command::Command(std::vector<std::wstring> args, CommandInfo commandInfo)
 }
 
 const std::vector<CommandInfo> Command::_commandInfos = std::vector<CommandInfo>({
-	CommandInfo(CommandType::CANCEL, L"CANCEL", cancelCurrentWrite),
-	CommandInfo(CommandType::QUIT, L"QUIT", quitApp),
-	CommandInfo(CommandType::EXIT, L"EXIT", quitApp),
-	CommandInfo(CommandType::WRITE, L"WRITE", startWriting),
-	CommandInfo(CommandType::BOOST, L"BOOST", boost),
-	CommandInfo(CommandType::FINISH, L"FINISH", finish),
-	CommandInfo(CommandType::PLAY, L"PLAY", startPlaying)
+	CommandInfo(CommandType::CANCEL, L"CANCEL", cmdFuncCancel),
+	CommandInfo(CommandType::QUIT, L"QUIT", cmdFuncQuit),
+	CommandInfo(CommandType::EXIT, L"EXIT", cmdFuncQuit),
+	CommandInfo(CommandType::WRITE, L"WRITE", cmdFuncWrite),
+	CommandInfo(CommandType::BOOST, L"BOOST", Play::cmdFuncBoost),
+	CommandInfo(CommandType::FINISH, L"FINISH", Play::cmdFuncFinish),
+	CommandInfo(CommandType::PLAY, L"PLAY", Play::cmdFuncPlay)
 });

@@ -13,11 +13,11 @@ class Play
 {
 public:
 	static PlayStage getStage();
-	static void setValue(PlayStage stage);
+	static void setStage(PlayStage stage);
 	static bool updateAnswer(std::wstring answer);
-	static DEFINE_CMD_FUNC(startPlaying);
-	static DEFINE_CMD_FUNC(finishPlaying);
-	static DEFINE_CMD_FUNC(boost);
+	static DEFINE_CMD_FUNC(cmdFuncPlay);
+	static DEFINE_CMD_FUNC(cmdFuncFinish);
+	static DEFINE_CMD_FUNC(cmdFuncBoost);
 	static int getNumCorrect();
 	static int getNumWrong();
 	static int getNumSkipped();

@@ -14,9 +14,8 @@ PlayStage Play::getStage() {
 	return _stage;
 }
 
-void Play::setValue(PlayStage stage)
+void Play::setStage(PlayStage stage)
 {
-
 	if (stage == PlayStage::QUESTION)
 	{
 		_stage = stage;
@@ -25,7 +24,7 @@ void Play::setValue(PlayStage stage)
 
 		if (_index >= _questions.size())
 		{
-			finishPlaying();
+			finishPlaying(std::vector<std::wstring>());
 			return;
 		}
 
@@ -54,7 +53,7 @@ bool Play::updateAnswer(std::wstring answer)
 	return _isCorrect;
 }
 
-DECLARE_CMD_FUNC(Play::startPlaying)
+DECLARE_CMD_FUNC(Play::cmdFuncPlay)
 {
 	std::wcout << L"Starting play with ";
 	_questions = std::vector<Question*>();
@@ -88,13 +87,33 @@ DECLARE_CMD_FUNC(Play::startPlaying)
 	_correct = 0;
 	_wrong = 0;
 
-	setValue(PlayStage::QUESTION);
+	setStage(PlayStage::QUESTION);
 
 	CmdHandler::setHandler(playHandler);
 	return CmdHandler::Returns::SUCCESS;
 };
 
-DECLARE_CMD_FUNC(Play::finishPlaying)
+DECLARE_CMD_FUNC(Play::cmdFuncFinish)
+{
+	std::wcout << L"Are you sure you want to finish playing?";
+
+	int numSkipped = getNumSkipped();
+	if (numSkipped > 0)
+	{
+		std::wcout << L" You still have "
+			<< numSkipped
+			<< L" question"
+			<< numSkipped > 1 ? L"s " : L" "
+			<< L"to play.";
+	}
+
+	std::wcout << L" [Y/N]\n";
+
+	if (getUserYesNo())
+		Play::finishPlaying();
+};
+
+void Play::finishPlaying()
 {
 	std::wcout << L"\n" << Globals::horizontalRule << L"\n";
 	std::wcout << L"\nEnd of play.\n"
@@ -107,9 +126,9 @@ DECLARE_CMD_FUNC(Play::finishPlaying)
 	std::wcout << L".\n" << Globals::horizontalDoubleRule << L"\n\n";
 
 	CmdHandler::setHandlerDefault();
-};
+}
 
-DECLARE_CMD_FUNC(Play::boost)
+DECLARE_CMD_FUNC(Play::cmdFuncBoost)
 {
 	if (_hasAnswered && !_isCorrect)
 	{
@@ -155,17 +174,7 @@ CmdHandler::Returns playHandler(std::wstring userInput)
 
 	if (command != nullptr)
 	{
-		CommandInfo commandInfo = command->getCommandInfo();
-		if (commandInfo.isType(CommandType::FINISH))
-		{
-			std::wcout << L"You still have " << Play::getNumSkipped() << L" questions to answer. Are you sure you want to finish play here? [Y/N]\n";
-			if (getUserYesNo())
-			{
-				Play::finishPlay();
-				return CmdHandler::Returns::SUCCESS;
-			}
-		}
-		return CmdHandler::Returns::CMD_NOT_RECOGNISED;
+		command->doCommandFunc();
 	}
 
 	if (Play::getStage() == PlayStage::QUESTION)
@@ -175,7 +184,7 @@ CmdHandler::Returns playHandler(std::wstring userInput)
 		if (isCorrect)
 		{
 			std::wcout << L"Correct! Press enter to continue.\n\n";
-			Play::setValue(PlayStage::ANSWER);
+			Play::setStage(PlayStage::ANSWER);
 			return CmdHandler::Returns::SUCCESS;
 		}
 		else
@@ -185,7 +194,7 @@ CmdHandler::Returns playHandler(std::wstring userInput)
 				<< "\nPress enter to continue, or enter the command <"
 				<< toLower(Command::getCommandInfo(CommandType::BOOST)->code)
 				<< "> if you have been marked down unfairly.\n";
-			Play::setValue(PlayStage::ANSWER);
+			Play::setStage(PlayStage::ANSWER);
 			return CmdHandler::Returns::SUCCESS;
 		}
 	}
@@ -195,7 +204,7 @@ CmdHandler::Returns playHandler(std::wstring userInput)
 		if (command != nullptr && command->getCommandInfo().isType(CommandType::BOOST))
 			Play::boost();
 
-		Play::setValue(PlayStage::QUESTION);
+		Play::setStage(PlayStage::QUESTION);
 		return CmdHandler::Returns::SUCCESS;
 	}
 

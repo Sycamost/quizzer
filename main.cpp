@@ -73,7 +73,7 @@ CmdHandler::Returns defaultCmdHandler(std::wstring userInput)
 	return command->doCommandFunc();
 }
 
-DECLARE_CMD_FUNC(quitApp) {
+DECLARE_CMD_FUNC(cmdFuncQuit) {
 	std::wcout << L"Are you sure you want to exit the app? [Y/N]\n";
 
 	if (getUserYesNo())

@@ -5,7 +5,7 @@
 #include "CmdHandler.h"
 
 #define DEFINE_CMD_FUNC(func) const CommandFunc func
-#define DECLARE_CMD_FUNC(func) const CommandFunc func = [](std::vector<std::wstring> args) -> CmdHandler::Returns
+#define DECLARE_CMD_FUNC(func) const CommandFunc func = [](std::vector<std::wstring> args = std::vector<std::wstring>()) -> CmdHandler::Returns
 
 enum class CommandType {
 	CANCEL,

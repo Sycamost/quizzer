@@ -64,7 +64,7 @@ CmdHandler::Returns writeCmdHandler(std::wstring userInput)
 	return Returns::CMD_NOT_RECOGNISED;
 }
 
-DECLARE_CMD_FUNC(startWriting) {
+DECLARE_CMD_FUNC(cmdFuncWrite) {
 
 	if (args.size() == 0)
 		return CmdHandler::Returns::TOO_FEW_ARGS;
@@ -78,7 +78,7 @@ DECLARE_CMD_FUNC(startWriting) {
 	return CmdHandler::Returns::SUCCESS;
 };
 
-DECLARE_CMD_FUNC(cancelCurrentWrite) {
+DECLARE_CMD_FUNC(cmdFuncCancel) {
 	std::wcout << L"\nAre you sure you want to cancel writing the current question? [Y/N]\n";
 	if (getUserYesNo())
 	{
