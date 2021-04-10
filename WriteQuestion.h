@@ -11,7 +11,7 @@ public:
 		INPUT_TAGS
 	};
 	WriteQuestion(
-		QuestionType type,
+		QuestionTypeInfo typeInfo,
 		std::wstring startWritingMessage,
 		void (*startInputData)(),
 		void (*inputData)(std::wstring),
@@ -20,12 +20,12 @@ public:
 		void (*pushCurrent)(std::vector<std::wstring>),
 		std::vector<Question*> (*writeToFile)()
 	);
-	static const QuestionType getCurrentType();
-	static void setCurrentType(const QuestionType qt);
+	static const QuestionTypeInfo getCurrentTypeInfo();
+	static void setCurrentTypeInfo(QuestionTypeInfo qti);
 	static const Stage getStage();
 	static void setStage(Stage stage);
 	static const std::vector<std::wstring> getTags();
-	static void startWriting(const QuestionType qt);
+	static void startWriting(const QuestionTypeInfo qti);
 	static void pushTag(std::wstring tag);
 	static void inputData(std::wstring);
 	static void finishWriting();
@@ -37,7 +37,7 @@ private:
 	static const std::vector<WriteQuestion> _instances;
 	static std::vector<std::wstring> _tags;
 	static Stage _stage;
-	QuestionType _type;
+	QuestionTypeInfo _typeInfo;
 	std::wstring _startWritingMessage;
 	void (*_startInputData)();
 	void (*_inputData)(std::wstring userInput);

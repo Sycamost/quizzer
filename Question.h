@@ -8,9 +8,30 @@ enum class QuestionType {
 	FLASHCARD
 };
 
-extern const std::map<QuestionType, std::wstring> questionTypeDisplay;
-extern const std::map<std::wstring, QuestionType> questionCodeType;
-const std::wstring questionTypeCode(const QuestionType qt);
+struct QuestionTypeInfo {
+	QuestionType type;
+	std::wstring display;
+	std::wstring code;
+	std::string fileAddress;
+	QuestionTypeInfo(QuestionType type, std::wstring display, std::wstring code, std::string fileAddress) :
+		type(type),
+		display(display),
+		code(code),
+		fileAddress(fileAddress)
+	{}
+	bool operator==(const QuestionTypeInfo& other)
+	{
+		return
+			type == other.type &&
+			display == other.display &&
+			code == other.code &&
+			fileAddress == other.fileAddress;
+	}
+};
+
+extern const std::vector<QuestionTypeInfo> questionTypeInfos;
+const QuestionTypeInfo* getQuestionTypeInfo(QuestionType type);
+const QuestionTypeInfo* getQuestionTypeInfoFromCode(std::wstring code);
 
 class Question
 {

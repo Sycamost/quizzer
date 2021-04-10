@@ -5,15 +5,8 @@
 
 std::vector<Question*> Question::_questionList = std::vector<Question*>();
 
-typedef std::map<QuestionType, std::wstring> MapQtWstr;
-typedef std::pair<QuestionType, std::wstring> PairQtWstr;
-const MapQtWstr questionTypeDisplay = MapQtWstr({
-	PairQtWstr(QuestionType::FLASHCARD, L"flashcard")
-});
-typedef std::map<std::wstring, QuestionType> MapWstrQt;
-typedef std::pair<std::wstring, QuestionType> PairWstrQt;
-const MapWstrQt questionCodeType = MapWstrQt({
-	PairWstrQt(L"FLASHCARD", QuestionType::FLASHCARD)
+extern const std::vector<QuestionTypeInfo> questionTypeInfos = std::vector<QuestionTypeInfo>({
+	QuestionTypeInfo(QuestionType::FLASHCARD, L"flashcard", L"FLASHCARD", "flashcards.txt")
 });
 
 std::vector<std::wstring> Question::readTags(std::wifstream& stream)
@@ -34,10 +27,7 @@ std::vector<std::wstring> Question::readTags(std::wifstream& stream)
 Question::Question(QuestionType type, std::vector<std::wstring> tags) :
 	_type(type),
 	_tags(tags)
-{
-	tags.size();
-	_tags.size();
-}
+{}
 
 void Question::write(std::wofstream& stream)
 {
@@ -56,7 +46,22 @@ std::vector<Question*> Question::getQuestionList()
 void Question::readQuestionList()
 {
 	_questionList = std::vector<Question*>();
-	appendQuestionsToList(Flashcard::readFlashcardList());
+
+	try
+	{
+		std::wifstream file(Globals::flashcardsFileAddress);
+		if (file.is_open())
+		{
+			while (!file.eof())
+			{
+
+			}
+		}
+	}
+	catch (std::exception e)
+	{
+		std::wcout << L"Error reading flashcards from file.\n";
+	}
 }
 
 void Question::appendQuestionToList(Question* question)
@@ -82,10 +87,32 @@ QuestionType Question::getType()
 const std::wstring questionTypeCode(const QuestionType qt)
 {
 	auto iter = std::find_if(
-		questionCodeType.begin(),
-		questionCodeType.end(),
-		[qt](std::pair<std::wstring, QuestionType> pair) -> bool { return pair.second == qt; });
-	if (iter == questionCodeType.end())
+		questionTypeInfos.begin(),
+		questionTypeInfos.end(),
+		[qt](QuestionTypeInfo qti) -> bool { return qti.type == qt; });
+	if (iter == questionTypeInfos.end())
 		return L"";
-	return iter->first;
+	return iter->code;
+}
+
+const QuestionTypeInfo* getQuestionTypeInfo(QuestionType type)
+{
+	auto iter = std::find_if(
+		questionTypeInfos.begin(),
+		questionTypeInfos.end(),
+		[type](QuestionTypeInfo qti) -> bool { return qti.type == type; });
+	if (iter == questionTypeInfos.end())
+		return nullptr;
+	return iter._Ptr;
+}
+
+const QuestionTypeInfo* getQuestionTypeInfoFromCode(std::wstring code)
+{
+	auto iter = std::find_if(
+		questionTypeInfos.begin(),
+		questionTypeInfos.end(),
+		[code](QuestionTypeInfo qti) -> bool { return qti.code == code; });
+	if (iter == questionTypeInfos.end())
+		return nullptr;
+	return iter._Ptr;
 }

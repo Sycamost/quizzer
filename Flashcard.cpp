@@ -52,42 +52,18 @@ void Flashcard::setCaseInsensitive()
 	_caseSensitive = false;
 }
 
-std::vector<Question*> Flashcard::readFlashcardList()
+Question* Flashcard::readFlashcard(std::wifstream& stream)
 {
-	std::vector<Question*> _flashcardList = std::vector<Question*>();
+	std::vector<Option> options = Option::readOptions(stream);
+	bool caseSensitive = std::find_if(options.begin(), options.end(), [](Option opt) -> bool {return opt.getOption() == _optCaseSensitive; }) != options.end();
 
-	try
-	{
-		std::wifstream file(Globals::flashcardsFileAddress);
-		if (file.is_open())
-		{
-			while (!file.eof())
-			{
-				std::vector<Option> options = Option::readOptions(file);
-				bool caseSensitive = std::find_if(options.begin(), options.end(), [](Option opt) -> bool {return opt.getOption() == _optCaseSensitive; }) != options.end();
+	if (stream.eof())
+		return nullptr;
+	std::wstring question = getInputLine(stream);
 
-				std::wstring question = getInputLine(file);
+	if (stream.eof())
+		return nullptr;
+	std::wstring answer = getInputLine(stream);
 
-				if (file.eof()) break;
-				std::wstring answer = getInputLine(file);
-
-				std::vector<std::wstring> tags = std::vector<std::wstring>();
-				while (!file.eof())
-				{
-					std::wstring tag = getInputLine(file);
-					if (tag == L"")
-						break;
-					tags.push_back(tag);
-				}
-
-				_flashcardList.push_back(new Flashcard(question, answer, caseSensitive, tags));
-			}
-		}
-		file.close();
-	}
-	catch (std::exception) {}
-
-	std::wcout << "\tRead " << _flashcardList.size() << " flashcards from file...\n";
-
-	return _flashcardList;
+	return new Flashcard(question, answer, caseSensitive);
 }

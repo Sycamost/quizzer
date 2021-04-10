@@ -52,12 +52,12 @@ extern DECLARE_CMD_FUNC(cmdFuncWrite) {
 	if (args.size() == 0)
 		return CmdHandler::Returns::TOO_FEW_ARGS;
 
-	auto typeIter = questionCodeType.find(toUpper(args[0]));
-	if (typeIter == questionCodeType.end())
+	const QuestionTypeInfo* questionTypeInfo = getQuestionTypeInfoFromCode(args[0]);
+	if (questionTypeInfo == nullptr)
 		return CmdHandler::Returns::INVALID_ARGS;
 
 	CmdHandler::setHandler(writeCmdHandler);
-	WriteQuestion::startWriting(typeIter->second);
+	WriteQuestion::startWriting(*questionTypeInfo);
 	return CmdHandler::Returns::SUCCESS;
 };
 

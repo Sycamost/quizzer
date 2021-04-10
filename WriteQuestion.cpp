@@ -9,7 +9,7 @@
 
 const std::vector<WriteQuestion> WriteQuestion::_instances = std::vector<WriteQuestion>({
 	WriteQuestion(
-		QuestionType::FLASHCARD,
+		*getQuestionTypeInfo(QuestionType::FLASHCARD),
 		WriteFlashcard::startWritingMessage,
 		WriteFlashcard::startInputData,
 		WriteFlashcard::inputData,
@@ -23,7 +23,7 @@ std::vector<std::wstring> WriteQuestion::_tags = std::vector<std::wstring>();
 WriteQuestion::Stage WriteQuestion::_stage = WriteQuestion::Stage::NEXT_QUESTION;
 
 WriteQuestion::WriteQuestion(
-	QuestionType type,
+	QuestionTypeInfo typeInfo,
 	std::wstring startWritingMessage,
 	void(*startInputData)(),
 	void(*inputData)(std::wstring),
@@ -31,20 +31,20 @@ WriteQuestion::WriteQuestion(
 	void(*resetLastInputStep)(),
 	void(*pushCurrent)(std::vector<std::wstring>),
 	std::vector<Question*>(*writeToFile)())
-{
-	_type = type;
-	_startWritingMessage = startWritingMessage;
-	_startInputData = startInputData;
-	_inputData = inputData;
-	_cancel = cancel;
-	_resetLastInputStep = resetLastInputStep;
-	_pushCurrent = pushCurrent;
-	_writeToFile = writeToFile;
-}
+	:
+	_typeInfo(typeInfo),
+	_startWritingMessage(startWritingMessage),
+	_startInputData(startInputData),
+	_inputData(inputData),
+	_cancel(cancel),
+	_resetLastInputStep(resetLastInputStep),
+	_pushCurrent(pushCurrent),
+	_writeToFile(writeToFile)
+{}
 
-const QuestionType WriteQuestion::getCurrentType()
+const QuestionTypeInfo WriteQuestion::getCurrentTypeInfo()
 {
-	return _currentInstance._type;
+	return _currentInstance._typeInfo;
 }
 
 void WriteQuestion::inputData(std::wstring userInput)
@@ -52,12 +52,12 @@ void WriteQuestion::inputData(std::wstring userInput)
 	return _currentInstance._inputData(userInput);
 }
 
-void WriteQuestion::setCurrentType(const QuestionType qt)
+void WriteQuestion::setCurrentTypeInfo(QuestionTypeInfo qti)
 {
 	auto iter = std::find_if(
 		_instances.begin(),
 		_instances.end(),
-		[qt](WriteQuestion wq) -> bool { return wq._type == qt; });
+		[qti](WriteQuestion wq) -> bool { return wq._typeInfo == qti; });
 	if (iter == _instances.end())
 		return;
 	_currentInstance = *iter;
@@ -75,7 +75,7 @@ void WriteQuestion::setStage(Stage stage)
 		_stage = stage;
 
 		std::wcout << L"Would you like to write another "
-			<< questionTypeDisplay.at(getCurrentType())
+			<< getCurrentTypeInfo().display
 			<< L"? [Y/N]\n";
 
 		if (getUserYesNo())
@@ -110,11 +110,10 @@ const std::vector<std::wstring> WriteQuestion::getTags()
 	return _tags;
 }
 
-void WriteQuestion::startWriting(const QuestionType qt)
+void WriteQuestion::startWriting(const QuestionTypeInfo qti)
 {
-	std::wstring qtDisp = questionTypeDisplay.at(qt);
-	std::wcout << "Writing new " << qtDisp << L"s...\n\n";
-	setCurrentType(qt);
+	std::wcout << "Writing new " << qti.display << L"s...\n\n";
+	setCurrentTypeInfo(qti);
 	_stage = Stage::INPUT_DATA;
 	_tags = std::vector<std::wstring>();
 	std::wcout << _currentInstance._startWritingMessage << L"\n";
@@ -160,7 +159,7 @@ void WriteQuestion::pushCurrent()
 
 void WriteQuestion::finishWriting()
 {
-	std::wcout << L"\nFinished writing new " << questionTypeDisplay.at(getCurrentType()) << L"s.\n";
+	std::wcout << L"\nFinished writing new " << getCurrentTypeInfo().display << L"s.\n";
 
 	std::vector<Question*> newQuestions = _currentInstance._writeToFile();
 	Question::appendQuestionsToList(newQuestions);

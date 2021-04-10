@@ -20,5 +20,5 @@ public:
 	bool isCaseSensitive();
 	void setCaseSensitive();
 	void setCaseInsensitive();
-	static std::vector<Question*> readFlashcardList();
+	static Question* readFlashcard(std::wifstream& stream);
 };
