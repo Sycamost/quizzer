@@ -5,6 +5,16 @@
 #include "Play.h"
 #include "util.h"
 
+const std::vector<CommandInfo> Command::_commandInfos = std::vector<CommandInfo>({
+	CommandInfo(CommandType::CANCEL, L"CANCEL", &cmdFuncCancel),
+	CommandInfo(CommandType::QUIT, L"QUIT", &cmdFuncQuit),
+	CommandInfo(CommandType::EXIT, L"EXIT", &cmdFuncQuit),
+	CommandInfo(CommandType::WRITE, L"WRITE", &cmdFuncWrite),
+	CommandInfo(CommandType::BOOST, L"BOOST", &Play::cmdFuncBoost),
+	CommandInfo(CommandType::FINISH, L"FINISH", &Play::cmdFuncFinish),
+	CommandInfo(CommandType::PLAY, L"PLAY", &Play::cmdFuncPlay)
+	});
+
 Command* Command::read(std::wifstream& stream)
 {
 	std::streampos pos = stream.tellg();
@@ -60,7 +70,7 @@ const CommandInfo* Command::getCommandInfo(std::wstring code)
 
 CmdHandler::Returns Command::doCommandFunc()
 {
-	return _commandInfo.func(_args);
+	return (*_commandInfo.func)(_args);
 }
 
 CommandInfo Command::getCommandInfo()
@@ -73,18 +83,7 @@ const std::vector<std::wstring> Command::getArgs() const
 	return _args;
 }
 
-Command::Command(std::vector<std::wstring> args, CommandInfo commandInfo)
-{
-	_args = args;
-	_commandInfo = commandInfo;
-}
-
-const std::vector<CommandInfo> Command::_commandInfos = std::vector<CommandInfo>({
-	CommandInfo(CommandType::CANCEL, L"CANCEL", cmdFuncCancel),
-	CommandInfo(CommandType::QUIT, L"QUIT", cmdFuncQuit),
-	CommandInfo(CommandType::EXIT, L"EXIT", cmdFuncQuit),
-	CommandInfo(CommandType::WRITE, L"WRITE", cmdFuncWrite),
-	CommandInfo(CommandType::BOOST, L"BOOST", Play::cmdFuncBoost),
-	CommandInfo(CommandType::FINISH, L"FINISH", Play::cmdFuncFinish),
-	CommandInfo(CommandType::PLAY, L"PLAY", Play::cmdFuncPlay)
-});
+Command::Command(std::vector<std::wstring> args, CommandInfo commandInfo) :
+	_args(args),
+	_commandInfo(commandInfo)
+{}

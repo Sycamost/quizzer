@@ -35,9 +35,9 @@ public:
 private:
 	static WriteQuestion _currentInstance;
 	static const std::vector<WriteQuestion> _instances;
+	static std::vector<std::wstring> _tags;
+	static Stage _stage;
 	QuestionType _type;
-	std::vector<std::wstring> _tags;
-	Stage _stage;
 	std::wstring _startWritingMessage;
 	void (*_startInputData)();
 	void (*_inputData)(std::wstring userInput);

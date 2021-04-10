@@ -13,25 +13,7 @@ CmdHandler::Returns writeCmdHandler(std::wstring userInput)
 
 	Command* cmd = Command::read(userInput);
 	if (cmd != nullptr)
-	{
-		if (cmd->getCommandInfo().type == CommandType::CANCEL)
-		{
-			std::wcout << L"Are you sure you want to cancel writing the current "
-				<< questionTypeDisplay.at(WriteQuestion::getCurrentType())
-				<< L"? [Y/N]\n";
-
-			if (getUserYesNo())
-			{
-				WriteQuestion::cancel();
-				return CmdHandler::Returns::SUCCESS;
-			}
-
-			WriteQuestion::resetLastStep();
-			return CmdHandler::Returns::SUCCESS;
-		}
-
-		return CmdHandler::Returns::CMD_NOT_RECOGNISED;
-	}
+		return cmd->doCommandFunc();
 
 	if (stage == Stage::INPUT_DATA)
 	{
@@ -44,6 +26,7 @@ CmdHandler::Returns writeCmdHandler(std::wstring userInput)
 		if (userInput == L"")
 		{
 			WriteQuestion::pushCurrent();
+			WriteQuestion::setStage(Stage::NEXT_QUESTION);
 			return Returns::SUCCESS;
 		}
 
@@ -64,7 +47,7 @@ CmdHandler::Returns writeCmdHandler(std::wstring userInput)
 	return Returns::CMD_NOT_RECOGNISED;
 }
 
-DECLARE_CMD_FUNC(cmdFuncWrite) {
+extern DECLARE_CMD_FUNC(cmdFuncWrite) {
 
 	if (args.size() == 0)
 		return CmdHandler::Returns::TOO_FEW_ARGS;

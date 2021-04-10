@@ -19,18 +19,16 @@ enum class CommandType {
 
 typedef CmdHandler::Returns (*CommandFunc) (std::vector<std::wstring> args);
 
-struct CommandInfo {
-	CommandType type;
-	std::wstring code;
-	CommandFunc func;
-	CommandInfo() {
-		throw new std::exception("CommandInfo not initialized properly.");
-	}
-	CommandInfo(CommandType ty, std::wstring c, CommandFunc fn) {
-		type = ty;
-		code = c;
-		func = fn;
-	}
+class CommandInfo {
+public:
+	const CommandType type;
+	const std::wstring code;
+	const CommandFunc* func;
+	CommandInfo(const CommandType ty, const std::wstring c, const CommandFunc* fn) :
+		type(ty),
+		code(c),
+		func(fn)
+	{}
 	bool isType(CommandType ty)
 	{
 		return type == ty;

@@ -19,6 +19,8 @@ const std::vector<WriteQuestion> WriteQuestion::_instances = std::vector<WriteQu
 		WriteFlashcard::writeToFile)
 });
 WriteQuestion WriteQuestion::_currentInstance = WriteQuestion::_instances[0];
+std::vector<std::wstring> WriteQuestion::_tags = std::vector<std::wstring>();
+WriteQuestion::Stage WriteQuestion::_stage = WriteQuestion::Stage::NEXT_QUESTION;
 
 WriteQuestion::WriteQuestion(
 	QuestionType type,
@@ -31,8 +33,6 @@ WriteQuestion::WriteQuestion(
 	std::vector<Question*>(*writeToFile)())
 {
 	_type = type;
-	_stage = Stage::NEXT_QUESTION;
-	_tags = std::vector<std::wstring>();
 	_startWritingMessage = startWritingMessage;
 	_startInputData = startInputData;
 	_inputData = inputData;
@@ -65,13 +65,15 @@ void WriteQuestion::setCurrentType(const QuestionType qt)
 
 const WriteQuestion::Stage WriteQuestion::getStage()
 {
-	return _currentInstance._stage;
+	return _stage;
 }
 
 void WriteQuestion::setStage(Stage stage)
 {
 	if (stage == Stage::NEXT_QUESTION)
 	{
+		_stage = stage;
+
 		std::wcout << L"Would you like to write another "
 			<< questionTypeDisplay.at(getCurrentType())
 			<< L"? [Y/N]\n";
@@ -88,12 +90,14 @@ void WriteQuestion::setStage(Stage stage)
 
 	if (stage == Stage::INPUT_DATA)
 	{
-		inputData(L"");
+		_stage = stage;
+		_currentInstance._startInputData();
 		return;
 	}
 
 	if (stage == Stage::INPUT_TAGS)
 	{
+		_stage = stage;
 		std::wcout << L"Tag " << (getTags().size() + 1) << L":\t";
 		return;
 	}
@@ -103,7 +107,7 @@ void WriteQuestion::setStage(Stage stage)
 
 const std::vector<std::wstring> WriteQuestion::getTags()
 {
-	return _currentInstance._tags;
+	return _tags;
 }
 
 void WriteQuestion::startWriting(const QuestionType qt)
@@ -111,13 +115,15 @@ void WriteQuestion::startWriting(const QuestionType qt)
 	std::wstring qtDisp = questionTypeDisplay.at(qt);
 	std::wcout << "Writing new " << qtDisp << L"s...\n\n";
 	setCurrentType(qt);
+	_stage = Stage::INPUT_DATA;
+	_tags = std::vector<std::wstring>();
 	std::wcout << _currentInstance._startWritingMessage << "L\n";
 	_currentInstance._startInputData();
 }
 
 void WriteQuestion::pushTag(std::wstring tag)
 {
-	_currentInstance._tags.push_back(tag);
+	_tags.push_back(tag);
 }
 
 void WriteQuestion::cancel()
@@ -148,8 +154,8 @@ void WriteQuestion::resetLastStep()
 
 void WriteQuestion::pushCurrent()
 {
-	_currentInstance._pushCurrent(_currentInstance._tags);
-	_currentInstance._tags = std::vector<std::wstring>();
+	_currentInstance._pushCurrent(_tags);
+	_tags = std::vector<std::wstring>();
 }
 
 void WriteQuestion::finishWriting()
