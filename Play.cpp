@@ -10,138 +10,57 @@
 
 CmdHandler::Returns playHandler(std::wstring userInput);
 
-class PlayStage
+PlayStage Play::getStage() {
+	return _stage;
+}
+
+void Play::setValue(PlayStage stage)
 {
-public:
-	enum class Stage {
-		QUESTION,
-		ANSWER
-	};
 
-	static Stage getValue() {
-		return _value;
-	}
-
-	static void startPlay(std::vector<Question*> questions)
+	if (stage == PlayStage::QUESTION)
 	{
-		_questions = questions;
-		std::shuffle(_questions.begin(), _questions.end(), std::default_random_engine((unsigned int)time(NULL)));
-		_index = 0;
-		_correct = 0;
-		_wrong = 0;
-		setValue(Stage::QUESTION);
-	}
+		_stage = stage;
 
-	static void setValue(Stage stage) {
+		_hasAnswered = false;
 
-		if (stage == Stage::QUESTION)
+		if (_index >= _questions.size())
 		{
-			_value = stage;
-
-			_hasAnswered = false;
-
-			if (_index >= _questions.size())
-			{
-				finishPlay();
-				return;
-			}
-
-			std::wcout << L"\n" << _questions[_index]->getQuestion() << L"\n";
+			finishPlaying();
 			return;
 		}
 
-		if (stage == Stage::ANSWER)
-		{
-			_value = stage;
-			_index++;
-		}
+		std::wcout << L"\n" << _questions[_index]->getQuestion() << L"\n";
+		return;
 	}
 
-	static bool updateAnswer(std::wstring answer)
+	if (stage == PlayStage::ANSWER)
 	{
-		if (!_hasAnswered)
-		{
-			_isCorrect = _questions[_index]->isCorrect(answer);
-			if (_isCorrect)
-				_correct++;
-			else
-				_wrong++;
-			_hasAnswered = true;
-		}
-		return _isCorrect;
+		_stage = stage;
+		_index++;
 	}
+}
 
-	static void boost()
+bool Play::updateAnswer(std::wstring answer)
+{
+	if (!_hasAnswered)
 	{
-		if (_hasAnswered && !_isCorrect)
-		{
-			_isCorrect = true;
+		_isCorrect = _questions[_index]->isCorrect(answer);
+		if (_isCorrect)
 			_correct++;
-			_wrong--;
-			return;
-		}
-		throw new std::exception("Invalid boost.");
+		else
+			_wrong++;
+		_hasAnswered = true;
 	}
+	return _isCorrect;
+}
 
-	static int getNumCorrect()
-	{
-		return _correct;
-	}
-
-	static int getNumWrong()
-	{
-		return _wrong;
-	}
-
-	static int getNumSkipped()
-	{
-		return (int)_questions.size() - (_correct + _wrong);
-	}
-
-	static std::wstring getCurrentCorrectAnswer()
-	{
-		return _questions[_index]->getAnswer();
-	}
-
-	static void finishPlay()
-	{
-		std::wcout << L"\n" << Globals::horizontalRule << L"\n";
-		std::wcout << L"\nEnd of play.\n"
-			<< L"Final scores: "
-			<< _correct << L" correct, "
-			<< _wrong << L" incorrect";
-		int numSkipped = getNumSkipped();
-		if (numSkipped > 0)
-			std::wcout << L" and " << numSkipped << L" skipped";
-		std::wcout << L".\n" << Globals::horizontalDoubleRule << L"\n\n";
-
-		CmdHandler::setHandlerDefault();
-	}
-
-private:
-	static PlayStage::Stage _value;
-	static std::vector<Question*> _questions;
-	static unsigned int _index;
-	static int _correct;
-	static int _wrong;
-	static bool _hasAnswered;
-	static bool _isCorrect;
-};
-PlayStage::Stage PlayStage::_value = PlayStage::Stage::QUESTION;
-std::vector<Question*> PlayStage::_questions = std::vector<Question*>();
-unsigned int PlayStage::_index = 0;
-int PlayStage::_correct = 0;
-int PlayStage::_wrong = 0;
-bool PlayStage::_hasAnswered = false;
-bool PlayStage::_isCorrect = true;
-
-DECLARE_CMD_FUNC(startPlaying)
+DECLARE_CMD_FUNC(Play::startPlaying)
 {
 	std::wcout << L"Starting play with ";
-	std::vector<Question*> questionsInPlay = std::vector<Question*>();
+	_questions = std::vector<Question*>();
 	if (args.empty())
 	{
-		questionsInPlay = Question::getQuestionList();
+		_questions = Question::getQuestionList();
 		std::wcout << L"all ";
 	}
 	else
@@ -152,11 +71,11 @@ DECLARE_CMD_FUNC(startPlaying)
 			std::vector<std::wstring> thisQuestionTags = questionList[i]->getTags();
 			std::transform(thisQuestionTags.begin(), thisQuestionTags.end(), thisQuestionTags.begin(), toUpper);
 			if (shareAnyElems<std::wstring>(args, thisQuestionTags))
-				questionsInPlay.push_back(questionList[i]);
+				_questions.push_back(questionList[i]);
 		}
 	}
-	std::wcout << questionsInPlay.size()
-		<< (questionsInPlay.size() > 1 ? L" cards" : L" card") << L"...\n\n"
+	std::wcout << _questions.size()
+		<< (_questions.size() > 1 ? L" cards" : L" card") << L"...\n\n"
 		<< Globals::horizontalDoubleRule << L"\n\n"
 		<< L"You'll get given questions, and you'll have to answer correctly. "
 		<< L"If you think you've been marked down unfairly, type the command <"
@@ -164,11 +83,71 @@ DECLARE_CMD_FUNC(startPlaying)
 		<< L"> before the next card rolls on. Good luck!\n\n"
 		<< Globals::horizontalRule << L"\n\n";
 
+	std::shuffle(_questions.begin(), _questions.end(), std::default_random_engine((unsigned int)time(NULL)));
+	_index = 0;
+	_correct = 0;
+	_wrong = 0;
 
-	PlayStage::startPlay(questionsInPlay);
+	setValue(PlayStage::QUESTION);
+
 	CmdHandler::setHandler(playHandler);
 	return CmdHandler::Returns::SUCCESS;
 };
+
+DECLARE_CMD_FUNC(Play::finishPlaying)
+{
+	std::wcout << L"\n" << Globals::horizontalRule << L"\n";
+	std::wcout << L"\nEnd of play.\n"
+		<< L"Final scores: "
+		<< _correct << L" correct, "
+		<< _wrong << L" incorrect";
+	int numSkipped = getNumSkipped();
+	if (numSkipped > 0)
+		std::wcout << L" and " << numSkipped << L" skipped";
+	std::wcout << L".\n" << Globals::horizontalDoubleRule << L"\n\n";
+
+	CmdHandler::setHandlerDefault();
+};
+
+DECLARE_CMD_FUNC(Play::boost)
+{
+	if (_hasAnswered && !_isCorrect)
+	{
+		_isCorrect = true;
+		_correct++;
+		_wrong--;
+		return;
+	}
+	throw new std::exception("Invalid boost.");
+};
+
+int Play::getNumCorrect()
+{
+	return _correct;
+}
+
+int Play::getNumWrong()
+{
+	return _wrong;
+}
+
+int Play::getNumSkipped()
+{
+	return (int)_questions.size() - (_correct + _wrong);
+}
+
+std::wstring Play::getCurrentCorrectAnswer()
+{
+	return _questions[_index]->getAnswer();
+}
+
+PlayStage Play::_stage = PlayStage::QUESTION;
+std::vector<Question*> Play::_questions = std::vector<Question*>();
+unsigned int Play::_index = 0;
+int Play::_correct = 0;
+int Play::_wrong = 0;
+bool Play::_hasAnswered = false;
+bool Play::_isCorrect = true;
 
 CmdHandler::Returns playHandler(std::wstring userInput)
 {
@@ -179,48 +158,48 @@ CmdHandler::Returns playHandler(std::wstring userInput)
 		CommandInfo commandInfo = command->getCommandInfo();
 		if (commandInfo.isType(CommandType::FINISH))
 		{
-			std::wcout << L"You still have " << PlayStage::getNumSkipped() << L" questions to answer. Are you sure you want to finish play here? [Y/N]\n";
+			std::wcout << L"You still have " << Play::getNumSkipped() << L" questions to answer. Are you sure you want to finish play here? [Y/N]\n";
 			if (getUserYesNo())
 			{
-				PlayStage::finishPlay();
+				Play::finishPlay();
 				return CmdHandler::Returns::SUCCESS;
 			}
 		}
 		return CmdHandler::Returns::CMD_NOT_RECOGNISED;
 	}
 
-	if (PlayStage::getValue() == PlayStage::Stage::QUESTION)
+	if (Play::getStage() == PlayStage::QUESTION)
 	{
-		bool isCorrect = PlayStage::updateAnswer(userInput);
+		bool isCorrect = Play::updateAnswer(userInput);
 
 		if (isCorrect)
 		{
 			std::wcout << L"Correct! Press enter to continue.\n\n";
-			PlayStage::setValue(PlayStage::Stage::ANSWER);
+			Play::setValue(PlayStage::ANSWER);
 			return CmdHandler::Returns::SUCCESS;
 		}
 		else
 		{
 			std::wcout << L"Incorrect! The correct answer was:\n"
-				<< indent(PlayStage::getCurrentCorrectAnswer(), 1)
+				<< indent(Play::getCurrentCorrectAnswer(), 1)
 				<< "\nPress enter to continue, or enter the command <"
 				<< toLower(Command::getCommandInfo(CommandType::BOOST)->code)
 				<< "> if you have been marked down unfairly.\n";
-			PlayStage::setValue(PlayStage::Stage::ANSWER);
+			Play::setValue(PlayStage::ANSWER);
 			return CmdHandler::Returns::SUCCESS;
 		}
 	}
 
-	if (PlayStage::getValue() == PlayStage::Stage::ANSWER)
+	if (Play::getStage() == PlayStage::ANSWER)
 	{
 		if (command != nullptr && command->getCommandInfo().isType(CommandType::BOOST))
-			PlayStage::boost();
+			Play::boost();
 
-		PlayStage::setValue(PlayStage::Stage::QUESTION);
+		Play::setValue(PlayStage::QUESTION);
 		return CmdHandler::Returns::SUCCESS;
 	}
 
 	std::wcout << L"\nSomething went wrong interpreting that input. Exiting play...\n";
-	PlayStage::finishPlay();
+	Play::finishPlay();
 	return CmdHandler::Returns::CMD_NOT_RECOGNISED;
 }

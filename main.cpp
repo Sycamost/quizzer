@@ -67,46 +67,21 @@ CmdHandler::Returns defaultCmdHandler(std::wstring userInput)
 {
 	if (userInput.empty())
 		return CmdHandler::Returns::SUCCESS;
-
 	Command* command = Command::read(userInput);
 	if (command == nullptr)
 		return CmdHandler::Returns::CMD_NOT_RECOGNISED;
-	CommandInfo commandInfo = command->getCommandInfo();
+	return command->doCommandFunc();
+}
 
-	if (commandInfo.isType(CommandType::EXIT) || commandInfo.isType(CommandType::QUIT)) {
+DECLARE_CMD_FUNC(quitApp) {
+	std::wcout << L"Are you sure you want to exit the app? [Y/N]\n";
 
-		std::wcout << L"Are you sure you want to exit the app? [Y/N]\n";
-
-		if (getUserYesNo())
-		{
-			std::wcout << L"Exiting app...\n";
-			return CmdHandler::Returns::QUIT_APP;
-		}
-
-		std::wcout << L"Not exiting app.\n";
-		return CmdHandler::Returns::SUCCESS;;
-	}
-
-	std::vector<std::wstring> args = command->getArgs();
-
-	if (commandInfo.isType(CommandType::WRITE))
+	if (getUserYesNo())
 	{
-		if (args.size() == 0)
-			return CmdHandler::Returns::TOO_FEW_ARGS;
-
-		if (args[0] == questionTypeCode(QuestionType::FLASHCARD))
-		{
-			WriteQuestion::startWriting(QuestionType::FLASHCARD);
-			return CmdHandler::Returns::SUCCESS;
-		}
-
-		return CmdHandler::Returns::INVALID_ARGS;
+		std::wcout << L"Exiting app...\n";
+		return CmdHandler::Returns::QUIT_APP;
 	}
 
-	if (commandInfo.isType(CommandType::PLAY))
-	{
-		return startPlaying(args);
-	}
-
-	return CmdHandler::Returns::CMD_NOT_RECOGNISED;
+	std::wcout << L"Not exiting app.\n";
+	return CmdHandler::Returns::SUCCESS;;
 }

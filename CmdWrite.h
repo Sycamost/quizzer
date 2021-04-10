@@ -2,5 +2,5 @@
 #include "CmdHandler.h"
 #include "Command.h"
 
-DEFINE_CMD_FUNC(startWriting);
-DEFINE_CMD_FUNC(cancelCurrentWrite);
+extern DEFINE_CMD_FUNC(startWriting);
+extern DEFINE_CMD_FUNC(cancelCurrentWrite);

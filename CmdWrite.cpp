@@ -88,7 +88,3 @@ DECLARE_CMD_FUNC(cancelCurrentWrite) {
 	WriteQuestion::resetLastStep();
 	return CmdHandler::Returns::SUCCESS;
 };
-
-DECLARE_CMD_FUNC(setCaseSensitive) {
-	throw new std::exception("setCaseSensitive() not implemented yet!");
-};

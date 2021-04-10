@@ -4,7 +4,7 @@
 #include <fstream>
 #include "CmdHandler.h"
 
-#define DEFINE_CMD_FUNC(func) extern const CommandFunc func
+#define DEFINE_CMD_FUNC(func) const CommandFunc func
 #define DECLARE_CMD_FUNC(func) const CommandFunc func = [](std::vector<std::wstring> args) -> CmdHandler::Returns
 
 enum class CommandType {
