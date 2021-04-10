@@ -18,6 +18,7 @@ const std::vector<WriteQuestion> WriteQuestion::_instances = std::vector<WriteQu
 		WriteFlashcard::pushCurrent,
 		WriteFlashcard::writeToFile)
 });
+WriteQuestion WriteQuestion::_currentInstance = WriteQuestion::_instances[0];
 
 WriteQuestion::WriteQuestion(
 	QuestionType type,

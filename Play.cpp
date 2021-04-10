@@ -24,7 +24,7 @@ void Play::setStage(PlayStage stage)
 
 		if (_index >= _questions.size())
 		{
-			finishPlaying(std::vector<std::wstring>());
+			finishPlaying();
 			return;
 		}
 
@@ -103,7 +103,7 @@ DECLARE_CMD_FUNC(Play::cmdFuncFinish)
 		std::wcout << L" You still have "
 			<< numSkipped
 			<< L" question"
-			<< numSkipped > 1 ? L"s " : L" "
+			<< (numSkipped > 1 ? L"s " : L" ")
 			<< L"to play.";
 	}
 
@@ -111,6 +111,8 @@ DECLARE_CMD_FUNC(Play::cmdFuncFinish)
 
 	if (getUserYesNo())
 		Play::finishPlaying();
+
+	return CmdHandler::Returns::SUCCESS;
 };
 
 void Play::finishPlaying()
@@ -135,9 +137,10 @@ DECLARE_CMD_FUNC(Play::cmdFuncBoost)
 		_isCorrect = true;
 		_correct++;
 		_wrong--;
-		return;
+		Play::setStage(PlayStage::QUESTION);
+		return CmdHandler::Returns::SUCCESS;
 	}
-	throw new std::exception("Invalid boost.");
+	return CmdHandler::Returns::INVALID_STATE;
 };
 
 int Play::getNumCorrect()
@@ -171,11 +174,8 @@ bool Play::_isCorrect = true;
 CmdHandler::Returns playHandler(std::wstring userInput)
 {
 	Command* command = Command::read(userInput);
-
 	if (command != nullptr)
-	{
 		command->doCommandFunc();
-	}
 
 	if (Play::getStage() == PlayStage::QUESTION)
 	{
@@ -201,14 +201,11 @@ CmdHandler::Returns playHandler(std::wstring userInput)
 
 	if (Play::getStage() == PlayStage::ANSWER)
 	{
-		if (command != nullptr && command->getCommandInfo().isType(CommandType::BOOST))
-			Play::boost();
-
 		Play::setStage(PlayStage::QUESTION);
 		return CmdHandler::Returns::SUCCESS;
 	}
 
 	std::wcout << L"\nSomething went wrong interpreting that input. Exiting play...\n";
-	Play::finishPlay();
+	Play::finishPlaying();
 	return CmdHandler::Returns::CMD_NOT_RECOGNISED;
 }

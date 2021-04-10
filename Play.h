@@ -15,6 +15,7 @@ public:
 	static PlayStage getStage();
 	static void setStage(PlayStage stage);
 	static bool updateAnswer(std::wstring answer);
+	static void finishPlaying();
 	static DEFINE_CMD_FUNC(cmdFuncPlay);
 	static DEFINE_CMD_FUNC(cmdFuncFinish);
 	static DEFINE_CMD_FUNC(cmdFuncBoost);
