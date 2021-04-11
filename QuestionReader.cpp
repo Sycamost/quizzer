@@ -6,7 +6,7 @@
 QuestionReader::QuestionReader(
 	QuestionType type,
 	void(*readChildData)(std::wstring line),
-	void(*constructCurrent)(std::vector<std::wstring> tags))
+	Question*(*constructCurrent)(std::vector<std::wstring> tags))
 	:
 	_type(type),
 	_stage(Stage::CHILD_DATA),
@@ -18,7 +18,8 @@ QuestionReader::QuestionReader(
 Question* QuestionReader::read(std::wifstream& stream)
 {
 	std::vector<Option> options = Option::readOptions(stream);
-	setStage(Stage::CHILD_DATA);
+	_stage = Stage::CHILD_DATA;
+	_tags = std::vector<std::wstring>();
 
 	while (!stream.eof())
 	{
@@ -31,7 +32,7 @@ Question* QuestionReader::read(std::wifstream& stream)
 
 		else if (line == Globals::fileStartOfTags)
 		{
-			setStage(Stage::TAGS);
+			_stage = Stage::TAGS;
 			continue;
 		}
 

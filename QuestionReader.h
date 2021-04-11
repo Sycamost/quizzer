@@ -10,7 +10,7 @@ public:
 	QuestionReader(
 		QuestionType type,
 		void(*readChildData)(std::wstring line),
-		void(*constructCurrent)(std::vector<std::wstring> tags));
+		Question*(*constructCurrent)(std::vector<std::wstring> tags));
 	Question* read(std::wifstream& stream);
 private:
 	enum class Stage {
@@ -21,7 +21,5 @@ private:
 	Stage _stage;
 	std::vector<std::wstring> _tags;
 	void (*_readChildData)(std::wstring line);
-	void (*_constructCurrent)(std::vector<std::wstring> tags);
-
-	void setStage(Stage stage);
+	Question* (*_constructCurrent)(std::vector<std::wstring> tags);
 };
