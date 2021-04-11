@@ -75,6 +75,9 @@
     <ClCompile Include="Read.cpp">
       <Filter>Source Files\Read</Filter>
     </ClCompile>
+    <ClCompile Include="QuestionReader.cpp">
+      <Filter>Source Files\Read</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CmdHandler.h">
