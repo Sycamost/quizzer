@@ -8,9 +8,6 @@
 #include "Command.h"
 #include "Read.h"
 
-InputHandler::Returns defaultInputHandler(std::wstring userInput);
-InputHandler::Returns(*InputHandler)(std::wstring userInput) = &defaultInputHandler;
-
 int main() {
 
 	std::wcout << L"Reading questions from file...\n";
@@ -21,7 +18,7 @@ int main() {
 	while (true)
 	{
 		std::wstring userInput = getInputLine();
-		InputHandler::Returns ret = (*InputHandler)(userInput);
+		InputHandler::Returns ret = InputHandler::call(userInput);
 
 		if (ret == InputHandler::Returns::SUCCESS)
 			continue;
