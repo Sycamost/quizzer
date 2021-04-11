@@ -10,7 +10,6 @@
 #include "globals.h"
 #include "QuestionWriter.h"
 
-const std::string flashcardsFileAddress = "flashcards.txt";
 const std::wstring startWritingFlashcardsMessage =
 	L"Enter the values for new flashcards' front, back and any tags.\nOnce you're finished adding tags, leave the next tag blank.\nThe front and back cannot be blank.\nUse <"
 	+ toLower(Command::getCommandInfo(CommandType::CANCEL)->code)
@@ -23,7 +22,6 @@ Question* constructCurrentFlashcard(std::vector<std::wstring> tags);
 
 extern QuestionWriter* const flashcardWriter = new QuestionWriter(
 	QuestionType::FLASHCARD,
-	flashcardsFileAddress,
 	startWritingFlashcardsMessage,
 	&startInputFlashcard,
 	&inputFlashcard,
