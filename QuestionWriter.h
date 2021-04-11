@@ -39,7 +39,6 @@ private:
 	bool (*_inputData)(std::wstring userInput);
 	void (*_resetLastChildDataStep)();
 	Question* (*_constructCurrent)(std::vector<std::wstring> tags);
-	std::vector<Question*> (*_writeToFile)();
 
 	void setStage(Stage stage);
 };

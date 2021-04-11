@@ -2,6 +2,7 @@
 #include "Flashcard.h"
 #include "util.h"
 #include "globals.h"
+#include "QuestionTypeInfo.h"
 
 std::vector<Question*> Question::_questionList = std::vector<Question*>();
 
@@ -78,15 +79,4 @@ std::vector<std::wstring> Question::getTags()
 QuestionType Question::getType()
 {
 	return _type;
-}
-
-const std::wstring questionTypeCode(const QuestionType qt)
-{
-	auto iter = std::find_if(
-		questionTypeInfos.begin(),
-		questionTypeInfos.end(),
-		[qt](QuestionTypeInfo qti) -> bool { return qti.type == qt; });
-	if (iter == questionTypeInfos.end())
-		return L"";
-	return iter->code;
 }

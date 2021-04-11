@@ -9,6 +9,9 @@
 #include "CmdHandler.h"
 #include "util.h"
 
+QuestionWriter::Stage QuestionWriter::_stage = QuestionWriter::Stage::CHILD_DATA;
+std::vector<std::wstring> QuestionWriter::_tags = std::vector<std::wstring>();
+
 QuestionWriter::QuestionWriter(
 	QuestionType type,
 	std::string fileAddress,
