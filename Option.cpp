@@ -11,8 +11,12 @@ std::vector<Option> Option::readOptions(std::wifstream& stream)
 	{
 		std::streampos pos = stream.tellg();
 		Option* option = readOption(getInputLine(stream));
-		if (option != nullptr)
-			options.push_back(*option);
+		if (option == nullptr)
+		{
+			stream.seekg(pos);
+			break;
+		}
+		options.push_back(*option);
 	}
 	return options;
 }
