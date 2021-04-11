@@ -3,14 +3,7 @@
 #include <string>
 #include <fstream>
 #include <map>
-
-enum class QuestionType {
-	FLASHCARD
-};
-
-extern const std::map<QuestionType, std::wstring> questionTypeDisplay;
-extern const std::map<std::wstring, QuestionType> questionCodeType;
-const std::wstring questionTypeCode(const QuestionType qt);
+#include "QuestionType.h"
 
 class Question
 {
@@ -19,18 +12,14 @@ private:
 protected:
 	QuestionType _type;
 	std::vector<std::wstring> _tags;
-	void writeTags(std::wofstream& stream);
-	std::vector<std::wstring> readTags(std::wifstream& stream);
+	static std::vector<std::wstring> readTags(std::wifstream& stream);
+	virtual void writeChildData(std::wofstream& stream) = 0;
 public:
 	Question(QuestionType type, std::vector<std::wstring> tags = std::vector<std::wstring>());
 	virtual std::wstring getQuestion() = 0;
 	virtual std::wstring getAnswer() = 0;
 	virtual bool isCorrect(std::wstring guess) = 0;
-	virtual void write(std::wofstream& stream) = 0;
-	static std::vector<Question*> getQuestionList();
-	static void readQuestionList();
-	static void appendQuestionToList(Question* question);
-	static void appendQuestionsToList(std::vector<Question*> questions);
+	void write(std::wofstream& stream);
 	std::vector<std::wstring> getTags();
 	QuestionType getType();
 };

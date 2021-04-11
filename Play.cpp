@@ -6,6 +6,7 @@
 #include "CmdHandler.h"
 #include "Question.h"
 #include "util.h"
+#include "QuestionList.h"
 #include "globals.h"
 
 CmdHandler::Returns playHandler(std::wstring userInput);
@@ -59,12 +60,12 @@ DECLARE_CMD_FUNC(Play::cmdFuncPlay)
 	_questions = std::vector<Question*>();
 	if (args.empty())
 	{
-		_questions = Question::getQuestionList();
+		_questions = QuestionList::get();
 		std::wcout << L"all ";
 	}
 	else
 	{
-		std::vector<Question*> questionList = Question::getQuestionList();
+		std::vector<Question*> questionList = QuestionList::get();
 		for (unsigned int i = 0; i < questionList.size(); i++)
 		{
 			std::vector<std::wstring> thisQuestionTags = questionList[i]->getTags();

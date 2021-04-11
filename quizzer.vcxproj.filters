@@ -25,6 +25,12 @@
     <Filter Include="Header Files\Write">
       <UniqueIdentifier>{da734bbf-e062-46af-a0ee-c0c9f0f9fb78}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Read">
+      <UniqueIdentifier>{8539078b-2a69-4dc5-85df-0404f60631d4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Read">
+      <UniqueIdentifier>{65322f17-1307-4fa4-9559-2cde6a065d27}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -39,7 +45,7 @@
     <ClCompile Include="Play.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="WriteFlashcard.cpp">
+    <ClCompile Include="FlashcardWriter.cpp">
       <Filter>Source Files\Write</Filter>
     </ClCompile>
     <ClCompile Include="Flashcard.cpp">
@@ -54,11 +60,26 @@
     <ClCompile Include="Command.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="CmdWrite.cpp">
+    <ClCompile Include="QuestionWriter.cpp">
       <Filter>Source Files\Write</Filter>
     </ClCompile>
-    <ClCompile Include="WriteQuestion.cpp">
+    <ClCompile Include="Write.cpp">
       <Filter>Source Files\Write</Filter>
+    </ClCompile>
+    <ClCompile Include="QuestionTypeInfo.cpp">
+      <Filter>Source Files\Question</Filter>
+    </ClCompile>
+    <ClCompile Include="QuestionList.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Read.cpp">
+      <Filter>Source Files\Read</Filter>
+    </ClCompile>
+    <ClCompile Include="QuestionReader.cpp">
+      <Filter>Source Files\Read</Filter>
+    </ClCompile>
+    <ClCompile Include="FlashcardReader.cpp">
+      <Filter>Source Files\Read</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -89,14 +110,32 @@
     <ClInclude Include="main.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="CmdWrite.h">
+    <ClInclude Include="FlashcardWriter.h">
       <Filter>Header Files\Write</Filter>
     </ClInclude>
-    <ClInclude Include="WriteFlashcard.h">
+    <ClInclude Include="QuestionWriter.h">
       <Filter>Header Files\Write</Filter>
     </ClInclude>
-    <ClInclude Include="WriteQuestion.h">
+    <ClInclude Include="Write.h">
       <Filter>Header Files\Write</Filter>
+    </ClInclude>
+    <ClInclude Include="QuestionTypeInfo.h">
+      <Filter>Header Files\Question</Filter>
+    </ClInclude>
+    <ClInclude Include="QuestionType.h">
+      <Filter>Header Files\Question</Filter>
+    </ClInclude>
+    <ClInclude Include="QuestionReader.h">
+      <Filter>Header Files\Read</Filter>
+    </ClInclude>
+    <ClInclude Include="FlashcardReader.h">
+      <Filter>Header Files\Read</Filter>
+    </ClInclude>
+    <ClInclude Include="QuestionList.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Read.h">
+      <Filter>Header Files\Read</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

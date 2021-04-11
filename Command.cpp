@@ -1,15 +1,15 @@
 #include <algorithm>
 #include "Command.h"
-#include "CmdWrite.h"
+#include "Write.h"
 #include "main.h"
 #include "Play.h"
 #include "util.h"
 
 const std::vector<CommandInfo> Command::_commandInfos = std::vector<CommandInfo>({
-	CommandInfo(CommandType::CANCEL, L"CANCEL", &cmdFuncCancel),
 	CommandInfo(CommandType::QUIT, L"QUIT", &cmdFuncQuit),
 	CommandInfo(CommandType::EXIT, L"EXIT", &cmdFuncQuit),
-	CommandInfo(CommandType::WRITE, L"WRITE", &cmdFuncWrite),
+	CommandInfo(CommandType::WRITE, L"WRITE", &Write::cmdFuncWrite),
+	CommandInfo(CommandType::CANCEL, L"CANCEL", &Write::cmdFuncCancel),
 	CommandInfo(CommandType::BOOST, L"BOOST", &Play::cmdFuncBoost),
 	CommandInfo(CommandType::FINISH, L"FINISH", &Play::cmdFuncFinish),
 	CommandInfo(CommandType::PLAY, L"PLAY", &Play::cmdFuncPlay)

@@ -100,29 +100,40 @@
   <ItemGroup>
     <ClCompile Include="Command.cpp" />
     <ClCompile Include="Flashcard.cpp" />
+    <ClCompile Include="FlashcardReader.cpp" />
     <ClCompile Include="globals.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Option.cpp" />
     <ClCompile Include="Play.cpp" />
     <ClCompile Include="Question.cpp" />
+    <ClCompile Include="QuestionList.cpp" />
+    <ClCompile Include="QuestionReader.cpp" />
+    <ClCompile Include="QuestionTypeInfo.cpp" />
+    <ClCompile Include="Read.cpp" />
     <ClCompile Include="util.cpp" />
-    <ClCompile Include="CmdWrite.cpp" />
-    <ClCompile Include="WriteFlashcard.cpp" />
-    <ClCompile Include="WriteQuestion.cpp" />
+    <ClCompile Include="Write.cpp" />
+    <ClCompile Include="FlashcardWriter.cpp" />
+    <ClCompile Include="QuestionWriter.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CmdHandler.h" />
     <ClInclude Include="Command.h" />
     <ClInclude Include="Flashcard.h" />
+    <ClInclude Include="FlashcardReader.h" />
     <ClInclude Include="globals.h" />
     <ClInclude Include="main.h" />
     <ClInclude Include="Option.h" />
     <ClInclude Include="Play.h" />
     <ClInclude Include="Question.h" />
+    <ClInclude Include="QuestionList.h" />
+    <ClInclude Include="QuestionReader.h" />
+    <ClInclude Include="QuestionType.h" />
+    <ClInclude Include="QuestionTypeInfo.h" />
+    <ClInclude Include="Read.h" />
     <ClInclude Include="util.h" />
-    <ClInclude Include="CmdWrite.h" />
-    <ClInclude Include="WriteFlashcard.h" />
-    <ClInclude Include="WriteQuestion.h" />
+    <ClInclude Include="Write.h" />
+    <ClInclude Include="FlashcardWriter.h" />
+    <ClInclude Include="QuestionWriter.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
