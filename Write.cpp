@@ -10,21 +10,25 @@
 QuestionTypeInfo Write::_typeInfo{ *getQuestionTypeInfo(QuestionType::FLASHCARD) };
 Write::Stage Write::_stage{ Write::Stage::NEXT_QUESTION };
 
-InputHandler::Returns Write::InputHandler(std::wstring userInput)
+InputHandler::Handler Write::getWriteHandler()
 {
-	Command* cmd = Command::read(userInput);
-	if (cmd != nullptr)
-		return cmd->doCommandFunc();
-
-	if (_stage == Stage::INPUT)
+	static InputHandler::Handler writeHandler = [](std::wstring input) -> InputHandler::Returns
 	{
-		_typeInfo.writer.processInput(userInput);
-		return InputHandler::Returns::SUCCESS;
-	}
+		Command* cmd = Command::read(input);
+		if (cmd != nullptr)
+			return cmd->doCommandFunc();
 
-	std::wcout << L"\nSomething went wrong interpreting that input. Exiting write session...\n";
-	finishWriting();
-	return InputHandler::Returns::CMD_NOT_RECOGNISED;
+		if (_stage == Stage::INPUT)
+		{
+			_typeInfo.writer.processInput(input);
+			return InputHandler::Returns::SUCCESS;
+		}
+
+		std::wcout << L"\nSomething went wrong interpreting that input. Exiting write session...\n";
+		finishWriting();
+		return InputHandler::Returns::CMD_NOT_RECOGNISED;
+	};
+	return writeHandler;
 }
 
 void Write::nextQuestion()
@@ -41,7 +45,7 @@ DECLARE_CMD_FUNC(Write::cmdFuncWrite) {
 	if (questionTypeInfo == nullptr)
 		return InputHandler::Returns::INVALID_ARGS;
 
-	InputHandler::set(InputHandler);
+	InputHandler::set(getWriteHandler());
 	Write::startWriting(*questionTypeInfo);
 	return InputHandler::Returns::SUCCESS;
 };

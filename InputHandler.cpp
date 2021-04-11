@@ -1,9 +1,9 @@
 #include "InputHandler.h"
 #include "Command.h"
 
-InputHandler::Returns defaultInputHandler(std::wstring input);
+InputHandler::Handler getDefaultInputHandler();
 
-InputHandler::Returns(*InputHandler::_handler)(std::wstring) { &defaultInputHandler };
+InputHandler::Handler InputHandler::_handler { getDefaultInputHandler() };
 
 void InputHandler::set(Returns(*handler)(std::wstring))
 {
@@ -12,7 +12,7 @@ void InputHandler::set(Returns(*handler)(std::wstring))
 
 void InputHandler::setDefault()
 {
-	_handler = &defaultInputHandler;
+	_handler = getDefaultInputHandler();
 }
 
 InputHandler::Returns InputHandler::call(std::wstring input)
@@ -20,23 +20,27 @@ InputHandler::Returns InputHandler::call(std::wstring input)
 	return _handler(input);
 }
 
-InputHandler::Returns defaultInputHandler(std::wstring userInput)
+InputHandler::Handler getDefaultInputHandler()
 {
-	if (userInput.empty())
-		return InputHandler::Returns::SUCCESS;
-
-	Command* cmd = Command::read(userInput);
-	if (cmd == nullptr)
-		return InputHandler::Returns::CMD_NOT_RECOGNISED;
-
-	CommandType cmdType = cmd->getCommandInfo().type;
-	if (cmdType == CommandType::QUIT ||
-		cmdType == CommandType::EXIT ||
-		cmdType == CommandType::WRITE ||
-		cmdType == CommandType::PLAY)
+	static InputHandler::Handler defaultInputHandler = [](std::wstring input) -> InputHandler::Returns
 	{
-		return cmd->doCommandFunc();
-	}
+		if (input.empty())
+			return InputHandler::Returns::SUCCESS;
 
-	return InputHandler::Returns::INVALID_STATE;
+		Command* cmd = Command::read(input);
+		if (cmd == nullptr)
+			return InputHandler::Returns::CMD_NOT_RECOGNISED;
+
+		CommandType cmdType = cmd->getCommandInfo().type;
+		if (cmdType == CommandType::QUIT ||
+			cmdType == CommandType::EXIT ||
+			cmdType == CommandType::WRITE ||
+			cmdType == CommandType::PLAY)
+		{
+			return cmd->doCommandFunc();
+		}
+
+		return InputHandler::Returns::INVALID_STATE;
+	};
+	return defaultInputHandler;
 }

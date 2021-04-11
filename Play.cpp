@@ -9,7 +9,7 @@
 #include "QuestionList.h"
 #include "globals.h"
 
-InputHandler::Returns playHandler(std::wstring userInput);
+InputHandler::Handler getPlayHandler();
 
 PlayStage Play::getStage() {
 	return _stage;
@@ -90,7 +90,7 @@ DECLARE_CMD_FUNC(Play::cmdFuncPlay)
 
 	setStage(PlayStage::QUESTION);
 
-	InputHandler::set(playHandler);
+	InputHandler::set(getPlayHandler());
 	return InputHandler::Returns::SUCCESS;
 };
 
@@ -173,41 +173,45 @@ int Play::_wrong = 0;
 bool Play::_hasAnswered = false;
 bool Play::_isCorrect = true;
 
-InputHandler::Returns playHandler(std::wstring userInput)
+InputHandler::Handler getPlayHandler()
 {
-	Command* command = Command::read(userInput);
-	if (command != nullptr)
-		return command->doCommandFunc();
-
-	if (Play::getStage() == PlayStage::QUESTION)
+	static InputHandler::Handler playHandler = [](std::wstring input) -> InputHandler::Returns
 	{
-		bool isCorrect = Play::updateAnswer(userInput);
+		Command* command = Command::read(input);
+		if (command != nullptr)
+			return command->doCommandFunc();
 
-		if (isCorrect)
+		if (Play::getStage() == PlayStage::QUESTION)
 		{
-			std::wcout << L"Correct! Press enter to continue.\n\n";
-			Play::setStage(PlayStage::ANSWER);
+			bool isCorrect = Play::updateAnswer(input);
+
+			if (isCorrect)
+			{
+				std::wcout << L"Correct! Press enter to continue.\n\n";
+				Play::setStage(PlayStage::ANSWER);
+				return InputHandler::Returns::SUCCESS;
+			}
+			else
+			{
+				std::wcout << L"Incorrect! The correct answer was:\n"
+					<< indent(Play::getCurrentCorrectAnswer(), 1)
+					<< "\nPress enter to continue, or enter the command <"
+					<< toLower(Command::getCommandInfo(CommandType::BOOST)->code)
+					<< "> if you have been marked down unfairly.\n";
+				Play::setStage(PlayStage::ANSWER);
+				return InputHandler::Returns::SUCCESS;
+			}
+		}
+
+		if (Play::getStage() == PlayStage::ANSWER)
+		{
+			Play::setStage(PlayStage::QUESTION);
 			return InputHandler::Returns::SUCCESS;
 		}
-		else
-		{
-			std::wcout << L"Incorrect! The correct answer was:\n"
-				<< indent(Play::getCurrentCorrectAnswer(), 1)
-				<< "\nPress enter to continue, or enter the command <"
-				<< toLower(Command::getCommandInfo(CommandType::BOOST)->code)
-				<< "> if you have been marked down unfairly.\n";
-			Play::setStage(PlayStage::ANSWER);
-			return InputHandler::Returns::SUCCESS;
-		}
-	}
 
-	if (Play::getStage() == PlayStage::ANSWER)
-	{
-		Play::setStage(PlayStage::QUESTION);
-		return InputHandler::Returns::SUCCESS;
-	}
-
-	std::wcout << L"\nSomething went wrong interpreting that input. Exiting play...\n";
-	Play::finishPlaying();
-	return InputHandler::Returns::CMD_NOT_RECOGNISED;
+		std::wcout << L"\nSomething went wrong interpreting that input. Exiting play...\n";
+		Play::finishPlaying();
+		return InputHandler::Returns::CMD_NOT_RECOGNISED;
+	};
+	return playHandler;
 }

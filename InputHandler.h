@@ -11,9 +11,10 @@ public:
 		INVALID_ARGS,
 		INVALID_STATE
 	};
+	typedef Returns(*Handler)(std::wstring input);
 	static void set(Returns(*handler)(std::wstring));
 	static void setDefault();
 	static Returns call(std::wstring input);
 private:
-	static Returns(*_handler)(std::wstring input);
+	static Handler _handler;
 };
