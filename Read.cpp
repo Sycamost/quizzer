@@ -5,7 +5,7 @@
 
 void read()
 {
-	clearQuestionList();
+	QuestionList::clear();
 
 	for (QuestionTypeInfo qti : questionTypeInfos)
 	{
@@ -31,10 +31,10 @@ void read()
 			Question* question = qti.reader->read(file);
 			if (question == nullptr)
 				break;
-			appendQuestionToList(question);
+			QuestionList::append(question);
 			countRead++;
 		}
 		std::wcout << countRead << L" " << qti.displayPlural << L"...\n";
 	}
-	std::wcout << L"Read a total of " << getQuestionList().size() << L" questions from file.\n\n";
+	std::wcout << L"Read a total of " << QuestionList::get().size() << L" questions from file.\n\n";
 }

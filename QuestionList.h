@@ -2,7 +2,10 @@
 #include <vector>
 #include "Question.h"
 
-const std::vector<Question*> getQuestionList();
-void appendQuestionToList(Question* question);
-void appendQuestionsToList(std::vector<Question*> questions);
-void clearQuestionList();
+namespace QuestionList
+{
+	const std::vector<Question*> get();
+	void append(Question* question);
+	void append(std::vector<Question*> questions);
+	void clear();
+}

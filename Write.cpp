@@ -116,6 +116,6 @@ void Write::resetLastStep()
 void Write::finishWriting()
 {
 	std::wcout << L"\nFinished writing new " << _typeInfo.displayPlural << L".\n";
-	Question::appendQuestionsToList(_typeInfo.writer->writeToFile());
+	QuestionList::append(_typeInfo.writer->writeToFile());
 	CmdHandler::setHandlerDefault();
 }
