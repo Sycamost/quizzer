@@ -17,5 +17,6 @@ public:
 	std::wstring getArgument(unsigned int n) const;
 	std::vector<std::wstring> getArguments() const;
 	static std::vector<Option> readOptions(std::wifstream& stream);
+	static Option* readOption(std::wstring userInput);
 	void write(std::wofstream& stream);
 };

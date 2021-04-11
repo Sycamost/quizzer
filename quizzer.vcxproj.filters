@@ -54,11 +54,14 @@
     <ClCompile Include="Command.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="CmdWrite.cpp">
+    <ClCompile Include="QuestionWriter.cpp">
       <Filter>Source Files\Write</Filter>
     </ClCompile>
-    <ClCompile Include="WriteQuestion.cpp">
+    <ClCompile Include="Write.cpp">
       <Filter>Source Files\Write</Filter>
+    </ClCompile>
+    <ClCompile Include="QuestionTypeInfo.cpp">
+      <Filter>Source Files\Question</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -89,14 +92,20 @@
     <ClInclude Include="main.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="CmdWrite.h">
-      <Filter>Header Files\Write</Filter>
-    </ClInclude>
     <ClInclude Include="WriteFlashcard.h">
       <Filter>Header Files\Write</Filter>
     </ClInclude>
-    <ClInclude Include="WriteQuestion.h">
+    <ClInclude Include="QuestionWriter.h">
       <Filter>Header Files\Write</Filter>
+    </ClInclude>
+    <ClInclude Include="Write.h">
+      <Filter>Header Files\Write</Filter>
+    </ClInclude>
+    <ClInclude Include="QuestionTypeInfo.h">
+      <Filter>Header Files\Question</Filter>
+    </ClInclude>
+    <ClInclude Include="QuestionType.h">
+      <Filter>Header Files\Question</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -105,10 +105,11 @@
     <ClCompile Include="Option.cpp" />
     <ClCompile Include="Play.cpp" />
     <ClCompile Include="Question.cpp" />
+    <ClCompile Include="QuestionTypeInfo.cpp" />
     <ClCompile Include="util.cpp" />
-    <ClCompile Include="CmdWrite.cpp" />
+    <ClCompile Include="Write.cpp" />
     <ClCompile Include="WriteFlashcard.cpp" />
-    <ClCompile Include="WriteQuestion.cpp" />
+    <ClCompile Include="QuestionWriter.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CmdHandler.h" />
@@ -119,10 +120,12 @@
     <ClInclude Include="Option.h" />
     <ClInclude Include="Play.h" />
     <ClInclude Include="Question.h" />
+    <ClInclude Include="QuestionType.h" />
+    <ClInclude Include="QuestionTypeInfo.h" />
     <ClInclude Include="util.h" />
-    <ClInclude Include="CmdWrite.h" />
+    <ClInclude Include="Write.h" />
     <ClInclude Include="WriteFlashcard.h" />
-    <ClInclude Include="WriteQuestion.h" />
+    <ClInclude Include="QuestionWriter.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

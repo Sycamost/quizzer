@@ -10,21 +10,26 @@ std::vector<Option> Option::readOptions(std::wifstream& stream)
 	while (!stream.eof())
 	{
 		std::streampos pos = stream.tellg();
-		std::vector<std::wstring> lineWords = splitByWord(getInputLine(stream));
-		if (lineWords.size() == 0)
-			break;
-
-		if (lineWords[0].substr(0, Globals::fileEscapeChar.size()) != Globals::fileEscapeChar)
-		{
-			stream.seekg(pos);
-			break;
-		}
-
-		options.push_back(Option(
-			lineWords[0].substr(Globals::fileEscapeChar.size()),
-			std::vector<std::wstring>(lineWords.begin() + 1, lineWords.end())));
+		Option* option = readOption(getInputLine(stream));
+		if (option != nullptr)
+			options.push_back(*option);
 	}
 	return options;
+}
+
+Option* Option::readOption(std::wstring userInput)
+{
+	std::vector<std::wstring> words = splitByWord(toUpper(userInput));
+	if (words.size() == 0)
+		return nullptr;
+
+	// Starts with file escape char?
+	if (words[0].substr(0, Globals::fileEscapeChar.size()) != Globals::fileEscapeChar)
+		return nullptr;
+
+	return new Option(
+		words[0].substr(Globals::fileEscapeChar.size()),
+		std::vector<std::wstring>(words.begin() + 1, words.end()));
 }
 
 void Option::constructor(std::wstring option, std::vector<std::wstring> args)

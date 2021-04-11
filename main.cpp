@@ -1,12 +1,10 @@
 #include <iostream>
 #include <vector>
 #include "CmdHandler.h"
-#include "CmdWrite.h"
-#include "WriteQuestion.h"
 #include "util.h"
 #include "globals.h"
-#include "Flashcard.h"
-#include "Play.h"
+#include "Question.h"
+#include "Command.h"
 
 CmdHandler::Returns defaultCmdHandler(std::wstring userInput);
 CmdHandler::Returns(*cmdHandler)(std::wstring userInput) = &defaultCmdHandler;

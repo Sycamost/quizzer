@@ -3,35 +3,7 @@
 #include <string>
 #include <fstream>
 #include <map>
-
-enum class QuestionType {
-	FLASHCARD
-};
-
-struct QuestionTypeInfo {
-	QuestionType type;
-	std::wstring display;
-	std::wstring code;
-	std::string fileAddress;
-	QuestionTypeInfo(QuestionType type, std::wstring display, std::wstring code, std::string fileAddress) :
-		type(type),
-		display(display),
-		code(code),
-		fileAddress(fileAddress)
-	{}
-	bool operator==(const QuestionTypeInfo& other)
-	{
-		return
-			type == other.type &&
-			display == other.display &&
-			code == other.code &&
-			fileAddress == other.fileAddress;
-	}
-};
-
-extern const std::vector<QuestionTypeInfo> questionTypeInfos;
-const QuestionTypeInfo* getQuestionTypeInfo(QuestionType type);
-const QuestionTypeInfo* getQuestionTypeInfoFromCode(std::wstring code);
+#include "QuestionType.h"
 
 class Question
 {
