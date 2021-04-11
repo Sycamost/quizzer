@@ -3,7 +3,7 @@
 #include "FlashcardWriter.h"
 
 extern const std::vector<QuestionTypeInfo> questionTypeInfos = std::vector<QuestionTypeInfo>({
-	QuestionTypeInfo(QuestionType::FLASHCARD, L"flashcard", L"FLASHCARD", flashcardWriter)
+	QuestionTypeInfo(QuestionType::FLASHCARD, L"flashcard", L"FLASHCARD", "flashcards.txt", flashcardWriter)
 });
 
 const QuestionTypeInfo* getQuestionTypeInfo(QuestionType type)

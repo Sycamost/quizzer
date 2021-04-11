@@ -8,19 +8,22 @@ struct QuestionTypeInfo {
 	std::wstring displaySingular;
 	std::wstring displayPlural;
 	std::wstring code;
+	std::string fileAddress;
 	QuestionWriter* writer;
-	QuestionTypeInfo(QuestionType type, std::wstring display, std::wstring code, QuestionWriter* const writer) :
+	QuestionTypeInfo(QuestionType type, std::wstring display, std::wstring code, std::string fileAddress, QuestionWriter* const writer) :
 		type(type),
 		displaySingular(display),
 		displayPlural(display + L"s"),
 		code(code),
+		fileAddress(fileAddress),
 		writer(writer)
 	{}
-	QuestionTypeInfo(QuestionType type, std::wstring displaySingular, std::wstring displayPlural, std::wstring code, QuestionWriter* const writer) :
+	QuestionTypeInfo(QuestionType type, std::wstring displaySingular, std::wstring displayPlural, std::wstring code, std::string fileAddress, QuestionWriter* const writer) :
 		type(type),
 		displaySingular(displaySingular),
 		displayPlural(displayPlural),
 		code(code),
+		fileAddress(fileAddress),
 		writer(writer)
 	{}
 	bool operator==(const QuestionTypeInfo& other)

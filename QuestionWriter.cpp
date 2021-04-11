@@ -14,7 +14,6 @@ std::vector<std::wstring> QuestionWriter::_tags = std::vector<std::wstring>();
 
 QuestionWriter::QuestionWriter(
 	QuestionType type,
-	std::string fileAddress,
 	std::wstring startWritingMessage,
 	void(*startInputData)(),
 	bool(*inputData)(std::wstring userInput),
@@ -22,7 +21,6 @@ QuestionWriter::QuestionWriter(
 	Question*(*constructCurrent)(std::vector<std::wstring> tags))
 	:
 	_type(type),
-	_fileAddress(fileAddress),
 	_startWritingMessage(startWritingMessage),
 	_startInputData(startInputData),
 	_inputData(inputData),
@@ -105,7 +103,7 @@ std::vector<Question*> QuestionWriter::writeToFile()
 	std::wofstream file;
 	try
 	{
-		file.open(_fileAddress, std::ios::app);
+		file.open(getQuestionTypeInfo(_type)->fileAddress, std::ios::app);
 		if (!file.is_open())
 			throw new std::exception("File did not open correctly.");
 	}

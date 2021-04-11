@@ -8,7 +8,6 @@ class QuestionWriter
 public:
 	QuestionWriter(
 		QuestionType type,
-		std::string fileAddress,
 		std::wstring startWritingMessage,
 		void (*startInputData)(),
 		bool (*inputData)(std::wstring userInput),
@@ -31,7 +30,6 @@ private:
 	static std::vector<std::wstring> _tags;
 
 	QuestionType _type;
-	std::string _fileAddress;
 	std::wstring _startWritingMessage;
 	std::vector<Question*> _newQuestions;
 
