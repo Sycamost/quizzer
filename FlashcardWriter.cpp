@@ -29,14 +29,14 @@ extern QuestionWriter* const flashcardWriter = new QuestionWriter(
 	&constructCurrentFlashcard
 );
 
-enum FlashcardWriteStage {
+enum class FlashcardWriteStage {
 	FRONT,
 	BACK,
 	CASE_SENSITIVE,
 	SLEEP
 };
 
-FlashcardWriteStage flashcardWriteStage{ SLEEP };
+FlashcardWriteStage flashcardWriteStage{ FlashcardWriteStage::SLEEP };
 std::wstring front{ L"" };
 std::wstring back{ L"" };
 bool caseSensitive{ false };
