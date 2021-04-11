@@ -108,7 +108,7 @@
     <ClCompile Include="QuestionTypeInfo.cpp" />
     <ClCompile Include="util.cpp" />
     <ClCompile Include="Write.cpp" />
-    <ClCompile Include="WriteFlashcard.cpp" />
+    <ClCompile Include="FlashcardWriter.cpp" />
     <ClCompile Include="QuestionWriter.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -124,7 +124,7 @@
     <ClInclude Include="QuestionTypeInfo.h" />
     <ClInclude Include="util.h" />
     <ClInclude Include="Write.h" />
-    <ClInclude Include="WriteFlashcard.h" />
+    <ClInclude Include="FlashcardWriter.h" />
     <ClInclude Include="QuestionWriter.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

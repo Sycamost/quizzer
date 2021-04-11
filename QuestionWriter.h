@@ -11,9 +11,9 @@ public:
 		std::string fileAddress,
 		std::wstring startWritingMessage,
 		void (*startInputData)(),
-		void (*inputData)(std::wstring userInput),
+		bool (*inputData)(std::wstring userInput),
 		void (*resetLastChildDataStep)(),
-		Question* (*constructCurrent)()
+		Question* (*constructCurrent)(std::vector<std::wstring> tags)
 	);
 	const std::wstring getStartWritingMessage() const;
 	void startInput();
@@ -36,9 +36,9 @@ private:
 	std::vector<Question*> _newQuestions;
 
 	void (*_startInputData)();
-	void (*_inputData)(std::wstring userInput);
+	bool (*_inputData)(std::wstring userInput);
 	void (*_resetLastChildDataStep)();
-	Question* (*_constructCurrent)();
+	Question* (*_constructCurrent)(std::vector<std::wstring> tags);
 	std::vector<Question*> (*_writeToFile)();
 
 	void setStage(Stage stage);

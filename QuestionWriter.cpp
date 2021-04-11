@@ -9,16 +9,14 @@
 #include "CmdHandler.h"
 #include "util.h"
 
-
-
 QuestionWriter::QuestionWriter(
 	QuestionType type,
 	std::string fileAddress,
 	std::wstring startWritingMessage,
 	void(*startInputData)(),
-	void(*inputData)(std::wstring userInput),
+	bool(*inputData)(std::wstring userInput),
 	void(*resetLastChildDataStep)(),
-	Question*(*constructCurrent)())
+	Question*(*constructCurrent)(std::vector<std::wstring> tags))
 	:
 	_type(type),
 	_fileAddress(fileAddress),
@@ -60,7 +58,13 @@ void QuestionWriter::processInput(std::wstring userInput)
 {
 	if (_stage == Stage::CHILD_DATA)
 	{
-		_inputData(userInput);
+		if (!_inputData(userInput))
+		{
+			// This input was not valid input data, or data input has ended.
+			// Either way, we need to forward on this data to the next step.
+			setStage(Stage::TAGS);
+			processInput(userInput);
+		}
 		return;
 	}
 
@@ -68,7 +72,7 @@ void QuestionWriter::processInput(std::wstring userInput)
 	{
 		if (userInput == L"")
 		{
-			Question* newQuestion = _constructCurrent();
+			Question* newQuestion = _constructCurrent(_tags);
 			if (newQuestion == nullptr)
 			{
 				std::wcout << L"Something went wrong constructing the "

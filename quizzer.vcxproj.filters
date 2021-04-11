@@ -39,7 +39,7 @@
     <ClCompile Include="Play.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="WriteFlashcard.cpp">
+    <ClCompile Include="FlashcardWriter.cpp">
       <Filter>Source Files\Write</Filter>
     </ClCompile>
     <ClCompile Include="Flashcard.cpp">
@@ -92,7 +92,7 @@
     <ClInclude Include="main.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="WriteFlashcard.h">
+    <ClInclude Include="FlashcardWriter.h">
       <Filter>Header Files\Write</Filter>
     </ClInclude>
     <ClInclude Include="QuestionWriter.h">
