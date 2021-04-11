@@ -5,7 +5,7 @@
 class Write
 {
 public:
-	static CmdHandler::Returns cmdHandler(std::wstring userInput);
+	static InputHandler::Returns InputHandler(std::wstring userInput);
 	static DEFINE_CMD_FUNC(cmdFuncWrite);
 	static DEFINE_CMD_FUNC(cmdFuncCancel);
 	static void nextQuestion();

@@ -1,6 +1,6 @@
 #include <iostream>
 #include <vector>
-#include "CmdHandler.h"
+#include "InputHandler.h"
 #include "util.h"
 #include "globals.h"
 #include "Question.h"
@@ -8,8 +8,8 @@
 #include "Command.h"
 #include "Read.h"
 
-CmdHandler::Returns defaultCmdHandler(std::wstring userInput);
-CmdHandler::Returns(*cmdHandler)(std::wstring userInput) = &defaultCmdHandler;
+InputHandler::Returns defaultInputHandler(std::wstring userInput);
+InputHandler::Returns(*InputHandler)(std::wstring userInput) = &defaultInputHandler;
 
 int main() {
 
@@ -21,35 +21,35 @@ int main() {
 	while (true)
 	{
 		std::wstring userInput = getInputLine();
-		CmdHandler::Returns ret = (*cmdHandler)(userInput);
+		InputHandler::Returns ret = (*InputHandler)(userInput);
 
-		if (ret == CmdHandler::Returns::SUCCESS)
+		if (ret == InputHandler::Returns::SUCCESS)
 			continue;
 
-		if (ret == CmdHandler::Returns::CMD_NOT_RECOGNISED)
+		if (ret == InputHandler::Returns::CMD_NOT_RECOGNISED)
 		{
 			std::wcout << L"Command not recognised. Please enter a valid command.\n";
 			continue;
 		}
 
-		if (ret == CmdHandler::Returns::QUIT_APP)
+		if (ret == InputHandler::Returns::QUIT_APP)
 		{
 			break;
 		}
 
-		if (ret == CmdHandler::Returns::TOO_FEW_ARGS)
+		if (ret == InputHandler::Returns::TOO_FEW_ARGS)
 		{
 			std::wcout << L"Too few arguments were provided for that command.\n";
 			continue;
 		}
 
-		if (ret == CmdHandler::Returns::INVALID_ARGS)
+		if (ret == InputHandler::Returns::INVALID_ARGS)
 		{
 			std::wcout << L"Invalid arguments were provided for that command.\n";
 			continue;
 		}
 
-		if (ret == CmdHandler::Returns::INVALID_STATE)
+		if (ret == InputHandler::Returns::INVALID_STATE)
 		{
 			std::wcout << L"That command is invalid right now.\n";
 			continue;
@@ -59,35 +59,15 @@ int main() {
 	return 0;
 }
 
-void CmdHandler::setHandler(Returns(*handler)(std::wstring))
-{
-	cmdHandler = handler;
-}
-
-void CmdHandler::setHandlerDefault()
-{
-	cmdHandler = &defaultCmdHandler;
-}
-
-CmdHandler::Returns defaultCmdHandler(std::wstring userInput)
-{
-	if (userInput.empty())
-		return CmdHandler::Returns::SUCCESS;
-	Command* command = Command::read(userInput);
-	if (command == nullptr)
-		return CmdHandler::Returns::CMD_NOT_RECOGNISED;
-	return command->doCommandFunc();
-}
-
 extern DECLARE_CMD_FUNC(cmdFuncQuit) {
 	std::wcout << L"Are you sure you want to exit the app? [Y/N]\n";
 
 	if (getUserYesNo())
 	{
 		std::wcout << L"Exiting app...\n";
-		return CmdHandler::Returns::QUIT_APP;
+		return InputHandler::Returns::QUIT_APP;
 	}
 
 	std::wcout << L"Not exiting app.\n";
-	return CmdHandler::Returns::SUCCESS;;
+	return InputHandler::Returns::SUCCESS;;
 };

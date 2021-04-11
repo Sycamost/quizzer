@@ -3,13 +3,13 @@
 #include <time.h>
 #include <random>
 #include "Play.h"
-#include "CmdHandler.h"
+#include "InputHandler.h"
 #include "Question.h"
 #include "util.h"
 #include "QuestionList.h"
 #include "globals.h"
 
-CmdHandler::Returns playHandler(std::wstring userInput);
+InputHandler::Returns playHandler(std::wstring userInput);
 
 PlayStage Play::getStage() {
 	return _stage;
@@ -90,8 +90,8 @@ DECLARE_CMD_FUNC(Play::cmdFuncPlay)
 
 	setStage(PlayStage::QUESTION);
 
-	CmdHandler::setHandler(playHandler);
-	return CmdHandler::Returns::SUCCESS;
+	InputHandler::set(playHandler);
+	return InputHandler::Returns::SUCCESS;
 };
 
 DECLARE_CMD_FUNC(Play::cmdFuncFinish)
@@ -113,7 +113,7 @@ DECLARE_CMD_FUNC(Play::cmdFuncFinish)
 	if (getUserYesNo())
 		Play::finishPlaying();
 
-	return CmdHandler::Returns::SUCCESS;
+	return InputHandler::Returns::SUCCESS;
 };
 
 void Play::finishPlaying()
@@ -128,7 +128,7 @@ void Play::finishPlaying()
 		std::wcout << L" and " << numSkipped << L" skipped";
 	std::wcout << L".\n" << Globals::horizontalDoubleRule << L"\n\n";
 
-	CmdHandler::setHandlerDefault();
+	InputHandler::setDefault();
 }
 
 DECLARE_CMD_FUNC(Play::cmdFuncBoost)
@@ -140,9 +140,9 @@ DECLARE_CMD_FUNC(Play::cmdFuncBoost)
 		_wrong--;
 		std::wcout << L"Boosted!\n";
 		Play::setStage(PlayStage::QUESTION);
-		return CmdHandler::Returns::SUCCESS;
+		return InputHandler::Returns::SUCCESS;
 	}
-	return CmdHandler::Returns::INVALID_STATE;
+	return InputHandler::Returns::INVALID_STATE;
 };
 
 int Play::getNumCorrect()
@@ -173,7 +173,7 @@ int Play::_wrong = 0;
 bool Play::_hasAnswered = false;
 bool Play::_isCorrect = true;
 
-CmdHandler::Returns playHandler(std::wstring userInput)
+InputHandler::Returns playHandler(std::wstring userInput)
 {
 	Command* command = Command::read(userInput);
 	if (command != nullptr)
@@ -187,7 +187,7 @@ CmdHandler::Returns playHandler(std::wstring userInput)
 		{
 			std::wcout << L"Correct! Press enter to continue.\n\n";
 			Play::setStage(PlayStage::ANSWER);
-			return CmdHandler::Returns::SUCCESS;
+			return InputHandler::Returns::SUCCESS;
 		}
 		else
 		{
@@ -197,17 +197,17 @@ CmdHandler::Returns playHandler(std::wstring userInput)
 				<< toLower(Command::getCommandInfo(CommandType::BOOST)->code)
 				<< "> if you have been marked down unfairly.\n";
 			Play::setStage(PlayStage::ANSWER);
-			return CmdHandler::Returns::SUCCESS;
+			return InputHandler::Returns::SUCCESS;
 		}
 	}
 
 	if (Play::getStage() == PlayStage::ANSWER)
 	{
 		Play::setStage(PlayStage::QUESTION);
-		return CmdHandler::Returns::SUCCESS;
+		return InputHandler::Returns::SUCCESS;
 	}
 
 	std::wcout << L"\nSomething went wrong interpreting that input. Exiting play...\n";
 	Play::finishPlaying();
-	return CmdHandler::Returns::CMD_NOT_RECOGNISED;
+	return InputHandler::Returns::CMD_NOT_RECOGNISED;
 }
