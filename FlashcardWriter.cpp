@@ -74,14 +74,13 @@ namespace FlashcardWriter
 
 	bool input(std::wstring userInput)
 	{
-		if (userInput == L"")
-		{
-			resetLastStep();
-			return true;
-		}
-
 		if (stage == Stage::FRONT)
 		{
+			if (userInput == L"")
+			{
+				resetLastStep();
+				return true;
+			}
 			front = userInput;
 			setFlashcardWriteStage(Stage::BACK);
 			return true;
@@ -89,6 +88,11 @@ namespace FlashcardWriter
 
 		if (stage == Stage::BACK)
 		{
+			if (userInput == L"")
+			{
+				resetLastStep();
+				return true;
+			}
 			back = userInput;
 			setFlashcardWriteStage(Stage::CASE_SENSITIVE);
 			return true;
@@ -96,6 +100,11 @@ namespace FlashcardWriter
 
 		if (stage == Stage::CASE_SENSITIVE)
 		{
+			if (userInput == L"")
+			{
+				resetLastStep();
+				return true;
+			}
 			caseSensitive = isYes(userInput);
 			setFlashcardWriteStage(Stage::SLEEP);
 			return true;
