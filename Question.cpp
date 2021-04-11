@@ -4,8 +4,6 @@
 #include "globals.h"
 #include "QuestionTypeInfo.h"
 
-std::vector<Question*> Question::_questionList = std::vector<Question*>();
-
 std::vector<std::wstring> Question::readTags(std::wifstream& stream)
 {
 	std::vector<std::wstring> tags = std::vector<std::wstring>();

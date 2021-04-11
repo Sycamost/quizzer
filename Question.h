@@ -20,7 +20,6 @@ public:
 	virtual std::wstring getAnswer() = 0;
 	virtual bool isCorrect(std::wstring guess) = 0;
 	void write(std::wofstream& stream);
-	static void readQuestionList();
 	std::vector<std::wstring> getTags();
 	QuestionType getType();
 };
