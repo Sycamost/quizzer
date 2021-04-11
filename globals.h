@@ -7,5 +7,4 @@ public:
 	static const std::wstring fileEscapeChar;
 	static const std::wstring Globals::horizontalRule;
 	static const std::wstring Globals::horizontalDoubleRule;
-	static const std::string flashcardsFileAddress;
 };
