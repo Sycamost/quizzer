@@ -60,12 +60,7 @@ void QuestionWriter::processInput(std::wstring userInput)
 	if (_stage == Stage::CHILD_DATA)
 	{
 		if (!_inputData(userInput))
-		{
-			// This input was not valid input data, or data input has ended.
-			// Either way, we need to forward on this data to the next step.
 			setStage(Stage::TAGS);
-			processInput(userInput);
-		}
 		return;
 	}
 

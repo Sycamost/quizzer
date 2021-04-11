@@ -107,7 +107,7 @@ namespace FlashcardWriter
 			}
 			caseSensitive = isYes(userInput);
 			setFlashcardWriteStage(Stage::SLEEP);
-			return true;
+			return false;
 		}
 
 		return false;
