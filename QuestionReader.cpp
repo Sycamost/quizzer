@@ -48,4 +48,6 @@ Question* QuestionReader::read(std::wifstream& stream)
 			continue;
 		}
 	}
+
+	return nullptr;
 }
