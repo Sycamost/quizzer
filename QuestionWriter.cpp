@@ -89,6 +89,7 @@ void QuestionWriter::processInput(std::wstring userInput)
 		}
 
 		_tags.push_back(userInput);
+		setStage(Stage::TAGS);
 		return;
 	}
 }
