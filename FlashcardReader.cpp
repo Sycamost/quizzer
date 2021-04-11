@@ -7,7 +7,6 @@ void readFlashcardData(std::wstring line);
 Question* constructFlashcard(std::vector<Option> options, std::vector<std::wstring> tags);
 
 extern QuestionReader* const flashcardReader = new QuestionReader(
-	QuestionType::FLASHCARD,
 	&readFlashcardData,
 	&constructFlashcard
 );
