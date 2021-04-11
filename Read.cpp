@@ -28,7 +28,7 @@ void read()
 		}
 		while (!file.eof())
 		{
-			Question* question = qti.reader->read(file);
+			Question* question = qti.reader.read(file);
 			if (question == nullptr)
 				break;
 			QuestionList::append(question);

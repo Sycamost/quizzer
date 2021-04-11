@@ -112,13 +112,17 @@ namespace FlashcardWriter
 			return nullptr;
 		return new Flashcard(front, back, caseSensitive, tags);
 	}
-}
 
-extern QuestionWriter* const flashcardWriter = new QuestionWriter(
-	QuestionType::FLASHCARD,
-	FlashcardWriter::startWritingMessage,
-	&FlashcardWriter::startInput,
-	&FlashcardWriter::input,
-	&FlashcardWriter::resetLastStep,
-	&FlashcardWriter::constructCurrent
-);
+	QuestionWriter& get()
+	{
+		static QuestionWriter writer = QuestionWriter(
+			QuestionType::FLASHCARD,
+			startWritingMessage,
+			&startInput,
+			&input,
+			&resetLastStep,
+			&constructCurrent
+		);
+		return writer;
+	}
+}

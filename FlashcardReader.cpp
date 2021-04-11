@@ -10,13 +10,13 @@ namespace FlashcardReader
 	std::wstring front{ L"" };
 	std::wstring back{ L"" };
 
-	void clearFlashcardData()
+	void clear()
 	{
 		front = L"";
 		back = L"";
 	}
 
-	void readFlashcardData(std::wstring line)
+	void read(std::wstring line)
 	{
 		if (front == L"")
 			front = line;
@@ -25,7 +25,7 @@ namespace FlashcardReader
 		// if we get any extra inputs after front and back are filled, they are ignored
 	}
 
-	Question* constructFlashcard(std::vector<Option> options, std::vector<std::wstring> tags)
+	Question* construct(std::vector<Option> options, std::vector<std::wstring> tags)
 	{
 		if (front == L"")
 			return nullptr;
@@ -35,10 +35,13 @@ namespace FlashcardReader
 		return new Flashcard(front, back, caseSensitive, tags);
 	}
 
+	QuestionReader& get()
+	{
+		static QuestionReader reader = QuestionReader(
+			&clear,
+			&read,
+			&construct
+		);
+		return reader;
+	}
 }
-
-extern QuestionReader* const flashcardReader = new QuestionReader(
-	&FlashcardReader::clearFlashcardData,
-	&FlashcardReader::readFlashcardData,
-	&FlashcardReader::constructFlashcard
-);

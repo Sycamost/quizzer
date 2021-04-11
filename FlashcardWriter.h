@@ -1,4 +1,7 @@
 #pragma once
 #include "QuestionWriter.h"
 
-extern QuestionWriter* const flashcardWriter;
+namespace FlashcardWriter
+{
+	QuestionWriter& get();
+}

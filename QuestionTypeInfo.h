@@ -10,15 +10,15 @@ struct QuestionTypeInfo {
 	std::wstring displayPlural;
 	std::wstring code;
 	std::string fileAddress;
-	QuestionWriter* writer;
-	QuestionReader* reader;
+	QuestionWriter writer;
+	QuestionReader reader;
 	QuestionTypeInfo(
 		QuestionType type,
 		std::wstring display,
 		std::wstring code,
 		std::string fileAddress,
-		QuestionWriter* const writer,
-		QuestionReader* const reader)
+		QuestionWriter writer,
+		QuestionReader reader)
 		:
 		type(type),
 		displaySingular(display),
@@ -34,8 +34,8 @@ struct QuestionTypeInfo {
 		std::wstring displayPlural,
 		std::wstring code,
 		std::string fileAddress,
-		QuestionWriter* const writer,
-		QuestionReader* const reader)
+		QuestionWriter writer,
+		QuestionReader reader)
 		:
 		type(type),
 		displaySingular(displaySingular),

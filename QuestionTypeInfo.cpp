@@ -3,9 +3,9 @@
 #include "FlashcardWriter.h"
 #include "FlashcardReader.h"
 
-extern const std::vector<QuestionTypeInfo> questionTypeInfos = std::vector<QuestionTypeInfo>({
-	QuestionTypeInfo(QuestionType::FLASHCARD, L"flashcard", L"FLASHCARD", "flashcards.txt", flashcardWriter, flashcardReader)
-});
+extern const std::vector<QuestionTypeInfo> questionTypeInfos{ std::vector<QuestionTypeInfo>({
+	QuestionTypeInfo(QuestionType::FLASHCARD, L"flashcard", L"FLASHCARD", "flashcards.txt", FlashcardWriter::get(), FlashcardReader::get())
+}) };
 
 const QuestionTypeInfo* getQuestionTypeInfo(QuestionType type)
 {
