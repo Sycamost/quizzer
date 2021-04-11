@@ -14,7 +14,7 @@ std::vector<std::wstring> Question::readTags(std::wifstream& stream)
 		std::wstring line = getInputLine(stream);
 		if (line == L"")
 			break;
-		if (line == L"%tags")
+		if (line == Globals::fileEscapeChar + L"tags")
 			continue;
 		tags.push_back(line);
 	}
@@ -43,19 +43,21 @@ std::vector<Question*> Question::getQuestionList()
 void Question::readQuestionList()
 {
 	_questionList = std::vector<Question*>();
-	std::wifstream file;
 
-	for 
-	try
+	for (QuestionTypeInfo qti : questionTypeInfos)
 	{
-		file.open(Globals::flashcardsFileAddress);
-		if (!file.is_open())
-			throw new std::exception("File didn't open correctly.");
-	}
-	catch (std::exception e)
-	{
-		std::wcout << L"Error reading flashcards from file.\n";
-		return;
+		std::wifstream file;
+		try
+		{
+			file.open(qti.fileAddress);
+			if (!file.is_open())
+				throw new std::exception("File didn't open correctly.");
+		}
+		catch (std::exception e)
+		{
+			std::wcout << L"Error reading flashcards from file. Error message:\n\t" << e.what() << L"\n";
+			return;
+		}
 	}
 }
 
