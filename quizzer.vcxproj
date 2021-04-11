@@ -100,6 +100,7 @@
   <ItemGroup>
     <ClCompile Include="Command.cpp" />
     <ClCompile Include="Flashcard.cpp" />
+    <ClCompile Include="FlashcardReader.cpp" />
     <ClCompile Include="globals.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Option.cpp" />

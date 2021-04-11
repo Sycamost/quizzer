@@ -9,7 +9,6 @@ class QuestionReader
 {
 public:
 	QuestionReader(
-		QuestionType type,
 		void(*readChildData)(std::wstring line),
 		Question*(*constructCurrent)(std::vector<Option> options, std::vector<std::wstring> tags));
 	Question* read(std::wifstream& stream);
@@ -18,9 +17,6 @@ private:
 		CHILD_DATA,
 		TAGS
 	};
-	QuestionType _type;
-	Stage _stage;
-	std::vector<std::wstring> _tags;
 	void (*_readChildData)(std::wstring line);
 	Question* (*_constructCurrent)(std::vector<Option> options, std::vector<std::wstring> tags);
 };

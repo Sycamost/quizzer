@@ -4,13 +4,9 @@
 #include "globals.h"
 
 QuestionReader::QuestionReader(
-	QuestionType type,
 	void(*readChildData)(std::wstring line),
 	Question*(*constructCurrent)(std::vector<Option> options, std::vector<std::wstring> tags))
 	:
-	_type(type),
-	_stage(Stage::CHILD_DATA),
-	_tags(std::vector<std::wstring>()),
 	_readChildData(readChildData),
 	_constructCurrent(constructCurrent)
 {}
@@ -18,8 +14,8 @@ QuestionReader::QuestionReader(
 Question* QuestionReader::read(std::wifstream& stream)
 {
 	std::vector<Option> options = Option::readOptions(stream);
-	_stage = Stage::CHILD_DATA;
-	_tags = std::vector<std::wstring>();
+	Stage stage = Stage::CHILD_DATA;
+	std::vector<std::wstring> tags = std::vector<std::wstring>();
 
 	while (!stream.eof())
 	{
@@ -27,24 +23,24 @@ Question* QuestionReader::read(std::wifstream& stream)
 
 		if (line == L"")
 		{
-			return _constructCurrent(options, _tags);
+			return _constructCurrent(options, tags);
 		}
 
 		else if (line == Globals::fileStartOfTags)
 		{
-			_stage = Stage::TAGS;
+			stage = Stage::TAGS;
 			continue;
 		}
 
-		if (_stage == Stage::CHILD_DATA)
+		if (stage == Stage::CHILD_DATA)
 		{
 			_readChildData(line);
 			continue;
 		}
 
-		else if (_stage == Stage::TAGS)
+		else if (stage == Stage::TAGS)
 		{
-			_tags.push_back(line);
+			tags.push_back(line);
 			continue;
 		}
 	}
