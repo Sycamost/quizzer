@@ -9,6 +9,7 @@ class QuestionReader
 {
 public:
 	QuestionReader(
+		void(*clearChildData)(),
 		void(*readChildData)(std::wstring line),
 		Question*(*constructCurrent)(std::vector<Option> options, std::vector<std::wstring> tags));
 	Question* read(std::wifstream& stream);
@@ -17,6 +18,7 @@ private:
 		CHILD_DATA,
 		TAGS
 	};
+	void (*_clearChildData)();
 	void (*_readChildData)(std::wstring line);
 	Question* (*_constructCurrent)(std::vector<Option> options, std::vector<std::wstring> tags);
 };

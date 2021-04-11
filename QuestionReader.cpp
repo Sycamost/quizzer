@@ -4,18 +4,22 @@
 #include "globals.h"
 
 QuestionReader::QuestionReader(
+	void(*clearChildData)(),
 	void(*readChildData)(std::wstring line),
 	Question*(*constructCurrent)(std::vector<Option> options, std::vector<std::wstring> tags))
 	:
+	_clearChildData(clearChildData),
 	_readChildData(readChildData),
 	_constructCurrent(constructCurrent)
 {}
 
 Question* QuestionReader::read(std::wifstream& stream)
 {
-	std::vector<Option> options = Option::readOptions(stream);
 	Stage stage = Stage::CHILD_DATA;
 	std::vector<std::wstring> tags = std::vector<std::wstring>();
+	_clearChildData();
+
+	std::vector<Option> options = Option::readOptions(stream);
 
 	while (!stream.eof())
 	{
