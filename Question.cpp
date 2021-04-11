@@ -4,8 +4,6 @@
 #include "globals.h"
 #include "QuestionTypeInfo.h"
 
-std::vector<Question*> Question::_questionList = std::vector<Question*>();
-
 std::vector<std::wstring> Question::readTags(std::wifstream& stream)
 {
 	std::vector<std::wstring> tags = std::vector<std::wstring>();
@@ -33,42 +31,6 @@ void Question::write(std::wofstream& stream)
 	for (unsigned int i = 0; i < _tags.size(); i++)
 		stream << _tags[i] << L"\n";
 	stream << L"\n";
-}
-
-std::vector<Question*> Question::getQuestionList()
-{
-	return _questionList;
-}
-
-void Question::readQuestionList()
-{
-	_questionList = std::vector<Question*>();
-
-	for (QuestionTypeInfo qti : questionTypeInfos)
-	{
-		std::wifstream file;
-		try
-		{
-			file.open(qti.fileAddress);
-			if (!file.is_open())
-				throw new std::exception("File didn't open correctly.");
-		}
-		catch (std::exception e)
-		{
-			std::wcout << L"Error reading flashcards from file. Error message:\n\t" << e.what() << L"\n";
-			return;
-		}
-	}
-}
-
-void Question::appendQuestionToList(Question* question)
-{
-	_questionList.push_back(question);
-}
-
-void Question::appendQuestionsToList(std::vector<Question*> questions)
-{
-	_questionList.insert(_questionList.end(), questions.begin(), questions.end());
 }
 
 std::vector<std::wstring> Question::getTags()

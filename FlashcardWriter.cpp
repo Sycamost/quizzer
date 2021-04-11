@@ -10,127 +10,128 @@
 #include "globals.h"
 #include "QuestionWriter.h"
 
-const std::string flashcardsFileAddress = "flashcards.txt";
-const std::wstring startWritingFlashcardsMessage =
-	L"Enter the values for new flashcards' front, back and any tags.\nOnce you're finished adding tags, leave the next tag blank.\nThe front and back cannot be blank.\nUse <"
-	+ toLower(Command::getCommandInfo(CommandType::CANCEL)->code)
-	+ L"> to cancel adding the current card.\n";
-
-void startInputFlashcard();
-bool inputFlashcard(std::wstring userInput);
-void resetLastFlashcardStep();
-Question* constructCurrentFlashcard(std::vector<std::wstring> tags);
-
-extern QuestionWriter* const flashcardWriter = new QuestionWriter(
-	QuestionType::FLASHCARD,
-	flashcardsFileAddress,
-	startWritingFlashcardsMessage,
-	&startInputFlashcard,
-	&inputFlashcard,
-	&resetLastFlashcardStep,
-	&constructCurrentFlashcard
-);
-
-enum FlashcardWriteStage {
-	FRONT,
-	BACK,
-	CASE_SENSITIVE,
-	SLEEP
-};
-
-FlashcardWriteStage flashcardWriteStage{ SLEEP };
-std::wstring front{ L"" };
-std::wstring back{ L"" };
-bool caseSensitive{ false };
-
-void setFlashcardWriteStage(FlashcardWriteStage stage) {
-
-	if (stage == FlashcardWriteStage::FRONT)
-	{
-		front = L"";
-		back = L"";
-		caseSensitive = false;
-		std::wcout << L"Front:\t";
-		flashcardWriteStage = stage;
-		return;
-	}
-
-	else if (stage == FlashcardWriteStage::BACK)
-	{
-		std::wcout << L"Back:\t";
-		flashcardWriteStage = stage;
-		return;
-	}
-
-	else if (stage == FlashcardWriteStage::CASE_SENSITIVE)
-	{
-		std::wcout << L"Case-sensitive? [Y/N]:\t";
-		flashcardWriteStage = stage;
-		return;
-	}
-
-	else if (stage == FlashcardWriteStage::SLEEP)
-	{
-		flashcardWriteStage = stage;
-		return;
-	}
-}
-
-void startInputFlashcard()
+namespace FlashcardWriter
 {
-	setFlashcardWriteStage(FlashcardWriteStage::FRONT);
-}
-
-bool inputFlashcard(std::wstring userInput)
-{
-	bool isEmpty = (userInput == L"");
-	auto resetIfEmpty = [isEmpty]() -> bool {
-		if (isEmpty)
-		{
-			resetLastFlashcardStep();
-			return true;
-		}
-		return false;
+	enum class Stage {
+		FRONT,
+		BACK,
+		CASE_SENSITIVE,
+		SLEEP
 	};
 
-	if (flashcardWriteStage == FlashcardWriteStage::FRONT)
+	Stage stage{ Stage::SLEEP };
+	std::wstring front{ L"" };
+	std::wstring back{ L"" };
+	bool caseSensitive{ false };
+	const std::wstring startWritingMessage{
+		L"Enter the values for new flashcards' front, back and any tags.\nOnce you're finished adding tags, leave the next tag blank.\nThe front and back cannot be blank.\nUse <"
+		+ toLower(Command::getCommandInfo(CommandType::CANCEL)->code)
+		+ L"> to cancel adding the current card.\n" };
+
+	void setFlashcardWriteStage(Stage stage)
 	{
-		if (resetIfEmpty())
+
+		if (stage == Stage::FRONT)
+		{
+			front = L"";
+			back = L"";
+			caseSensitive = false;
+			std::wcout << L"Front:\t";
+			FlashcardWriter::stage = stage;
+			return;
+		}
+
+		else if (stage == Stage::BACK)
+		{
+			std::wcout << L"Back:\t";
+			FlashcardWriter::stage = stage;
+			return;
+		}
+
+		else if (stage == Stage::CASE_SENSITIVE)
+		{
+			std::wcout << L"Case-sensitive? [Y/N]:\t";
+			FlashcardWriter::stage = stage;
+			return;
+		}
+
+		else if (stage == Stage::SLEEP)
+		{
+			FlashcardWriter::stage = stage;
+			return;
+		}
+	}
+
+	void startInput()
+	{
+		setFlashcardWriteStage(Stage::FRONT);
+	}
+
+	void resetLastStep()
+	{
+		setFlashcardWriteStage(stage);
+	}
+
+	bool input(std::wstring userInput)
+	{
+		if (stage == Stage::FRONT)
+		{
+			if (userInput == L"")
+			{
+				resetLastStep();
+				return true;
+			}
+			front = userInput;
+			setFlashcardWriteStage(Stage::BACK);
 			return true;
-		front = userInput;
-		setFlashcardWriteStage(FlashcardWriteStage::BACK);
-		return true;
-	}
+		}
 
-	if (flashcardWriteStage == FlashcardWriteStage::BACK)
-	{
-		if (resetIfEmpty())
+		if (stage == Stage::BACK)
+		{
+			if (userInput == L"")
+			{
+				resetLastStep();
+				return true;
+			}
+			back = userInput;
+			setFlashcardWriteStage(Stage::CASE_SENSITIVE);
 			return true;
-		back = userInput;
-		setFlashcardWriteStage(FlashcardWriteStage::CASE_SENSITIVE);
-		return true;
+		}
+
+		if (stage == Stage::CASE_SENSITIVE)
+		{
+			if (userInput == L"")
+			{
+				resetLastStep();
+				return true;
+			}
+			caseSensitive = isYes(userInput);
+			setFlashcardWriteStage(Stage::SLEEP);
+			return false;
+		}
+
+		return false;
 	}
 
-	if (flashcardWriteStage == FlashcardWriteStage::CASE_SENSITIVE)
+	Question* constructCurrent(std::vector<std::wstring> tags)
 	{
-		caseSensitive = isYes(userInput);
-		setFlashcardWriteStage(FlashcardWriteStage::SLEEP);
-		return true;
+		if (front == L"")
+			return nullptr;
+		if (back == L"")
+			return nullptr;
+		return new Flashcard(front, back, caseSensitive, tags);
 	}
 
-	return false;
-}
-
-void resetLastFlashcardStep()
-{
-	setFlashcardWriteStage(flashcardWriteStage);
-}
-
-Question* constructCurrentFlashcard(std::vector<std::wstring> tags)
-{
-	if (front == L"")
-		return nullptr;
-	if (back == L"")
-		return nullptr;
-	return new Flashcard(front, back, caseSensitive, tags);
+	QuestionWriter& get()
+	{
+		static QuestionWriter writer = QuestionWriter(
+			QuestionType::FLASHCARD,
+			startWritingMessage,
+			&startInput,
+			&input,
+			&resetLastStep,
+			&constructCurrent
+		);
+		return writer;
+	}
 }

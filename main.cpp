@@ -4,7 +4,9 @@
 #include "util.h"
 #include "globals.h"
 #include "Question.h"
+#include "QuestionList.h"
 #include "Command.h"
+#include "Read.h"
 
 CmdHandler::Returns defaultCmdHandler(std::wstring userInput);
 CmdHandler::Returns(*cmdHandler)(std::wstring userInput) = &defaultCmdHandler;
@@ -12,8 +14,8 @@ CmdHandler::Returns(*cmdHandler)(std::wstring userInput) = &defaultCmdHandler;
 int main() {
 
 	std::wcout << L"Reading questions from file...\n";
-	Question::readQuestionList();
-	std::wcout << L"Read " << Question::getQuestionList().size() << L" questions from file.\n\n";
+	read();
+	std::wcout << L"Read " << QuestionList::get().size() << L" questions from file.\n\n";
 	std::wcout << L"Welcome to Quizzer!\n\n";
 
 	while (true)

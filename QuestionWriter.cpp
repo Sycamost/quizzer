@@ -60,12 +60,7 @@ void QuestionWriter::processInput(std::wstring userInput)
 	if (_stage == Stage::CHILD_DATA)
 	{
 		if (!_inputData(userInput))
-		{
-			// This input was not valid input data, or data input has ended.
-			// Either way, we need to forward on this data to the next step.
 			setStage(Stage::TAGS);
-			processInput(userInput);
-		}
 		return;
 	}
 
@@ -94,6 +89,7 @@ void QuestionWriter::processInput(std::wstring userInput)
 		}
 
 		_tags.push_back(userInput);
+		setStage(Stage::TAGS);
 		return;
 	}
 }
@@ -105,7 +101,7 @@ std::vector<Question*> QuestionWriter::writeToFile()
 	{
 		file.open(getQuestionTypeInfo(_type)->fileAddress, std::ios::app);
 		if (!file.is_open())
-			throw new std::exception("File did not open correctly.");
+			throw std::exception("File did not open correctly.");
 	}
 	catch (std::exception e)
 	{

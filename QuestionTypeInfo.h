@@ -2,6 +2,7 @@
 #include <string>
 #include "QuestionType.h"
 #include "QuestionWriter.h"
+#include "QuestionReader.h"
 
 struct QuestionTypeInfo {
 	QuestionType type;
@@ -9,22 +10,40 @@ struct QuestionTypeInfo {
 	std::wstring displayPlural;
 	std::wstring code;
 	std::string fileAddress;
-	QuestionWriter* writer;
-	QuestionTypeInfo(QuestionType type, std::wstring display, std::wstring code, std::string fileAddress, QuestionWriter* const writer) :
+	QuestionWriter writer;
+	QuestionReader reader;
+	QuestionTypeInfo(
+		QuestionType type,
+		std::wstring display,
+		std::wstring code,
+		std::string fileAddress,
+		QuestionWriter writer,
+		QuestionReader reader)
+		:
 		type(type),
 		displaySingular(display),
 		displayPlural(display + L"s"),
 		code(code),
 		fileAddress(fileAddress),
-		writer(writer)
+		writer(writer),
+		reader(reader)
 	{}
-	QuestionTypeInfo(QuestionType type, std::wstring displaySingular, std::wstring displayPlural, std::wstring code, std::string fileAddress, QuestionWriter* const writer) :
+	QuestionTypeInfo(
+		QuestionType type,
+		std::wstring displaySingular,
+		std::wstring displayPlural,
+		std::wstring code,
+		std::string fileAddress,
+		QuestionWriter writer,
+		QuestionReader reader)
+		:
 		type(type),
 		displaySingular(displaySingular),
 		displayPlural(displayPlural),
 		code(code),
 		fileAddress(fileAddress),
-		writer(writer)
+		writer(writer),
+		reader(reader)
 	{}
 	bool operator==(const QuestionTypeInfo& other)
 	{

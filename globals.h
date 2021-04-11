@@ -5,7 +5,8 @@ class Globals
 {
 public:
 	static const std::wstring fileEscapeChar;
+	static const std::wstring fileStartOfTags;
+	static const std::wstring optionCaseSensitive;
 	static const std::wstring Globals::horizontalRule;
 	static const std::wstring Globals::horizontalDoubleRule;
-	static const std::string flashcardsFileAddress;
 };
