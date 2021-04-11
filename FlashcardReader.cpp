@@ -39,6 +39,6 @@ Question* constructFlashcard(std::vector<Option> options, std::vector<std::wstri
 		return nullptr;
 	if (back == L"")
 		return nullptr;
-	bool caseSensitive = options.end() != std::find_if(options.begin(), options.end(), [](Option opt) -> bool { opt.getOption() == Globals::optionCaseSensitive; });
+	bool caseSensitive = options.end() != std::find_if(options.begin(), options.end(), [](Option opt) -> bool { return opt.getOption() == Globals::optionCaseSensitive; });
 	return new Flashcard(front, back, caseSensitive, tags);
 }
