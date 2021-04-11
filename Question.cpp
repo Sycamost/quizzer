@@ -43,21 +43,19 @@ std::vector<Question*> Question::getQuestionList()
 void Question::readQuestionList()
 {
 	_questionList = std::vector<Question*>();
+	std::wifstream file;
 
+	for 
 	try
 	{
-		std::wifstream file(Globals::flashcardsFileAddress);
-		if (file.is_open())
-		{
-			while (!file.eof())
-			{
-
-			}
-		}
+		file.open(Globals::flashcardsFileAddress);
+		if (!file.is_open())
+			throw new std::exception("File didn't open correctly.");
 	}
 	catch (std::exception e)
 	{
 		std::wcout << L"Error reading flashcards from file.\n";
+		return;
 	}
 }
 
