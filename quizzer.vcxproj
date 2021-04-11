@@ -106,6 +106,7 @@
     <ClCompile Include="Play.cpp" />
     <ClCompile Include="Question.cpp" />
     <ClCompile Include="QuestionList.cpp" />
+    <ClCompile Include="QuestionReader.cpp" />
     <ClCompile Include="QuestionTypeInfo.cpp" />
     <ClCompile Include="Read.cpp" />
     <ClCompile Include="util.cpp" />
@@ -121,6 +122,7 @@
     <ClInclude Include="globals.h" />
     <ClInclude Include="main.h" />
     <ClInclude Include="Option.h" />
+    <ClInclude Include="OptionType.h" />
     <ClInclude Include="Play.h" />
     <ClInclude Include="Question.h" />
     <ClInclude Include="QuestionList.h" />

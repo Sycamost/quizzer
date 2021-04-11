@@ -31,6 +31,12 @@
     <Filter Include="Source Files\Read">
       <UniqueIdentifier>{65322f17-1307-4fa4-9559-2cde6a065d27}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Question\Option">
+      <UniqueIdentifier>{f0648c4d-8268-4a40-b421-7b7090b60260}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Question\Option">
+      <UniqueIdentifier>{3df89e3c-451f-4164-83d9-c0cd4a4fc240}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -54,9 +60,6 @@
     <ClCompile Include="Question.cpp">
       <Filter>Source Files\Question</Filter>
     </ClCompile>
-    <ClCompile Include="Option.cpp">
-      <Filter>Source Files\Question</Filter>
-    </ClCompile>
     <ClCompile Include="Command.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -74,6 +77,12 @@
     </ClCompile>
     <ClCompile Include="Read.cpp">
       <Filter>Source Files\Read</Filter>
+    </ClCompile>
+    <ClCompile Include="QuestionReader.cpp">
+      <Filter>Source Files\Read</Filter>
+    </ClCompile>
+    <ClCompile Include="Option.cpp">
+      <Filter>Source Files\Question\Option</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -93,9 +102,6 @@
       <Filter>Header Files\Question</Filter>
     </ClInclude>
     <ClInclude Include="Flashcard.h">
-      <Filter>Header Files\Question</Filter>
-    </ClInclude>
-    <ClInclude Include="Option.h">
       <Filter>Header Files\Question</Filter>
     </ClInclude>
     <ClInclude Include="Command.h">
@@ -130,6 +136,12 @@
     </ClInclude>
     <ClInclude Include="Read.h">
       <Filter>Header Files\Read</Filter>
+    </ClInclude>
+    <ClInclude Include="Option.h">
+      <Filter>Header Files\Question\Option</Filter>
+    </ClInclude>
+    <ClInclude Include="OptionType.h">
+      <Filter>Header Files\Question\Option</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
