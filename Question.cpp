@@ -35,42 +35,6 @@ void Question::write(std::wofstream& stream)
 	stream << L"\n";
 }
 
-std::vector<Question*> Question::getQuestionList()
-{
-	return _questionList;
-}
-
-void Question::readQuestionList()
-{
-	_questionList = std::vector<Question*>();
-
-	for (QuestionTypeInfo qti : questionTypeInfos)
-	{
-		std::wifstream file;
-		try
-		{
-			file.open(qti.fileAddress);
-			if (!file.is_open())
-				throw new std::exception("File didn't open correctly.");
-		}
-		catch (std::exception e)
-		{
-			std::wcout << L"Error reading flashcards from file. Error message:\n\t" << e.what() << L"\n";
-			return;
-		}
-	}
-}
-
-void Question::appendQuestionToList(Question* question)
-{
-	_questionList.push_back(question);
-}
-
-void Question::appendQuestionsToList(std::vector<Question*> questions)
-{
-	_questionList.insert(_questionList.end(), questions.begin(), questions.end());
-}
-
 std::vector<std::wstring> Question::getTags()
 {
 	return _tags;

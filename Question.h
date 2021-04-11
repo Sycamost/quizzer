@@ -12,7 +12,7 @@ private:
 protected:
 	QuestionType _type;
 	std::vector<std::wstring> _tags;
-	std::vector<std::wstring> readTags(std::wifstream& stream);
+	static std::vector<std::wstring> readTags(std::wifstream& stream);
 	virtual void writeChildData(std::wofstream& stream) = 0;
 public:
 	Question(QuestionType type, std::vector<std::wstring> tags = std::vector<std::wstring>());
