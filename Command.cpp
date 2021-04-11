@@ -68,7 +68,7 @@ const CommandInfo* Command::getCommandInfo(std::wstring code)
 	return ciIter._Ptr;
 }
 
-CmdHandler::Returns Command::doCommandFunc()
+InputHandler::Returns Command::doCommandFunc()
 {
 	return (*_commandInfo.func)(_args);
 }

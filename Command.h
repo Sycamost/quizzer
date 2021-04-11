@@ -2,10 +2,10 @@
 #include <string>
 #include <vector>
 #include <fstream>
-#include "CmdHandler.h"
+#include "InputHandler.h"
 
 #define DEFINE_CMD_FUNC(func) const CommandFunc func
-#define DECLARE_CMD_FUNC(func) const CommandFunc func = [](std::vector<std::wstring> args = std::vector<std::wstring>()) -> CmdHandler::Returns
+#define DECLARE_CMD_FUNC(func) const CommandFunc func = [](std::vector<std::wstring> args = std::vector<std::wstring>()) -> InputHandler::Returns
 
 enum class CommandType {
 	CANCEL,
@@ -17,7 +17,7 @@ enum class CommandType {
 	PLAY
 };
 
-typedef CmdHandler::Returns (*CommandFunc) (std::vector<std::wstring> args);
+typedef InputHandler::Returns (*CommandFunc) (std::vector<std::wstring> args);
 
 class CommandInfo {
 public:
@@ -46,7 +46,7 @@ public:
 	static Command* read(std::wstring userInput);
 	static const CommandInfo* getCommandInfo(CommandType type);
 	static const CommandInfo* getCommandInfo(std::wstring code);
-	CmdHandler::Returns doCommandFunc();
+	InputHandler::Returns doCommandFunc();
 	CommandInfo getCommandInfo();
 	const std::vector<std::wstring> getArgs() const;
 private:

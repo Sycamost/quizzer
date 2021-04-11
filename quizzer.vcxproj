@@ -102,6 +102,7 @@
     <ClCompile Include="Flashcard.cpp" />
     <ClCompile Include="FlashcardReader.cpp" />
     <ClCompile Include="globals.cpp" />
+    <ClCompile Include="InputHandler.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Option.cpp" />
     <ClCompile Include="Play.cpp" />
@@ -116,7 +117,7 @@
     <ClCompile Include="QuestionWriter.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="CmdHandler.h" />
+    <ClInclude Include="InputHandler.h" />
     <ClInclude Include="Command.h" />
     <ClInclude Include="Flashcard.h" />
     <ClInclude Include="FlashcardReader.h" />

@@ -4,27 +4,31 @@
 #include "QuestionWriter.h"
 #include "Write.h"
 #include "Command.h"
-#include "CmdHandler.h"
+#include "InputHandler.h"
 #include "util.h"
 
 QuestionTypeInfo Write::_typeInfo{ *getQuestionTypeInfo(QuestionType::FLASHCARD) };
 Write::Stage Write::_stage{ Write::Stage::NEXT_QUESTION };
 
-CmdHandler::Returns Write::cmdHandler(std::wstring userInput)
+InputHandler::Handler Write::getWriteHandler()
 {
-	Command* cmd = Command::read(userInput);
-	if (cmd != nullptr)
-		return cmd->doCommandFunc();
-
-	if (_stage == Stage::INPUT)
+	static InputHandler::Handler writeHandler = [](std::wstring input) -> InputHandler::Returns
 	{
-		_typeInfo.writer.processInput(userInput);
-		return CmdHandler::Returns::SUCCESS;
-	}
+		Command* cmd = Command::read(input);
+		if (cmd != nullptr)
+			return cmd->doCommandFunc();
 
-	std::wcout << L"\nSomething went wrong interpreting that input. Exiting write session...\n";
-	finishWriting();
-	return CmdHandler::Returns::CMD_NOT_RECOGNISED;
+		if (_stage == Stage::INPUT)
+		{
+			_typeInfo.writer.processInput(input);
+			return InputHandler::Returns::SUCCESS;
+		}
+
+		std::wcout << L"\nSomething went wrong interpreting that input. Exiting write session...\n";
+		finishWriting();
+		return InputHandler::Returns::CMD_NOT_RECOGNISED;
+	};
+	return writeHandler;
 }
 
 void Write::nextQuestion()
@@ -35,15 +39,15 @@ void Write::nextQuestion()
 DECLARE_CMD_FUNC(Write::cmdFuncWrite) {
 
 	if (args.size() == 0)
-		return CmdHandler::Returns::TOO_FEW_ARGS;
+		return InputHandler::Returns::TOO_FEW_ARGS;
 
 	const QuestionTypeInfo* questionTypeInfo = getQuestionTypeInfoFromCode(args[0]);
 	if (questionTypeInfo == nullptr)
-		return CmdHandler::Returns::INVALID_ARGS;
+		return InputHandler::Returns::INVALID_ARGS;
 
-	CmdHandler::setHandler(cmdHandler);
+	InputHandler::set(getWriteHandler());
 	Write::startWriting(*questionTypeInfo);
-	return CmdHandler::Returns::SUCCESS;
+	return InputHandler::Returns::SUCCESS;
 };
 
 DECLARE_CMD_FUNC(Write::cmdFuncCancel) {
@@ -51,10 +55,10 @@ DECLARE_CMD_FUNC(Write::cmdFuncCancel) {
 	if (getUserYesNo())
 	{
 		setStage(Stage::NEXT_QUESTION);
-		return CmdHandler::Returns::SUCCESS;
+		return InputHandler::Returns::SUCCESS;
 	}
 	resetLastStep();
-	return CmdHandler::Returns::SUCCESS;
+	return InputHandler::Returns::SUCCESS;
 };
 
 void Write::setStage(Stage stage)
@@ -117,5 +121,5 @@ void Write::finishWriting()
 {
 	std::wcout << L"\nFinished writing new " << _typeInfo.displayPlural << L".\n";
 	QuestionList::append(_typeInfo.writer.writeToFile());
-	CmdHandler::setHandlerDefault();
+	InputHandler::setDefault();
 }

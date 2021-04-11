@@ -3,13 +3,13 @@
 #include <time.h>
 #include <random>
 #include "Play.h"
-#include "CmdHandler.h"
+#include "InputHandler.h"
 #include "Question.h"
 #include "util.h"
 #include "QuestionList.h"
 #include "globals.h"
 
-CmdHandler::Returns playHandler(std::wstring userInput);
+InputHandler::Handler getPlayHandler();
 
 PlayStage Play::getStage() {
 	return _stage;
@@ -90,8 +90,8 @@ DECLARE_CMD_FUNC(Play::cmdFuncPlay)
 
 	setStage(PlayStage::QUESTION);
 
-	CmdHandler::setHandler(playHandler);
-	return CmdHandler::Returns::SUCCESS;
+	InputHandler::set(getPlayHandler());
+	return InputHandler::Returns::SUCCESS;
 };
 
 DECLARE_CMD_FUNC(Play::cmdFuncFinish)
@@ -113,7 +113,7 @@ DECLARE_CMD_FUNC(Play::cmdFuncFinish)
 	if (getUserYesNo())
 		Play::finishPlaying();
 
-	return CmdHandler::Returns::SUCCESS;
+	return InputHandler::Returns::SUCCESS;
 };
 
 void Play::finishPlaying()
@@ -128,7 +128,7 @@ void Play::finishPlaying()
 		std::wcout << L" and " << numSkipped << L" skipped";
 	std::wcout << L".\n" << Globals::horizontalDoubleRule << L"\n\n";
 
-	CmdHandler::setHandlerDefault();
+	InputHandler::setDefault();
 }
 
 DECLARE_CMD_FUNC(Play::cmdFuncBoost)
@@ -140,9 +140,9 @@ DECLARE_CMD_FUNC(Play::cmdFuncBoost)
 		_wrong--;
 		std::wcout << L"Boosted!\n";
 		Play::setStage(PlayStage::QUESTION);
-		return CmdHandler::Returns::SUCCESS;
+		return InputHandler::Returns::SUCCESS;
 	}
-	return CmdHandler::Returns::INVALID_STATE;
+	return InputHandler::Returns::INVALID_STATE;
 };
 
 int Play::getNumCorrect()
@@ -173,41 +173,45 @@ int Play::_wrong = 0;
 bool Play::_hasAnswered = false;
 bool Play::_isCorrect = true;
 
-CmdHandler::Returns playHandler(std::wstring userInput)
+InputHandler::Handler getPlayHandler()
 {
-	Command* command = Command::read(userInput);
-	if (command != nullptr)
-		return command->doCommandFunc();
-
-	if (Play::getStage() == PlayStage::QUESTION)
+	static InputHandler::Handler playHandler = [](std::wstring input) -> InputHandler::Returns
 	{
-		bool isCorrect = Play::updateAnswer(userInput);
+		Command* command = Command::read(input);
+		if (command != nullptr)
+			return command->doCommandFunc();
 
-		if (isCorrect)
+		if (Play::getStage() == PlayStage::QUESTION)
 		{
-			std::wcout << L"Correct! Press enter to continue.\n\n";
-			Play::setStage(PlayStage::ANSWER);
-			return CmdHandler::Returns::SUCCESS;
+			bool isCorrect = Play::updateAnswer(input);
+
+			if (isCorrect)
+			{
+				std::wcout << L"Correct! Press enter to continue.\n\n";
+				Play::setStage(PlayStage::ANSWER);
+				return InputHandler::Returns::SUCCESS;
+			}
+			else
+			{
+				std::wcout << L"Incorrect! The correct answer was:\n"
+					<< indent(Play::getCurrentCorrectAnswer(), 1)
+					<< "\nPress enter to continue, or enter the command <"
+					<< toLower(Command::getCommandInfo(CommandType::BOOST)->code)
+					<< "> if you have been marked down unfairly.\n";
+				Play::setStage(PlayStage::ANSWER);
+				return InputHandler::Returns::SUCCESS;
+			}
 		}
-		else
+
+		if (Play::getStage() == PlayStage::ANSWER)
 		{
-			std::wcout << L"Incorrect! The correct answer was:\n"
-				<< indent(Play::getCurrentCorrectAnswer(), 1)
-				<< "\nPress enter to continue, or enter the command <"
-				<< toLower(Command::getCommandInfo(CommandType::BOOST)->code)
-				<< "> if you have been marked down unfairly.\n";
-			Play::setStage(PlayStage::ANSWER);
-			return CmdHandler::Returns::SUCCESS;
+			Play::setStage(PlayStage::QUESTION);
+			return InputHandler::Returns::SUCCESS;
 		}
-	}
 
-	if (Play::getStage() == PlayStage::ANSWER)
-	{
-		Play::setStage(PlayStage::QUESTION);
-		return CmdHandler::Returns::SUCCESS;
-	}
-
-	std::wcout << L"\nSomething went wrong interpreting that input. Exiting play...\n";
-	Play::finishPlaying();
-	return CmdHandler::Returns::CMD_NOT_RECOGNISED;
+		std::wcout << L"\nSomething went wrong interpreting that input. Exiting play...\n";
+		Play::finishPlaying();
+		return InputHandler::Returns::CMD_NOT_RECOGNISED;
+	};
+	return playHandler;
 }
