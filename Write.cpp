@@ -18,7 +18,7 @@ CmdHandler::Returns Write::cmdHandler(std::wstring userInput)
 
 	if (_stage == Stage::INPUT)
 	{
-		_typeInfo.writer.processInput(userInput);
+		_typeInfo.writer->processInput(userInput);
 		return CmdHandler::Returns::SUCCESS;
 	}
 
@@ -80,7 +80,7 @@ void Write::setStage(Stage stage)
 	if (stage == Stage::INPUT)
 	{
 		_stage = stage;
-		_typeInfo.writer.startInput();
+		_typeInfo.writer->startInput();
 		return;
 	}
 
@@ -92,8 +92,8 @@ void Write::startWriting(const QuestionTypeInfo qti)
 	std::wcout << "Writing new " << qti.displayPlural << L"...\n\n";
 	_typeInfo = qti;
 	_stage = Stage::INPUT;
-	std::wcout << _typeInfo.writer.getStartWritingMessage() << L"\n";
-	_typeInfo.writer.startInput();
+	std::wcout << _typeInfo.writer->getStartWritingMessage() << L"\n";
+	_typeInfo.writer->startInput();
 }
 
 void Write::resetLastStep()
@@ -105,7 +105,7 @@ void Write::resetLastStep()
 		break;
 
 	case Stage::INPUT:
-		_typeInfo.writer.resetLastStep();
+		_typeInfo.writer->resetLastStep();
 		break;
 
 	default:
@@ -116,6 +116,6 @@ void Write::resetLastStep()
 void Write::finishWriting()
 {
 	std::wcout << L"\nFinished writing new " << _typeInfo.displayPlural << L".\n";
-	Question::appendQuestionsToList(_typeInfo.writer.writeToFile());
+	Question::appendQuestionsToList(_typeInfo.writer->writeToFile());
 	CmdHandler::setHandlerDefault();
 }

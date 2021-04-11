@@ -1,4 +1,4 @@
 #pragma once
 #include "QuestionWriter.h"
 
-extern const QuestionWriter* flashcardWriter;
+extern QuestionWriter* const flashcardWriter;

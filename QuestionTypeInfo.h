@@ -8,15 +8,15 @@ struct QuestionTypeInfo {
 	std::wstring displaySingular;
 	std::wstring displayPlural;
 	std::wstring code;
-	QuestionWriter writer;
-	QuestionTypeInfo(QuestionType type, std::wstring display, std::wstring code, QuestionWriter writer) :
+	QuestionWriter* writer;
+	QuestionTypeInfo(QuestionType type, std::wstring display, std::wstring code, QuestionWriter* const writer) :
 		type(type),
 		displaySingular(display),
 		displayPlural(display + L"s"),
 		code(code),
 		writer(writer)
 	{}
-	QuestionTypeInfo(QuestionType type, std::wstring displaySingular, std::wstring displayPlural, std::wstring code, QuestionWriter writer) :
+	QuestionTypeInfo(QuestionType type, std::wstring displaySingular, std::wstring displayPlural, std::wstring code, QuestionWriter* const writer) :
 		type(type),
 		displaySingular(displaySingular),
 		displayPlural(displayPlural),

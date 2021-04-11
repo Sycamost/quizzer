@@ -21,7 +21,7 @@ bool inputFlashcard(std::wstring userInput);
 void resetLastFlashcardStep();
 Question* constructCurrentFlashcard(std::vector<std::wstring> tags);
 
-extern const QuestionWriter* flashcardWriter = new QuestionWriter(
+extern QuestionWriter* const flashcardWriter = new QuestionWriter(
 	QuestionType::FLASHCARD,
 	flashcardsFileAddress,
 	startWritingFlashcardsMessage,
