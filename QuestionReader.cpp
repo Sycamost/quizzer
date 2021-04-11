@@ -6,7 +6,7 @@
 QuestionReader::QuestionReader(
 	QuestionType type,
 	void(*readChildData)(std::wstring line),
-	Question*(*constructCurrent)(std::vector<std::wstring> tags))
+	Question*(*constructCurrent)(std::vector<Option> options, std::vector<std::wstring> tags))
 	:
 	_type(type),
 	_stage(Stage::CHILD_DATA),
@@ -27,7 +27,7 @@ Question* QuestionReader::read(std::wifstream& stream)
 
 		if (line == L"")
 		{
-			return _constructCurrent(_tags);
+			return _constructCurrent(options, _tags);
 		}
 
 		else if (line == Globals::fileStartOfTags)
