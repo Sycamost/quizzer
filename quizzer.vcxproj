@@ -106,6 +106,7 @@
     <ClCompile Include="Play.cpp" />
     <ClCompile Include="Question.cpp" />
     <ClCompile Include="QuestionList.cpp" />
+    <ClCompile Include="QuestionReader.cpp" />
     <ClCompile Include="QuestionTypeInfo.cpp" />
     <ClCompile Include="Read.cpp" />
     <ClCompile Include="util.cpp" />
