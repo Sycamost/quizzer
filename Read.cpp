@@ -15,7 +15,7 @@ void read()
 		{
 			file.open(qti.fileAddress);
 			if (!file.is_open())
-				throw new std::exception("File didn't open correctly.");
+				throw std::exception("File didn't open correctly.");
 		}
 		catch (std::exception e)
 		{

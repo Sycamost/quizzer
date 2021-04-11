@@ -105,7 +105,7 @@ std::vector<Question*> QuestionWriter::writeToFile()
 	{
 		file.open(getQuestionTypeInfo(_type)->fileAddress, std::ios::app);
 		if (!file.is_open())
-			throw new std::exception("File did not open correctly.");
+			throw std::exception("File did not open correctly.");
 	}
 	catch (std::exception e)
 	{
