@@ -24,8 +24,19 @@ InputHandler::Returns defaultInputHandler(std::wstring userInput)
 {
 	if (userInput.empty())
 		return InputHandler::Returns::SUCCESS;
-	Command* command = Command::read(userInput);
-	if (command == nullptr)
+
+	Command* cmd = Command::read(userInput);
+	if (cmd == nullptr)
 		return InputHandler::Returns::CMD_NOT_RECOGNISED;
-	return command->doCommandFunc();
+
+	CommandType cmdType = cmd->getCommandInfo().type;
+	if (cmdType == CommandType::QUIT ||
+		cmdType == CommandType::EXIT ||
+		cmdType == CommandType::WRITE ||
+		cmdType == CommandType::PLAY)
+	{
+		return cmd->doCommandFunc();
+	}
+
+	return InputHandler::Returns::INVALID_STATE;
 }
