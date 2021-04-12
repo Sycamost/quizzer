@@ -1,10 +1,12 @@
 #include <iostream>
 #include <string>
 #include "util.h"
+#include "Command.h"
 
 const YesNo YesNo::YES{ YesNo(YesNo::Value::YES) };
 const YesNo YesNo::NO{ YesNo(YesNo::Value::NO) };
-const YesNo YesNo::INVALID{ YesNo(YesNo::Value::INVALID) };
+const YesNo YesNo::COMMAND{ YesNo(YesNo::Value::COMMAND) };
+const YesNo YesNo::OTHER{ YesNo(YesNo::Value::OTHER) };
 
 std::wstring getInputLine(std::wistream& stream)
 {
@@ -16,28 +18,38 @@ std::wstring getInputLine(std::wistream& stream)
 bool inputYesNo(std::wstring message, bool doPrintResult)
 {
 	message += L" [Y/N]\n";
-	YesNo result = YesNo::INVALID;
+	const YesNo* result;
 	while (true)
 	{
 		std::wcout << message;
 
-		result = getYesNo(getInputLine());
+		result = &getYesNo(getInputLine());
 
-		if (result)
+		if (*result)
 		{
 			if (doPrintResult)
 				std::wcout << L"I interpreted that as a \"yes\".\n";
 			return true;
 		}
 
-		if (!result)
+		else if (!*result)
 		{
 			if (doPrintResult)
 				std::wcout << L"I interpreted that as a \"no\".\n";
 			return false;
 		}
 
-		std::wcout << L"Please enter either \"yes\" or \"no\".\n";
+		else if (*result == YesNo::COMMAND)
+		{
+			std::wcout << L"Please answer this question before giving me further commands.\n";
+			continue;
+		}
+
+		else
+		{
+			std::wcout << L"Please enter either \"yes\" or \"no\".\n";
+			continue;
+		}
 	}
 }
 
@@ -80,7 +92,9 @@ const YesNo getYesNo(std::wstring str)
 		return YesNo::YES;
 	if (str == L"N" || str == L"NO" || str == L"0" || str == L"F" || str == L"FALSE")
 		return YesNo::NO;
-	return YesNo::INVALID;
+	if (Command::read(str) != nullptr)
+		return YesNo::COMMAND;
+	return YesNo::OTHER;
 }
 
 std::vector<std::wstring> splitByWord(std::wstring wstr)

@@ -7,7 +7,8 @@ class YesNo {
 public:
 	static const YesNo YES;
 	static const YesNo NO;
-	static const YesNo INVALID;
+	static const YesNo COMMAND;
+	static const YesNo OTHER;
 	operator bool() const { return _value == Value::YES; }
 	bool operator!() const { return _value == Value::NO; }
 	bool operator==(const YesNo& other) const { return _value == other._value; }
@@ -15,7 +16,8 @@ private:
 	enum class Value {
 		YES,
 		NO,
-		INVALID
+		COMMAND,
+		OTHER
 	};
 	Value _value;
 	YesNo(Value value) { _value = value; }
