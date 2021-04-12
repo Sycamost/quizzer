@@ -3,12 +3,31 @@
 #include <iostream>
 #include <vector>
 
+class YesNo {
+public:
+	static const YesNo YES;
+	static const YesNo NO;
+	static const YesNo COMMAND;
+	static const YesNo OTHER;
+	operator bool() const { return _value == Value::YES; }
+	bool operator!() const { return _value == Value::NO; }
+	bool operator==(const YesNo& other) const { return _value == other._value; }
+private:
+	enum class Value {
+		YES,
+		NO,
+		COMMAND,
+		OTHER
+	};
+	Value _value;
+	YesNo(Value value) { _value = value; }
+};
 std::wstring getInputLine(std::wistream &stream = std::wcin);
-bool getUserYesNo(bool doPrintResult = true);
+bool inputYesNo(std::wstring message, bool doPrintResult = true);
 std::wstring toUpper(std::wstring wstr);
 std::wstring toLower(std::wstring wstr);
 std::wstring indent(std::wstring wstr, int numTabs);
-bool isYes(std::wstring wstr);
+const YesNo getYesNo(std::wstring wstr);
 std::vector<std::wstring> splitByWord(std::wstring wstr);
 
 template <typename T1, typename T2> std::vector<T2> convv(std::vector<T1> v)

@@ -96,21 +96,19 @@ DECLARE_CMD_FUNC(Play::cmdFuncPlay)
 
 DECLARE_CMD_FUNC(Play::cmdFuncFinish)
 {
-	std::wcout << L"Are you sure you want to finish playing?";
+	std::wstring message = L"Are you sure you want to finish playing?";
 
 	int numSkipped = getNumSkipped();
 	if (numSkipped > 0)
 	{
-		std::wcout << L" You still have "
-			<< numSkipped
-			<< L" question"
-			<< (numSkipped > 1 ? L"s " : L" ")
-			<< L"to play.";
+		message += L" You still have "
+			+ std::to_wstring(numSkipped)
+			+ L" question"
+			+ (numSkipped > 1 ? L"s " : L" ")
+			+ L"to play.";
 	}
 
-	std::wcout << L" [Y/N]\n";
-
-	if (getUserYesNo())
+	if (inputYesNo(message))
 		Play::finishPlaying();
 
 	return InputHandler::Returns::SUCCESS;

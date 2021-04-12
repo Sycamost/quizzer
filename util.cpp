@@ -1,6 +1,12 @@
 #include <iostream>
 #include <string>
 #include "util.h"
+#include "Command.h"
+
+const YesNo YesNo::YES{ YesNo(YesNo::Value::YES) };
+const YesNo YesNo::NO{ YesNo(YesNo::Value::NO) };
+const YesNo YesNo::COMMAND{ YesNo(YesNo::Value::COMMAND) };
+const YesNo YesNo::OTHER{ YesNo(YesNo::Value::OTHER) };
 
 std::wstring getInputLine(std::wistream& stream)
 {
@@ -9,17 +15,42 @@ std::wstring getInputLine(std::wistream& stream)
 	return userInput;
 }
 
-bool getUserYesNo(bool doPrintResult)
+bool inputYesNo(std::wstring message, bool doPrintResult)
 {
-	if (isYes(getInputLine()))
+	message += L" [Y/N]\n";
+	const YesNo* result;
+	while (true)
 	{
-		if (doPrintResult)
-			std::wcout << L"I interpreted that as a \"yes\".\n";
-		return true;
+		std::wcout << message;
+
+		result = &getYesNo(getInputLine());
+
+		if (*result)
+		{
+			if (doPrintResult)
+				std::wcout << L"I interpreted that as a \"yes\".\n";
+			return true;
+		}
+
+		else if (!*result)
+		{
+			if (doPrintResult)
+				std::wcout << L"I interpreted that as a \"no\".\n";
+			return false;
+		}
+
+		else if (*result == YesNo::COMMAND)
+		{
+			std::wcout << L"Please answer this question before giving me further commands.\n";
+			continue;
+		}
+
+		else
+		{
+			std::wcout << L"Please enter either \"yes\" or \"no\".\n";
+			continue;
+		}
 	}
-	if (doPrintResult)
-		std::wcout << L"I interpreted that as a \"no\".\n";
-	return false;
 }
 
 std::wstring toUpper(std::wstring wstr)
@@ -54,10 +85,16 @@ std::wstring indent(std::wstring wstr, int numTabs)
 	return wstr;
 }
 
-bool isYes(std::wstring str)
+const YesNo getYesNo(std::wstring str)
 {
 	str = toUpper(str);
-	return (str == L"Y" || str == L"YES" || str == L"1" || str == L"TRUE");
+	if (str == L"Y" || str == L"YES" || str == L"1" || str == L"T" || str == L"TRUE")
+		return YesNo::YES;
+	if (str == L"N" || str == L"NO" || str == L"0" || str == L"F" || str == L"FALSE")
+		return YesNo::NO;
+	if (Command::read(str) != nullptr)
+		return YesNo::COMMAND;
+	return YesNo::OTHER;
 }
 
 std::vector<std::wstring> splitByWord(std::wstring wstr)
