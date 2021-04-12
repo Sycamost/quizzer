@@ -100,14 +100,17 @@ namespace FlashcardWriter
 
 		if (stage == Stage::CASE_SENSITIVE)
 		{
-			if (userInput == L"")
+			YesNo yesNo = getYesNo(userInput);
+
+			if (yesNo || !yesNo)
 			{
-				resetLastStep();
-				return true;
+				caseSensitive = yesNo;
+				setFlashcardWriteStage(Stage::SLEEP);
+				return false;
 			}
-			caseSensitive = isYes(userInput);
-			setFlashcardWriteStage(Stage::SLEEP);
-			return false;
+
+			resetLastStep();
+			return true;
 		}
 
 		return false;
