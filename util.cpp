@@ -2,6 +2,10 @@
 #include <string>
 #include "util.h"
 
+const YesNo YesNo::YES{ YesNo(YesNo::Value::YES) };
+const YesNo YesNo::NO{ YesNo(YesNo::Value::NO) };
+const YesNo YesNo::INVALID{ YesNo(YesNo::Value::INVALID) };
+
 std::wstring getInputLine(std::wistream& stream)
 {
 	std::wstring userInput = L"";
@@ -9,17 +13,31 @@ std::wstring getInputLine(std::wistream& stream)
 	return userInput;
 }
 
-bool getUserYesNo(bool doPrintResult)
+bool getUserYesNo(std::wstring message, bool doPrintResult)
 {
-	if (isYes(getInputLine()))
+	message += L" [Y/N]\n";
+	YesNo result = YesNo::INVALID;
+	do
 	{
-		if (doPrintResult)
-			std::wcout << L"I interpreted that as a \"yes\".\n";
-		return true;
-	}
-	if (doPrintResult)
-		std::wcout << L"I interpreted that as a \"no\".\n";
-	return false;
+		result = getYesNo(getInputLine());
+
+		if (result)
+		{
+			if (doPrintResult)
+				std::wcout << L"I interpreted that as a \"yes\".\n";
+			return true;
+		}
+
+		if (!result)
+		{
+			if (doPrintResult)
+				std::wcout << L"I interpreted that as a \"no\".\n";
+			return false;
+		}
+
+		std::wcout << L"Please enter either \"yes\" or \"no\".\n";
+
+	} while (result == YesNo::INVALID);
 }
 
 std::wstring toUpper(std::wstring wstr)
@@ -54,10 +72,14 @@ std::wstring indent(std::wstring wstr, int numTabs)
 	return wstr;
 }
 
-bool isYes(std::wstring str)
+const YesNo getYesNo(std::wstring str)
 {
 	str = toUpper(str);
-	return (str == L"Y" || str == L"YES" || str == L"1" || str == L"TRUE");
+	if (str == L"Y" || str == L"YES" || str == L"1" || str == L"T" || str == L"TRUE")
+		return YesNo::YES;
+	if (str == L"N" || str == L"NO" || str == L"0" || str == L"F" || str == L"FALSE")
+		return YesNo::NO;
+	return YesNo::INVALID;
 }
 
 std::vector<std::wstring> splitByWord(std::wstring wstr)
