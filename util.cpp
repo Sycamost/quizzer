@@ -19,6 +19,8 @@ bool inputYesNo(std::wstring message, bool doPrintResult)
 	YesNo result = YesNo::INVALID;
 	while (true)
 	{
+		std::wcout << message;
+
 		result = getYesNo(getInputLine());
 
 		if (result)
