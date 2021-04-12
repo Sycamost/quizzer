@@ -21,7 +21,7 @@ private:
 	YesNo(Value value) { _value = value; }
 };
 std::wstring getInputLine(std::wistream &stream = std::wcin);
-bool getUserYesNo(std::wstring message, bool doPrintResult = true);
+bool inputYesNo(std::wstring message, bool doPrintResult = true);
 std::wstring toUpper(std::wstring wstr);
 std::wstring toLower(std::wstring wstr);
 std::wstring indent(std::wstring wstr, int numTabs);

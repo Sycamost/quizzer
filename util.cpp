@@ -13,7 +13,7 @@ std::wstring getInputLine(std::wistream& stream)
 	return userInput;
 }
 
-bool getUserYesNo(std::wstring message, bool doPrintResult)
+bool inputYesNo(std::wstring message, bool doPrintResult)
 {
 	message += L" [Y/N]\n";
 	YesNo result = YesNo::INVALID;

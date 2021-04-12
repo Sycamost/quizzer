@@ -59,7 +59,7 @@ int main() {
 extern DECLARE_CMD_FUNC(cmdFuncQuit) {
 	std::wcout << L"Are you sure you want to exit the app? [Y/N]\n";
 
-	if (getUserYesNo())
+	if (inputYesNo())
 	{
 		std::wcout << L"Exiting app...\n";
 		return InputHandler::Returns::QUIT_APP;

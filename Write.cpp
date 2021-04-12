@@ -59,7 +59,7 @@ DECLARE_CMD_FUNC(Write::cmdFuncWrite) {
 
 DECLARE_CMD_FUNC(Write::cmdFuncCancel) {
 	std::wcout << L"\nAre you sure you want to cancel writing the current question? [Y/N]\n";
-	if (getUserYesNo())
+	if (inputYesNo())
 	{
 		setStage(Stage::NEXT_QUESTION);
 		return InputHandler::Returns::SUCCESS;
@@ -78,7 +78,7 @@ void Write::setStage(Stage stage)
 			<< _typeInfo.displaySingular
 			<< L"? [Y/N]\n";
 
-		if (getUserYesNo())
+		if (inputYesNo())
 		{
 			setStage(Stage::INPUT);
 			return;
