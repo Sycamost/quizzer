@@ -17,7 +17,7 @@ bool inputYesNo(std::wstring message, bool doPrintResult)
 {
 	message += L" [Y/N]\n";
 	YesNo result = YesNo::INVALID;
-	do
+	while (true)
 	{
 		result = getYesNo(getInputLine());
 
@@ -36,8 +36,7 @@ bool inputYesNo(std::wstring message, bool doPrintResult)
 		}
 
 		std::wcout << L"Please enter either \"yes\" or \"no\".\n";
-
-	} while (result == YesNo::INVALID);
+	}
 }
 
 std::wstring toUpper(std::wstring wstr)
