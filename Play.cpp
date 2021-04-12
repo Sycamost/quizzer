@@ -179,7 +179,17 @@ InputHandler::Handler getPlayHandler()
 	{
 		Command* command = Command::read(input);
 		if (command != nullptr)
-			return command->doCommandFunc();
+		{
+			CommandInfo cmdInfo = command->getCommandInfo();
+
+			if (cmdInfo.isType(CommandType::FINISH))
+				return command->doCommandFunc();
+
+			else if (cmdInfo.isType(CommandType::BOOST) && Play::getStage() == PlayStage::ANSWER)
+				return command->doCommandFunc();
+
+			return InputHandler::Returns::INVALID_STATE;
+		}
 
 		if (Play::getStage() == PlayStage::QUESTION)
 		{

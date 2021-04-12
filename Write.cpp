@@ -14,9 +14,16 @@ InputHandler::Handler Write::getWriteHandler()
 {
 	static InputHandler::Handler writeHandler = [](std::wstring input) -> InputHandler::Returns
 	{
-		Command* cmd = Command::read(input);
-		if (cmd != nullptr)
-			return cmd->doCommandFunc();
+		Command* command = Command::read(input);
+		if (command != nullptr)
+		{
+			CommandInfo cmdInfo = command->getCommandInfo();
+
+			if (cmdInfo.isType(CommandType::CANCEL))
+				return command->doCommandFunc();
+
+			return InputHandler::Returns::INVALID_STATE;
+		}
 
 		if (_stage == Stage::INPUT)
 		{
