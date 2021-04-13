@@ -13,7 +13,7 @@ enum class CommandType {
 	EXIT,
 	WRITE,
 	BOOST,
-	FINISH,
+	CONCEDE,
 	PLAY
 };
 

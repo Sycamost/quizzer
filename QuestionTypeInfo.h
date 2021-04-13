@@ -9,14 +9,13 @@ struct QuestionTypeInfo {
 	std::wstring displaySingular;
 	std::wstring displayPlural;
 	std::wstring code;
-	std::string fileAddress;
+	std::string getFileAddress() const;
 	QuestionWriter writer;
 	QuestionReader reader;
 	QuestionTypeInfo(
 		QuestionType type,
 		std::wstring display,
 		std::wstring code,
-		std::string fileAddress,
 		QuestionWriter writer,
 		QuestionReader reader)
 		:
@@ -24,7 +23,6 @@ struct QuestionTypeInfo {
 		displaySingular(display),
 		displayPlural(display + L"s"),
 		code(code),
-		fileAddress(fileAddress),
 		writer(writer),
 		reader(reader)
 	{}
@@ -33,7 +31,6 @@ struct QuestionTypeInfo {
 		std::wstring displaySingular,
 		std::wstring displayPlural,
 		std::wstring code,
-		std::string fileAddress,
 		QuestionWriter writer,
 		QuestionReader reader)
 		:
@@ -41,7 +38,6 @@ struct QuestionTypeInfo {
 		displaySingular(displaySingular),
 		displayPlural(displayPlural),
 		code(code),
-		fileAddress(fileAddress),
 		writer(writer),
 		reader(reader)
 	{}

@@ -99,7 +99,7 @@ std::vector<Question*> QuestionWriter::writeToFile()
 	std::wofstream file;
 	try
 	{
-		file.open(getQuestionTypeInfo(_type)->fileAddress, std::ios::app);
+		file.open(getQuestionTypeInfo(_type)->getFileAddress(), std::ios::app);
 		if (!file.is_open())
 			throw std::exception("File did not open correctly.");
 	}

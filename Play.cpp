@@ -94,7 +94,7 @@ DECLARE_CMD_FUNC(Play::cmdFuncPlay)
 	return InputHandler::Returns::SUCCESS;
 };
 
-DECLARE_CMD_FUNC(Play::cmdFuncFinish)
+DECLARE_CMD_FUNC(Play::cmdFuncConcede)
 {
 	std::wstring message = L"Are you sure you want to finish playing?";
 
@@ -180,7 +180,7 @@ InputHandler::Handler getPlayHandler()
 		{
 			CommandInfo cmdInfo = command->getCommandInfo();
 
-			if (cmdInfo.isType(CommandType::FINISH))
+			if (cmdInfo.isType(CommandType::CONCEDE))
 				return command->doCommandFunc();
 
 			else if (cmdInfo.isType(CommandType::BOOST) && Play::getStage() == PlayStage::ANSWER)

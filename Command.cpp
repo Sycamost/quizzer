@@ -11,7 +11,7 @@ const std::vector<CommandInfo> Command::_commandInfos = std::vector<CommandInfo>
 	CommandInfo(CommandType::WRITE, L"WRITE", &Write::cmdFuncWrite),
 	CommandInfo(CommandType::CANCEL, L"CANCEL", &Write::cmdFuncCancel),
 	CommandInfo(CommandType::BOOST, L"BOOST", &Play::cmdFuncBoost),
-	CommandInfo(CommandType::FINISH, L"FINISH", &Play::cmdFuncFinish),
+	CommandInfo(CommandType::CONCEDE, L"CONCEDE", &Play::cmdFuncConcede),
 	CommandInfo(CommandType::PLAY, L"PLAY", &Play::cmdFuncPlay)
 	});
 

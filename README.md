@@ -47,7 +47,7 @@ There is no way to delete questions in-app. The user may do so manually. Questio
 
 In this program, each flashcard has a string value for the front, a string value for the back, and a list of zero or more string tags.
 
-Flashcards are stored in <code>uderdata_.txt</code>. The front, back and tags are separated by line breaks, and flashcards are separated by a blank line. They may or not be marked with a case-sensitivity option. For example, if the file contains two flashcards, the latter of which is case-sensitive, <code>userdata_flashcard.txt</code> may look like this:
+Flashcards are stored in <code>userdata_flashcard.txt</code>. The front, back and tags are separated by line breaks, and flashcards are separated by a blank line. They may or not be marked with a case-sensitivity option. For example, if the file contains two flashcards, the latter of which is case-sensitive, <code>userdata_flashcard.txt</code> may look like this:
 
 	This is the front of flashcard 1.
 	This is the back of flashcard 1.
