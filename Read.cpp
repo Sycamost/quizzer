@@ -13,7 +13,7 @@ void read()
 		int countRead = 0;
 		try
 		{
-			file.open(qti.fileAddress);
+			file.open(qti.getFileAddress());
 			if (!file.is_open())
 				throw std::exception("File didn't open correctly.");
 		}
