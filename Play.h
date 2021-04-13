@@ -17,7 +17,7 @@ public:
 	static bool updateAnswer(std::wstring answer);
 	static void finishPlaying();
 	static DEFINE_CMD_FUNC(cmdFuncPlay);
-	static DEFINE_CMD_FUNC(cmdFuncFinish);
+	static DEFINE_CMD_FUNC(cmdFuncConcede);
 	static DEFINE_CMD_FUNC(cmdFuncBoost);
 	static int getNumCorrect();
 	static int getNumWrong();
