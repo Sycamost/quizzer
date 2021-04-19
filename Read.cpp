@@ -7,7 +7,7 @@ void read()
 {
 	QuestionList::clear();
 
-	for (QuestionTypeInfo qti : questionTypeInfos)
+	for (QuestionTypeInfo qti : QuestionTypeInfo::getList())
 	{
 		std::wifstream file;
 		int countRead = 0;
@@ -20,7 +20,7 @@ void read()
 		catch (std::exception e)
 		{
 			std::wcout << L"Error reading "
-				<< qti.displayPlural
+				<< qti.getDisplayPlural()
 				<< L" from file. Error message:\n\t"
 				<< e.what()
 				<< L"\n";
@@ -28,13 +28,13 @@ void read()
 		}
 		while (!file.eof())
 		{
-			Question* question = qti.reader.read(file);
+			Question* question = qti.getReader()->read(file);
 			if (question == nullptr)
 				break;
 			QuestionList::append(question);
 			countRead++;
 		}
-		std::wcout << countRead << L" " << qti.displayPlural << L"...\n";
+		std::wcout << countRead << L" " << qti.getDisplayPlural() << L"...\n";
 	}
 	std::wcout << L"Read a total of " << QuestionList::get().size() << L" questions from file.\n\n";
 }
