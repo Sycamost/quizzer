@@ -54,8 +54,8 @@ void Flashcard::setCaseInsensitive()
 
 Question* Flashcard::readFlashcard(std::wifstream& stream)
 {
-	auto options = Option::readOptions(stream);
-	bool caseSensitive = (options.count(Globals::optionCaseSensitive, &Option::getOption) >= 1);
+	std::vector<Option> options = Option::readOptions(stream);
+	bool caseSensitive = std::find_if(options.begin(), options.end(), [](Option opt) -> bool {return opt.getOption() == _optCaseSensitive; }) != options.end();
 
 	if (stream.eof())
 		return nullptr;
