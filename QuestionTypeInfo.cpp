@@ -7,22 +7,22 @@
 #include "util.h"
 
 
-const easy_list::list<QuestionTypeInfo> QuestionTypeInfo::getList()
+const easy_list::list<QuestionTypeInfo>* QuestionTypeInfo::getList()
 {
 	static const auto list = easy_list::list<QuestionTypeInfo>({
 		QuestionTypeInfo(QuestionType::FLASHCARD, L"flashcard", L"FLASHCARD", FlashcardWriter::get(), FlashcardReader::get())
 	});
-	return list;
+	return &list;
 }
 
 const easy_list::list<QuestionTypeInfo>::const_iterator QuestionTypeInfo::get(QuestionType type)
 {
-	return getList().search(type, &QuestionTypeInfo::getType);
+	return getList()->search(type, &QuestionTypeInfo::getType);
 }
 
 const easy_list::list<QuestionTypeInfo>::const_iterator QuestionTypeInfo::get(std::wstring code)
 {
-	return getList().search(code, &QuestionTypeInfo::getCode);
+	return getList()->search(code, &QuestionTypeInfo::getCode);
 }
 
 const std::string QuestionTypeInfo::getFileAddress() const

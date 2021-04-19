@@ -79,7 +79,7 @@ DECLARE_CMD_FUNC(Play::cmdFuncPlay)
 		<< Globals::horizontalDoubleRule << L"\n\n"
 		<< L"You'll get given questions, and you'll have to answer correctly. "
 		<< L"If you think you've been marked down unfairly, type the command <"
-		<< toLower(CommandInfo::get(CommandType::BOOST)->code)
+		<< toLower(CommandInfo::get(CommandType::BOOST)->getCode())
 		<< L"> before the next card rolls on. Good luck!\n\n"
 		<< Globals::horizontalRule << L"\n\n";
 
@@ -180,10 +180,10 @@ InputHandler::Handler getPlayHandler()
 		{
 			CommandInfo cmdInfo = command->getCommandInfo();
 
-			if (cmdInfo.type == CommandType::CONCEDE)
+			if (cmdInfo.getType() == CommandType::CONCEDE)
 				return command->doCommandFunc();
 
-			else if (cmdInfo.type == CommandType::BOOST && Play::getStage() == PlayStage::ANSWER)
+			else if (cmdInfo.getType() == CommandType::BOOST && Play::getStage() == PlayStage::ANSWER)
 				return command->doCommandFunc();
 
 			return InputHandler::Returns::INVALID_STATE;
@@ -204,7 +204,7 @@ InputHandler::Handler getPlayHandler()
 				std::wcout << L"Incorrect! The correct answer was:\n"
 					<< indent(Play::getCurrentCorrectAnswer(), 1)
 					<< "\nPress enter to continue, or enter the command <"
-					<< toLower(CommandInfo::get(CommandType::BOOST)->code)
+					<< toLower(CommandInfo::get(CommandType::BOOST)->getCode())
 					<< "> if you have been marked down unfairly.\n";
 				Play::setStage(PlayStage::ANSWER);
 				return InputHandler::Returns::SUCCESS;

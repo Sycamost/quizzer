@@ -7,7 +7,7 @@ void read()
 {
 	QuestionList::clear();
 
-	for (QuestionTypeInfo qti : QuestionTypeInfo::getList())
+	for (QuestionTypeInfo qti : *QuestionTypeInfo::getList())
 	{
 		std::wifstream file;
 		int countRead = 0;

@@ -25,7 +25,7 @@ namespace FlashcardWriter
 	bool caseSensitive{ false };
 	const std::wstring startWritingMessage{
 		L"Enter the values for new flashcards' front, back and any tags.\nOnce you're finished adding tags, leave the next tag blank.\nThe front and back cannot be blank.\nUse <"
-		+ toLower(CommandInfo::get(CommandType::CANCEL)->code)
+		+ toLower(CommandInfo::get(CommandType::CANCEL)->getCode())
 		+ L"> to cancel adding the current card.\n" };
 
 	void setFlashcardWriteStage(Stage stage)

@@ -7,7 +7,7 @@
 #include "InputHandler.h"
 #include "util.h"
 
-QuestionTypeInfo Write::_typeInfo{ QuestionTypeInfo::getList()[0] };
+QuestionTypeInfo Write::_typeInfo{ QuestionTypeInfo::getList()->front() };
 Write::Stage Write::_stage{ Write::Stage::NEXT_QUESTION };
 
 InputHandler::Handler Write::getWriteHandler()
@@ -19,7 +19,7 @@ InputHandler::Handler Write::getWriteHandler()
 		{
 			CommandInfo cmdInfo = command->getCommandInfo();
 
-			if (cmdInfo.type == CommandType::CANCEL)
+			if (cmdInfo.getType() == CommandType::CANCEL)
 				return command->doCommandFunc();
 
 			return InputHandler::Returns::INVALID_STATE;
@@ -49,7 +49,7 @@ DECLARE_CMD_FUNC(Write::cmdFuncWrite) {
 		return InputHandler::Returns::TOO_FEW_ARGS;
 
 	auto questionTypeInfo = QuestionTypeInfo::get(args[0]);
-	if (questionTypeInfo == QuestionTypeInfo::getList().end())
+	if (questionTypeInfo == QuestionTypeInfo::getList()->end())
 		return InputHandler::Returns::INVALID_ARGS;
 
 	InputHandler::set(getWriteHandler());

@@ -6,7 +6,7 @@
 #include "Play.h"
 #include "util.h"
 
-const easy_list::list<CommandInfo> CommandInfo::getList()
+const easy_list::list<CommandInfo>* CommandInfo::getList()
 {
 	static const auto list = easy_list::list<CommandInfo>({
 		CommandInfo(CommandType::QUIT, L"QUIT", &cmdFuncQuit),
@@ -17,17 +17,17 @@ const easy_list::list<CommandInfo> CommandInfo::getList()
 		CommandInfo(CommandType::CONCEDE, L"CONCEDE", &Play::cmdFuncConcede),
 		CommandInfo(CommandType::PLAY, L"PLAY", &Play::cmdFuncPlay)
 	});
-	return list;
+	return &list;
 }
 
 const easy_list::list<CommandInfo>::const_iterator CommandInfo::get(const CommandType type)
 {
-	return getList().search(type, &CommandInfo::type);
+	return getList()->search(type, &CommandInfo::getType);
 }
 
 const easy_list::list<CommandInfo>::const_iterator CommandInfo::get(const std::wstring code)
 {
-	return getList().search(code, &CommandInfo::code);
+	return getList()->search(code, &CommandInfo::getCode);
 }
 
 Command* Command::read(std::wifstream& stream)
@@ -50,7 +50,7 @@ Command* Command::read(std::wstring userInput)
 	std::wstring code = words[0].substr(1);
 
 	auto cmdInfoIter = CommandInfo::get(code);
-	if (cmdInfoIter == CommandInfo::getList().end())
+	if (cmdInfoIter == CommandInfo::getList()->end())
 		return nullptr;
 
 	return new Command(
@@ -60,7 +60,7 @@ Command* Command::read(std::wstring userInput)
 
 InputHandler::Returns Command::doCommandFunc()
 {
-	return (*_commandInfo.func)(_args);
+	return _commandInfo.callFunc(_args);
 }
 
 CommandInfo Command::getCommandInfo()

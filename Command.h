@@ -22,17 +22,21 @@ typedef InputHandler::Returns (*CommandFunc) (std::vector<std::wstring> args);
 
 class CommandInfo {
 public:
-	const CommandType type;
-	const std::wstring code;
-	const CommandFunc* func;
-	static const easy_list::list<CommandInfo> getList();
+	const CommandType getType() const { return _type; }
+	const std::wstring getCode() const { return _code; }
+	const CommandFunc* getFunc() const { return _func; }
+	const InputHandler::Returns callFunc(std::vector<std::wstring> args) { return (*_func)(args); }
+	static const easy_list::list<CommandInfo>* getList();
 	static const easy_list::list<CommandInfo>::const_iterator get(const CommandType type);
 	static const easy_list::list<CommandInfo>::const_iterator get(const std::wstring code);
 private:
-	CommandInfo(const CommandType ty, const std::wstring c, const CommandFunc* fn) :
-		type(ty),
-		code(c),
-		func(fn)
+	const CommandType _type;
+	const std::wstring _code;
+	const CommandFunc* _func;
+	CommandInfo(const CommandType type, const std::wstring code, const CommandFunc* func) :
+		_type(type),
+		_code(code),
+		_func(func)
 	{}
 };
 

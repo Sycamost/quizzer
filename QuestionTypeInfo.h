@@ -22,7 +22,7 @@ public:
 			_displayPlural == other._displayPlural &&
 			_code == other._code;
 	}
-	static const easy_list::list<QuestionTypeInfo> getList();
+	static const easy_list::list<QuestionTypeInfo>* getList();
 	static const easy_list::list<QuestionTypeInfo>::const_iterator get(QuestionType type);
 	static const easy_list::list<QuestionTypeInfo>::const_iterator get(std::wstring code);
 private:
