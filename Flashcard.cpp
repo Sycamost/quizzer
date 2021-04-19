@@ -29,6 +29,14 @@ bool Flashcard::isCorrect(std::wstring guess)
 	return _caseSensitive ? (guess == _answer) : (toUpper(guess) == toUpper(_answer));
 }
 
+void Flashcard::writeChildData(std::wofstream& stream)
+{
+	if (_caseSensitive)
+		Option(_optCaseSensitive).write(stream);
+	stream << _question << L"\n";
+	stream << _answer << L"\n";
+}
+
 bool Flashcard::isCaseSensitive()
 {
 	return _caseSensitive;
