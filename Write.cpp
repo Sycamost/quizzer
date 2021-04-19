@@ -7,7 +7,7 @@
 #include "InputHandler.h"
 #include "util.h"
 
-QuestionTypeInfo Write::_typeInfo{ *getQuestionTypeInfo(QuestionType::FLASHCARD) };
+QuestionTypeInfo Write::_typeInfo{ QuestionTypeInfo::getList()->front() };
 Write::Stage Write::_stage{ Write::Stage::NEXT_QUESTION };
 
 InputHandler::Handler Write::getWriteHandler()
@@ -19,7 +19,7 @@ InputHandler::Handler Write::getWriteHandler()
 		{
 			CommandInfo cmdInfo = command->getCommandInfo();
 
-			if (cmdInfo.isType(CommandType::CANCEL))
+			if (cmdInfo.getType() == CommandType::CANCEL)
 				return command->doCommandFunc();
 
 			return InputHandler::Returns::INVALID_STATE;
@@ -27,7 +27,7 @@ InputHandler::Handler Write::getWriteHandler()
 
 		if (_stage == Stage::INPUT)
 		{
-			_typeInfo.writer.processInput(input);
+			_typeInfo.getWriter()->processInput(input);
 			return InputHandler::Returns::SUCCESS;
 		}
 
@@ -48,8 +48,8 @@ DECLARE_CMD_FUNC(Write::cmdFuncWrite) {
 	if (args.size() == 0)
 		return InputHandler::Returns::TOO_FEW_ARGS;
 
-	const QuestionTypeInfo* questionTypeInfo = getQuestionTypeInfoFromCode(args[0]);
-	if (questionTypeInfo == nullptr)
+	auto questionTypeInfo = QuestionTypeInfo::get(args[0]);
+	if (questionTypeInfo == QuestionTypeInfo::getList()->end())
 		return InputHandler::Returns::INVALID_ARGS;
 
 	InputHandler::set(getWriteHandler());
@@ -76,7 +76,7 @@ void Write::setStage(Stage stage)
 
 		std::wstring message =
 			L"Would you like to write another "
-			+ _typeInfo.displaySingular
+			+ _typeInfo.getDisplaySingular()
 			+ L"?";
 
 		if (inputYesNo(message))
@@ -92,7 +92,7 @@ void Write::setStage(Stage stage)
 	if (stage == Stage::INPUT)
 	{
 		_stage = stage;
-		_typeInfo.writer.startInput();
+		_typeInfo.getWriter()->startInput();
 		return;
 	}
 
@@ -101,11 +101,11 @@ void Write::setStage(Stage stage)
 
 void Write::startWriting(const QuestionTypeInfo qti)
 {
-	std::wcout << "Writing new " << qti.displayPlural << L"...\n\n";
+	std::wcout << "Writing new " << qti.getDisplayPlural() << L"...\n\n";
 	_typeInfo = qti;
 	_stage = Stage::INPUT;
-	std::wcout << _typeInfo.writer.getStartWritingMessage() << L"\n";
-	_typeInfo.writer.startInput();
+	std::wcout << _typeInfo.getWriter()->getStartWritingMessage() << L"\n";
+	_typeInfo.getWriter()->startInput();
 }
 
 void Write::resetLastStep()
@@ -117,7 +117,7 @@ void Write::resetLastStep()
 		break;
 
 	case Stage::INPUT:
-		_typeInfo.writer.resetLastStep();
+		_typeInfo.getWriter()->resetLastStep();
 		break;
 
 	default:
@@ -127,7 +127,7 @@ void Write::resetLastStep()
 
 void Write::finishWriting()
 {
-	std::wcout << L"\nFinished writing new " << _typeInfo.displayPlural << L".\n";
-	QuestionList::append(_typeInfo.writer.writeToFile());
+	std::wcout << L"\nFinished writing new " << _typeInfo.getDisplayPlural() << L".\n";
+	QuestionList::append(_typeInfo.getWriter()->writeToFile());
 	InputHandler::setDefault();
 }

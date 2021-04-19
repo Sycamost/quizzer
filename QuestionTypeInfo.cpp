@@ -1,39 +1,33 @@
 #include <vector>
 #include <algorithm>
+#include <easy_list.h>
 #include "QuestionTypeInfo.h"
 #include "FlashcardWriter.h"
 #include "FlashcardReader.h"
 #include "util.h"
 
-extern const std::vector<QuestionTypeInfo> questionTypeInfos{ std::vector<QuestionTypeInfo>({
-	QuestionTypeInfo(QuestionType::FLASHCARD, L"flashcard", L"FLASHCARD", FlashcardWriter::get(), FlashcardReader::get())
-}) };
 
-const QuestionTypeInfo* getQuestionTypeInfo(QuestionType type)
+const easy_list::list<QuestionTypeInfo>* QuestionTypeInfo::getList()
 {
-	auto iter = std::find_if(
-		questionTypeInfos.begin(),
-		questionTypeInfos.end(),
-		[type](QuestionTypeInfo qti) -> bool { return qti.type == type; });
-	if (iter == questionTypeInfos.end())
-		return nullptr;
-	return iter._Ptr;
+	static const auto list = easy_list::list<QuestionTypeInfo>({
+		QuestionTypeInfo(QuestionType::FLASHCARD, L"flashcard", L"FLASHCARD", FlashcardWriter::get(), FlashcardReader::get())
+	});
+	return &list;
 }
 
-const QuestionTypeInfo* getQuestionTypeInfoFromCode(std::wstring code)
+const easy_list::list<QuestionTypeInfo>::const_iterator QuestionTypeInfo::get(QuestionType type)
 {
-	auto iter = std::find_if(
-		questionTypeInfos.begin(),
-		questionTypeInfos.end(),
-		[code](QuestionTypeInfo qti) -> bool { return qti.code == code; });
-	if (iter == questionTypeInfos.end())
-		return nullptr;
-	return iter._Ptr;
+	return getList()->search(type, &QuestionTypeInfo::getType);
 }
 
-std::string QuestionTypeInfo::getFileAddress() const
+const easy_list::list<QuestionTypeInfo>::const_iterator QuestionTypeInfo::get(std::wstring code)
 {
-	std::wstring typeName = toLower(displaySingular);
+	return getList()->search(code, &QuestionTypeInfo::getCode);
+}
+
+const std::string QuestionTypeInfo::getFileAddress() const
+{
+	std::wstring typeName = toLower(_displaySingular);
 	std::replace(typeName.begin(), typeName.end(), L' ', L'_');
 	return "userdata_" + std::string(typeName.begin(), typeName.end()) + ".txt";
 }

@@ -1,19 +1,34 @@
 #include <algorithm>
+#include <easy_list.h>
 #include "Command.h"
 #include "Write.h"
 #include "main.h"
 #include "Play.h"
 #include "util.h"
 
-const std::vector<CommandInfo> Command::_commandInfos = std::vector<CommandInfo>({
-	CommandInfo(CommandType::QUIT, L"QUIT", &cmdFuncQuit),
-	CommandInfo(CommandType::EXIT, L"EXIT", &cmdFuncQuit),
-	CommandInfo(CommandType::WRITE, L"WRITE", &Write::cmdFuncWrite),
-	CommandInfo(CommandType::CANCEL, L"CANCEL", &Write::cmdFuncCancel),
-	CommandInfo(CommandType::BOOST, L"BOOST", &Play::cmdFuncBoost),
-	CommandInfo(CommandType::CONCEDE, L"CONCEDE", &Play::cmdFuncConcede),
-	CommandInfo(CommandType::PLAY, L"PLAY", &Play::cmdFuncPlay)
+const easy_list::list<CommandInfo>* CommandInfo::getList()
+{
+	static const auto list = easy_list::list<CommandInfo>({
+		CommandInfo(CommandType::QUIT, L"QUIT", &cmdFuncQuit),
+		CommandInfo(CommandType::EXIT, L"EXIT", &cmdFuncQuit),
+		CommandInfo(CommandType::WRITE, L"WRITE", &Write::cmdFuncWrite),
+		CommandInfo(CommandType::CANCEL, L"CANCEL", &Write::cmdFuncCancel),
+		CommandInfo(CommandType::BOOST, L"BOOST", &Play::cmdFuncBoost),
+		CommandInfo(CommandType::CONCEDE, L"CONCEDE", &Play::cmdFuncConcede),
+		CommandInfo(CommandType::PLAY, L"PLAY", &Play::cmdFuncPlay)
 	});
+	return &list;
+}
+
+const easy_list::list<CommandInfo>::const_iterator CommandInfo::get(const CommandType type)
+{
+	return getList()->search(type, &CommandInfo::getType);
+}
+
+const easy_list::list<CommandInfo>::const_iterator CommandInfo::get(const std::wstring code)
+{
+	return getList()->search(code, &CommandInfo::getCode);
+}
 
 Command* Command::read(std::wifstream& stream)
 {
@@ -34,11 +49,8 @@ Command* Command::read(std::wstring userInput)
 		return nullptr;
 	std::wstring code = words[0].substr(1);
 
-	auto cmdInfoIter = std::find_if(
-		_commandInfos.begin(),
-		_commandInfos.end(),
-		[code](CommandInfo ci) -> bool { return ci.isCode(code); });
-	if (cmdInfoIter == Command::_commandInfos.end())
+	auto cmdInfoIter = CommandInfo::get(code);
+	if (cmdInfoIter == CommandInfo::getList()->end())
 		return nullptr;
 
 	return new Command(
@@ -46,31 +58,9 @@ Command* Command::read(std::wstring userInput)
 		*cmdInfoIter);
 }
 
-const CommandInfo* Command::getCommandInfo(CommandType type)
-{
-	auto ciIter = std::find_if(
-		_commandInfos.begin(),
-		_commandInfos.end(),
-		[type](CommandInfo ci) -> bool { return ci.isType(type); });
-	if (ciIter == _commandInfos.end())
-		return nullptr;
-	return ciIter._Ptr;
-}
-
-const CommandInfo* Command::getCommandInfo(std::wstring code)
-{
-	auto ciIter = std::find_if(
-		_commandInfos.begin(),
-		_commandInfos.end(),
-		[code](CommandInfo ci) -> bool { return ci.isCode(code); });
-	if (ciIter == _commandInfos.end())
-		return nullptr;
-	return ciIter._Ptr;
-}
-
 InputHandler::Returns Command::doCommandFunc()
 {
-	return (*_commandInfo.func)(_args);
+	return _commandInfo.callFunc(_args);
 }
 
 CommandInfo Command::getCommandInfo()

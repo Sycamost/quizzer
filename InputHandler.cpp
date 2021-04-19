@@ -31,7 +31,7 @@ InputHandler::Handler getDefaultInputHandler()
 		if (cmd == nullptr)
 			return InputHandler::Returns::CMD_NOT_RECOGNISED;
 
-		CommandType cmdType = cmd->getCommandInfo().type;
+		CommandType cmdType = cmd->getCommandInfo().getType();
 		if (cmdType == CommandType::QUIT ||
 			cmdType == CommandType::EXIT ||
 			cmdType == CommandType::WRITE ||

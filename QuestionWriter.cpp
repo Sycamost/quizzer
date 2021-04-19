@@ -72,7 +72,7 @@ void QuestionWriter::processInput(std::wstring userInput)
 			if (newQuestion == nullptr)
 			{
 				std::wcout << L"Something went wrong constructing the "
-					<< getQuestionTypeInfo(_type)->displaySingular
+					<< QuestionTypeInfo::get(_type)->getDisplaySingular()
 					<< " from the input given. Please try again, and ensure all inputs are valid.\n";
 				return;
 			}
@@ -99,7 +99,7 @@ std::vector<Question*> QuestionWriter::writeToFile()
 	std::wofstream file;
 	try
 	{
-		file.open(getQuestionTypeInfo(_type)->getFileAddress(), std::ios::app);
+		file.open(QuestionTypeInfo::get(_type)->getFileAddress(), std::ios::app);
 		if (!file.is_open())
 			throw std::exception("File did not open correctly.");
 	}
