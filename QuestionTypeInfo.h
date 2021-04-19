@@ -16,11 +16,7 @@ public:
 	QuestionReader* getReader() { return &_reader; }
 	bool operator==(const QuestionTypeInfo& other)
 	{
-		return
-			_type == other._type &&
-			_displaySingular == other._displaySingular &&
-			_displayPlural == other._displayPlural &&
-			_code == other._code;
+		return _type == other._type;
 	}
 	static const easy_list::list<QuestionTypeInfo>* getList();
 	static const easy_list::list<QuestionTypeInfo>::const_iterator get(QuestionType type);

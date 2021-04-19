@@ -29,6 +29,10 @@ public:
 	static const easy_list::list<CommandInfo>* getList();
 	static const easy_list::list<CommandInfo>::const_iterator get(const CommandType type);
 	static const easy_list::list<CommandInfo>::const_iterator get(const std::wstring code);
+	bool operator==(const CommandInfo& other)
+	{
+		return _type == other._type;
+	}
 private:
 	const CommandType _type;
 	const std::wstring _code;
