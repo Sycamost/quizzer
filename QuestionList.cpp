@@ -1,13 +1,14 @@
 #include <vector>
+#include <easy_list.h>
 #include "QuestionList.h"
 #include "Question.h"
 
 namespace QuestionList
 {
-	std::vector<Question*> questionList = std::vector<Question*>();
+	easy_list::list<Question*> questionList = easy_list::list<Question*>();
 }
 
-const std::vector<Question*> QuestionList::get()
+const easy_list::list<Question*> QuestionList::get()
 {
 	return questionList;
 }
