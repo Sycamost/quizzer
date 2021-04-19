@@ -24,11 +24,6 @@ public:
 	const CommandType type;
 	const std::wstring code;
 	const CommandFunc* func;
-	CommandInfo(const CommandType ty, const std::wstring c, const CommandFunc* fn) :
-		type(ty),
-		code(c),
-		func(fn)
-	{}
 	bool isType(CommandType ty)
 	{
 		return type == ty;
@@ -37,6 +32,12 @@ public:
 	{
 		return code == wstr;
 	}
+private:
+	CommandInfo(const CommandType ty, const std::wstring c, const CommandFunc* fn) :
+		type(ty),
+		code(c),
+		func(fn)
+	{}
 };
 
 class Command
