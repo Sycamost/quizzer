@@ -12,6 +12,15 @@ struct QuestionTypeInfo {
 	std::string getFileAddress() const;
 	QuestionWriter writer;
 	QuestionReader reader;
+	bool operator==(const QuestionTypeInfo& other)
+	{
+		return
+			type == other.type &&
+			displaySingular == other.displaySingular &&
+			displayPlural == other.displayPlural &&
+			code == other.code;
+	}
+private:
 	QuestionTypeInfo(
 		QuestionType type,
 		std::wstring display,
@@ -41,14 +50,6 @@ struct QuestionTypeInfo {
 		writer(writer),
 		reader(reader)
 	{}
-	bool operator==(const QuestionTypeInfo& other)
-	{
-		return
-			type == other.type &&
-			displaySingular == other.displaySingular &&
-			displayPlural == other.displayPlural &&
-			code == other.code;
-	}
 };
 
 extern const std::vector<QuestionTypeInfo> questionTypeInfos;
