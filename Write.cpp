@@ -19,7 +19,7 @@ InputHandler::Handler Write::getWriteHandler()
 		{
 			CommandInfo cmdInfo = command->getCommandInfo();
 
-			if (cmdInfo.isType(CommandType::CANCEL))
+			if (cmdInfo.type == CommandType::CANCEL)
 				return command->doCommandFunc();
 
 			return InputHandler::Returns::INVALID_STATE;

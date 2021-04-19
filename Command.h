@@ -2,6 +2,7 @@
 #include <string>
 #include <vector>
 #include <fstream>
+#include <easy_list.h>
 #include "InputHandler.h"
 
 #define DEFINE_CMD_FUNC(func) const CommandFunc func
@@ -24,14 +25,9 @@ public:
 	const CommandType type;
 	const std::wstring code;
 	const CommandFunc* func;
-	bool isType(CommandType ty)
-	{
-		return type == ty;
-	}
-	bool isCode(std::wstring wstr)
-	{
-		return code == wstr;
-	}
+	static const easy_list::list<CommandInfo> getList();
+	static const easy_list::list<CommandInfo>::const_iterator get(const CommandType type);
+	static const easy_list::list<CommandInfo>::const_iterator get(const std::wstring code);
 private:
 	CommandInfo(const CommandType ty, const std::wstring c, const CommandFunc* fn) :
 		type(ty),
@@ -40,19 +36,17 @@ private:
 	{}
 };
 
+
 class Command
 {
 public:
 	static Command* read(std::wifstream& stream);
 	static Command* read(std::wstring userInput);
-	static const CommandInfo* getCommandInfo(CommandType type);
-	static const CommandInfo* getCommandInfo(std::wstring code);
 	InputHandler::Returns doCommandFunc();
 	CommandInfo getCommandInfo();
 	const std::vector<std::wstring> getArgs() const;
 private:
 	CommandInfo _commandInfo;
 	std::vector<std::wstring> _args;
-	static const std::vector<CommandInfo> _commandInfos;
 	Command(std::vector<std::wstring> args, CommandInfo commandInfo);
 };
