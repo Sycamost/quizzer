@@ -2,6 +2,7 @@
 #include <string>
 #include <vector>
 #include <fstream>
+#include <easy_list.h>
 
 class Option
 {
@@ -16,7 +17,7 @@ public:
 	std::wstring getOption() const;
 	std::wstring getArgument(unsigned int n) const;
 	std::vector<std::wstring> getArguments() const;
-	static std::vector<Option> readOptions(std::wifstream& stream);
+	static easy_list::list<Option> readOptions(std::wifstream& stream);
 	static Option* readOption(std::wstring userInput);
 	void write(std::wofstream& stream);
 };

@@ -1,12 +1,13 @@
 #include <string>
 #include <vector>
+#include <easy_list.h>
 #include "Option.h"
 #include "util.h"
 #include "globals.h"
 
-std::vector<Option> Option::readOptions(std::wifstream& stream)
+easy_list::list<Option> Option::readOptions(std::wifstream& stream)
 {
-	std::vector<Option> options = std::vector<Option>();
+	auto options = easy_list::list<Option>();
 	while (!stream.eof())
 	{
 		std::streampos pos = stream.tellg();
