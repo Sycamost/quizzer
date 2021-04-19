@@ -4,6 +4,7 @@
 #include "Option.h"
 #include "QuestionType.h"
 #include "globals.h"
+#include "util.h"
 
 namespace FlashcardReader
 {
@@ -25,13 +26,13 @@ namespace FlashcardReader
 		// if we get any extra inputs after front and back are filled, they are ignored
 	}
 
-	Question* construct(std::vector<Option> options, std::vector<std::wstring> tags)
+	Question* construct(easy_list::list<Option> options, std::vector<std::wstring> tags)
 	{
 		if (front == L"")
 			return nullptr;
 		if (back == L"")
 			return nullptr;
-		bool caseSensitive = options.end() != std::find_if(options.begin(), options.end(), [](Option opt) -> bool { return opt.getOption() == Globals::optionCaseSensitive; });
+		bool caseSensitive = (options.count(toUpper(Globals::optionCaseSensitive), &Option::getOption) >= 1);
 		return new Flashcard(front, back, caseSensitive, tags);
 	}
 
