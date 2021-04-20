@@ -29,5 +29,5 @@ const std::string QuestionTypeInfo::getFileAddress() const
 	std::string typeName = std::string(_displaySingular.begin(), _displaySingular.end());
 	easy_list::list<char> fileAddress = easy_list::list<char>(typeName.begin(), typeName.end());
 	fileAddress = fileAddress.replace('_', ' ');
-	return "userdata_" + std::string(fileAddress.begin(), fileAddress.end());
+	return "userdata_" + std::string(fileAddress.begin(), fileAddress.end()) + ".txt";
 }
