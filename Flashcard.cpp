@@ -4,9 +4,7 @@
 #include "util.h"
 #include "Option.h"
 
-const std::wstring Flashcard::_optCaseSensitive = L"case_sensitive";
-
-Flashcard::Flashcard(std::wstring question, std::wstring answer, bool caseSensitive, std::vector<std::wstring> tags) :
+Flashcard::Flashcard(std::wstring question, std::wstring answer, bool caseSensitive, easy_list::list<std::wstring> tags) :
 	Question(QuestionType::FLASHCARD, tags),
 	_question(question),
 	_answer(answer),
@@ -26,13 +24,13 @@ std::wstring Flashcard::getAnswer()
 
 bool Flashcard::isCorrect(std::wstring guess)
 {
-	return _caseSensitive ? (guess == _answer) : (toUpper(guess) == toUpper(_answer));
+	return _caseSensitive ? (guess == _answer) : (toLower(guess) == toLower(_answer));
 }
 
 void Flashcard::writeChildData(std::wofstream& stream)
 {
 	if (_caseSensitive)
-		Option(_optCaseSensitive).write(stream);
+		Option(Globals::optionCaseSensitive).write(stream);
 	stream << _question << L"\n";
 	stream << _answer << L"\n";
 }
@@ -54,8 +52,8 @@ void Flashcard::setCaseInsensitive()
 
 Question* Flashcard::readFlashcard(std::wifstream& stream)
 {
-	std::vector<Option> options = Option::readOptions(stream);
-	bool caseSensitive = std::find_if(options.begin(), options.end(), [](Option opt) -> bool {return opt.getOption() == _optCaseSensitive; }) != options.end();
+	easy_list::list<Option> options = Option::readOptions(stream);
+	bool caseSensitive = options.contains(Globals::optionCaseSensitive, &Option::getOption);
 
 	if (stream.eof())
 		return nullptr;

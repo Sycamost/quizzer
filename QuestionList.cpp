@@ -1,4 +1,3 @@
-#include <vector>
 #include <easy_list.h>
 #include "QuestionList.h"
 #include "Question.h"
@@ -18,12 +17,12 @@ void QuestionList::append(Question* question)
 	questionList.push_back(question);
 }
 
-void QuestionList::append(std::vector<Question*> questions)
+void QuestionList::append(easy_list::list<Question*> questions)
 {
-	questionList.insert(questionList.end(), questions.begin(), questions.end());
+	questionList += questions;
 }
 
 void QuestionList::clear()
 {
-	questionList = std::vector<Question*>();
+	questionList = easy_list::list<Question*>();
 }

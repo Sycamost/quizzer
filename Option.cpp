@@ -1,5 +1,4 @@
 #include <string>
-#include <vector>
 #include <easy_list.h>
 #include "Option.h"
 #include "util.h"
@@ -24,7 +23,7 @@ easy_list::list<Option> Option::readOptions(std::wifstream& stream)
 
 Option* Option::readOption(std::wstring userInput)
 {
-	std::vector<std::wstring> words = splitByWord(toUpper(userInput));
+	easy_list::list<std::wstring> words = splitByWord(toLower(userInput));
 	if (words.size() == 0)
 		return nullptr;
 
@@ -34,10 +33,10 @@ Option* Option::readOption(std::wstring userInput)
 
 	return new Option(
 		words[0].substr(Globals::fileEscapeChar.size()),
-		std::vector<std::wstring>(words.begin() + 1, words.end()));
+		words.slice(1));
 }
 
-void Option::constructor(std::wstring option, std::vector<std::wstring> args)
+void Option::constructor(std::wstring option, easy_list::list<std::wstring> args)
 {
 	_option = option;
 	_args = args;
@@ -45,15 +44,15 @@ void Option::constructor(std::wstring option, std::vector<std::wstring> args)
 
 Option::Option(std::wstring option)
 {
-	constructor(option, std::vector<std::wstring>());
+	constructor(option, easy_list::list<std::wstring>());
 }
 
 Option::Option(std::wstring option, std::wstring arg)
 {
-	constructor(option, std::vector<std::wstring>(1, arg));
+	constructor(option, easy_list::list<std::wstring>({ arg }));
 }
 
-Option::Option(std::wstring option, std::vector<std::wstring> args)
+Option::Option(std::wstring option, easy_list::list<std::wstring> args)
 {
 	constructor(option, args);
 }
@@ -70,7 +69,7 @@ std::wstring Option::getArgument(unsigned int n) const
 	return _args[n];
 }
 
-std::vector<std::wstring> Option::getArguments() const
+easy_list::list<std::wstring> Option::getArguments() const
 {
 	return _args;
 }
@@ -78,7 +77,7 @@ std::vector<std::wstring> Option::getArguments() const
 void Option::write(std::wofstream& stream)
 {
 	stream << Globals::fileEscapeChar << _option;
-	for (unsigned int i = 0; i < _args.size(); i++)
-		stream << L" " << _args[i];
+	for (auto arg : _args)
+		stream << L" " << arg;
 	stream << L"\n";
 }

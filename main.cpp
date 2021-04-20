@@ -1,5 +1,5 @@
 #include <iostream>
-#include <vector>
+#include <easy_list.h>
 #include "InputHandler.h"
 #include "util.h"
 #include "globals.h"

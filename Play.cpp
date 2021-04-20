@@ -1,7 +1,6 @@
 #include <iostream>
-#include <algorithm>
-#include <time.h>
 #include <random>
+#include <easy_list.h>
 #include "Play.h"
 #include "InputHandler.h"
 #include "Question.h"
@@ -56,34 +55,29 @@ bool Play::updateAnswer(std::wstring answer)
 
 DECLARE_CMD_FUNC(Play::cmdFuncPlay)
 {
-	std::wcout << L"Starting play with ";
-	_questions = std::vector<Question*>();
 	if (args.empty())
-	{
 		_questions = QuestionList::get();
-		std::wcout << L"all ";
-	}
 	else
 	{
-		std::vector<Question*> questionList = QuestionList::get();
-		for (unsigned int i = 0; i < questionList.size(); i++)
-		{
-			std::vector<std::wstring> thisQuestionTags = questionList[i]->getTags();
-			std::transform(thisQuestionTags.begin(), thisQuestionTags.end(), thisQuestionTags.begin(), toUpper);
-			if (shareAnyElems<std::wstring>(args, thisQuestionTags))
-				_questions.push_back(questionList[i]);
-		}
+		auto questionHasAnyTag = [args](Question* q) -> bool { return q->getTags().shares(args); };
+		_questions = QuestionList::get().select(questionHasAnyTag);
+	}
+
+	std::wcout << L"Starting play with ";
+	if (args.empty())
+	{
+		std::wcout << L"all ";
 	}
 	std::wcout << _questions.size()
-		<< (_questions.size() > 1 ? L" cards" : L" card") << L"...\n\n"
+		<< (_questions.size() == 1 ? L" card" : L" cards") << L"...\n\n"
 		<< Globals::horizontalDoubleRule << L"\n\n"
 		<< L"You'll get given questions, and you'll have to answer correctly. "
 		<< L"If you think you've been marked down unfairly, type the command <"
 		<< toLower(CommandInfo::get(CommandType::BOOST)->getCode())
-		<< L"> before the next card rolls on. Good luck!\n\n"
+		<< L"> before the next question rolls in. Good luck!\n\n"
 		<< Globals::horizontalRule << L"\n\n";
 
-	std::shuffle(_questions.begin(), _questions.end(), std::default_random_engine((unsigned int)time(NULL)));
+	_questions.shuffle();
 	_index = 0;
 	_correct = 0;
 	_wrong = 0;
@@ -164,7 +158,7 @@ std::wstring Play::getCurrentCorrectAnswer()
 }
 
 PlayStage Play::_stage = PlayStage::QUESTION;
-std::vector<Question*> Play::_questions = std::vector<Question*>();
+easy_list::list<Question*> Play::_questions = easy_list::list<Question*>();
 unsigned int Play::_index = 0;
 int Play::_correct = 0;
 int Play::_wrong = 0;

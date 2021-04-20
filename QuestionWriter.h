@@ -12,13 +12,13 @@ public:
 		void (*startInputData)(),
 		bool (*inputData)(std::wstring userInput),
 		void (*resetLastChildDataStep)(),
-		Question* (*constructCurrent)(std::vector<std::wstring> tags)
+		Question* (*constructCurrent)(easy_list::list<std::wstring> tags)
 	);
 	const std::wstring getStartWritingMessage() const;
 	void startInput();
 	void resetLastStep();
 	void processInput(std::wstring userInput);
-	std::vector<Question*> writeToFile();
+	easy_list::list<Question*> writeToFile();
 
 private:
 	enum class Stage {
@@ -27,16 +27,16 @@ private:
 	};
 
 	static Stage _stage;
-	static std::vector<std::wstring> _tags;
+	static easy_list::list<std::wstring> _tags;
 
 	QuestionType _type;
 	std::wstring _startWritingMessage;
-	std::vector<Question*> _newQuestions;
+	easy_list::list<Question*> _newQuestions;
 
 	void (*_startInputData)();
 	bool (*_inputData)(std::wstring userInput);
 	void (*_resetLastChildDataStep)();
-	Question* (*_constructCurrent)(std::vector<std::wstring> tags);
+	Question* (*_constructCurrent)(easy_list::list<std::wstring> tags);
 
 	void setStage(Stage stage);
 };

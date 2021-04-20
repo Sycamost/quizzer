@@ -12,7 +12,7 @@ public:
 	QuestionReader(
 		void(*clearChildData)(),
 		void(*readChildData)(std::wstring line),
-		Question*(*constructCurrent)(easy_list::list<Option> options, std::vector<std::wstring> tags));
+		Question*(*constructCurrent)(easy_list::list<Option> options, easy_list::list<std::wstring> tags));
 	Question* read(std::wifstream& stream);
 private:
 	enum class Stage {
@@ -21,5 +21,5 @@ private:
 	};
 	void (*_clearChildData)();
 	void (*_readChildData)(std::wstring line);
-	Question* (*_constructCurrent)(easy_list::list<Option> options, std::vector<std::wstring> tags);
+	Question* (*_constructCurrent)(easy_list::list<Option> options, easy_list::list<std::wstring> tags);
 };

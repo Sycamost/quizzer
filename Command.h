@@ -1,12 +1,11 @@
 #pragma once
 #include <string>
-#include <vector>
-#include <fstream>
 #include <easy_list.h>
+#include <fstream>
 #include "InputHandler.h"
 
 #define DEFINE_CMD_FUNC(func) const CommandFunc func
-#define DECLARE_CMD_FUNC(func) const CommandFunc func = [](std::vector<std::wstring> args = std::vector<std::wstring>()) -> InputHandler::Returns
+#define DECLARE_CMD_FUNC(func) const CommandFunc func = [](easy_list::list<std::wstring> args = easy_list::list<std::wstring>()) -> InputHandler::Returns
 
 enum class CommandType {
 	CANCEL,
@@ -18,14 +17,14 @@ enum class CommandType {
 	PLAY
 };
 
-typedef InputHandler::Returns (*CommandFunc) (std::vector<std::wstring> args);
+typedef InputHandler::Returns (*CommandFunc) (easy_list::list<std::wstring> args);
 
 class CommandInfo {
 public:
 	const CommandType getType() const { return _type; }
 	const std::wstring getCode() const { return _code; }
 	const CommandFunc* getFunc() const { return _func; }
-	const InputHandler::Returns callFunc(std::vector<std::wstring> args) { return (*_func)(args); }
+	const InputHandler::Returns callFunc(easy_list::list<std::wstring> args) { return (*_func)(args); }
 	static const easy_list::list<CommandInfo>* getList();
 	static const easy_list::list<CommandInfo>::const_iterator get(const CommandType type);
 	static const easy_list::list<CommandInfo>::const_iterator get(const std::wstring code);
@@ -52,9 +51,9 @@ public:
 	static Command* read(std::wstring userInput);
 	InputHandler::Returns doCommandFunc();
 	CommandInfo getCommandInfo();
-	const std::vector<std::wstring> getArgs() const;
+	const easy_list::list<std::wstring> getArgs() const;
 private:
 	CommandInfo _commandInfo;
-	std::vector<std::wstring> _args;
-	Command(std::vector<std::wstring> args, CommandInfo commandInfo);
+	easy_list::list<std::wstring> _args;
+	Command(easy_list::list<std::wstring> args, CommandInfo commandInfo);
 };

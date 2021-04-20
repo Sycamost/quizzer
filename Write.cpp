@@ -49,7 +49,7 @@ DECLARE_CMD_FUNC(Write::cmdFuncWrite) {
 		return InputHandler::Returns::TOO_FEW_ARGS;
 
 	auto questionTypeInfo = QuestionTypeInfo::get(args[0]);
-	if (questionTypeInfo == QuestionTypeInfo::getList()->end())
+	if (questionTypeInfo == QuestionTypeInfo::getList()->npos())
 		return InputHandler::Returns::INVALID_ARGS;
 
 	InputHandler::set(getWriteHandler());

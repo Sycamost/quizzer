@@ -26,13 +26,13 @@ namespace FlashcardReader
 		// if we get any extra inputs after front and back are filled, they are ignored
 	}
 
-	Question* construct(easy_list::list<Option> options, std::vector<std::wstring> tags)
+	Question* construct(easy_list::list<Option> options, easy_list::list<std::wstring> tags)
 	{
 		if (front == L"")
 			return nullptr;
 		if (back == L"")
 			return nullptr;
-		bool caseSensitive = (options.count(toUpper(Globals::optionCaseSensitive), &Option::getOption) >= 1);
+		bool caseSensitive = options.contains(toLower(Globals::optionCaseSensitive), &Option::getOption);
 		return new Flashcard(front, back, caseSensitive, tags);
 	}
 
