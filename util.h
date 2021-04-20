@@ -1,7 +1,7 @@
 #pragma once
 #include <string>
 #include <iostream>
-#include <vector>
+#include <easy_list.h>
 
 class YesNo {
 public:
@@ -28,20 +28,20 @@ std::wstring toUpper(std::wstring wstr);
 std::wstring toLower(std::wstring wstr);
 std::wstring indent(std::wstring wstr, int numTabs);
 const YesNo getYesNo(std::wstring wstr);
-std::vector<std::wstring> splitByWord(std::wstring wstr);
+easy_list::list<std::wstring> splitByWord(std::wstring wstr);
 
-template <typename T1, typename T2> std::vector<T2> convv(std::vector<T1> v)
+template <typename T1, typename T2> easy_list::list<T2> convv(easy_list::list<T1> v)
 {
-	std::vector<T2> result = std::vector<T2>();
+	easy_list::list<T2> result = easy_list::list<T2>();
 	result.reserve(v.size());
 	for (int i = 0; i < v.size(); i++)
 		result.push_back((T2)v[i]);
 	return result;
 }
 
-template <typename T> std::vector<T> slice(std::vector<T> v, int start = 0, int end = -1)
+template <typename T> easy_list::list<T> slice(easy_list::list<T> v, int start = 0, int end = -1)
 {
-	std::vector<T> result = std::vector<T>();
+	easy_list::list<T> result = easy_list::list<T>();
 
 	if (end < 0)
 		end = v.size();
@@ -52,7 +52,7 @@ template <typename T> std::vector<T> slice(std::vector<T> v, int start = 0, int 
 	return result;
 }
 
-template <typename T> bool shareAnyElems(std::vector<T> v1, std::vector<T> v2)
+template <typename T> bool shareAnyElems(easy_list::list<T> v1, easy_list::list<T> v2)
 {
 
 	for (unsigned int i = 0; i < v1.size(); i++)

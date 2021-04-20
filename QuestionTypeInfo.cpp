@@ -1,6 +1,5 @@
-#include <vector>
-#include <algorithm>
 #include <easy_list.h>
+#include <algorithm>
 #include "QuestionTypeInfo.h"
 #include "FlashcardWriter.h"
 #include "FlashcardReader.h"

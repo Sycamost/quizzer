@@ -1,6 +1,6 @@
 #pragma once
 #include <string>
-#include <vector>
+#include <easy_list.h>
 #include <fstream>
 #include "Question.h"
 
@@ -13,7 +13,7 @@ private:
 	static const std::wstring _optCaseSensitive;
 	void writeChildData(std::wofstream& stream);
 public:
-	Flashcard(std::wstring question, std::wstring answer, bool caseSensitive, std::vector<std::wstring> tags = std::vector<std::wstring>());
+	Flashcard(std::wstring question, std::wstring answer, bool caseSensitive, easy_list::list<std::wstring> tags = easy_list::list<std::wstring>());
 	std::wstring getQuestion();
 	std::wstring getAnswer();
 	bool isCorrect(std::wstring guess);

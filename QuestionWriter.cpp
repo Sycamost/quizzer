@@ -10,7 +10,7 @@
 #include "util.h"
 
 QuestionWriter::Stage QuestionWriter::_stage = QuestionWriter::Stage::CHILD_DATA;
-std::vector<std::wstring> QuestionWriter::_tags = std::vector<std::wstring>();
+easy_list::list<std::wstring> QuestionWriter::_tags = easy_list::list<std::wstring>();
 
 QuestionWriter::QuestionWriter(
 	QuestionType type,
@@ -18,7 +18,7 @@ QuestionWriter::QuestionWriter(
 	void(*startInputData)(),
 	bool(*inputData)(std::wstring userInput),
 	void(*resetLastChildDataStep)(),
-	Question*(*constructCurrent)(std::vector<std::wstring> tags))
+	Question*(*constructCurrent)(easy_list::list<std::wstring> tags))
 	:
 	_type(type),
 	_startWritingMessage(startWritingMessage),
@@ -36,7 +36,7 @@ const std::wstring QuestionWriter::getStartWritingMessage() const
 void QuestionWriter::startInput()
 {
 	_stage = Stage::CHILD_DATA;
-	_tags = std::vector<std::wstring>();
+	_tags = easy_list::list<std::wstring>();
 	_startInputData();
 }
 
@@ -94,7 +94,7 @@ void QuestionWriter::processInput(std::wstring userInput)
 	}
 }
 
-std::vector<Question*> QuestionWriter::writeToFile()
+easy_list::list<Question*> QuestionWriter::writeToFile()
 {
 	std::wofstream file;
 	try
@@ -107,7 +107,7 @@ std::vector<Question*> QuestionWriter::writeToFile()
 	{
 		std::wcout << L"Oops! Something went wrong when trying to access the destination file. We got the following error message:\n"
 			<< e.what() << L"\n";
-		return std::vector<Question*>();
+		return easy_list::list<Question*>();
 	}
 
 	int numWritten;
@@ -116,7 +116,7 @@ std::vector<Question*> QuestionWriter::writeToFile()
 
 	file.close();
 
-	return std::vector<Question*>(_newQuestions.begin(), _newQuestions.begin() + numWritten, std::allocator<Question*>());
+	return easy_list::list<Question*>(_newQuestions.begin(), _newQuestions.begin() + numWritten, std::allocator<Question*>());
 }
 
 void QuestionWriter::setStage(Stage stage)

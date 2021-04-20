@@ -44,7 +44,7 @@ Command* Command::read(std::wifstream& stream)
 
 Command* Command::read(std::wstring userInput)
 {
-	std::vector<std::wstring> words = splitByWord(toUpper(userInput));
+	easy_list::list<std::wstring> words = splitByWord(toUpper(userInput));
 	if (words.size() == 0)
 		return nullptr;
 	std::wstring code = words[0].substr(1);
@@ -54,7 +54,7 @@ Command* Command::read(std::wstring userInput)
 		return nullptr;
 
 	return new Command(
-		std::vector<std::wstring>(words.begin() + 1, words.end(), std::allocator<std::wstring>()),
+		easy_list::list<std::wstring>(words.begin() + 1, words.end(), std::allocator<std::wstring>()),
 		*cmdInfoIter);
 }
 
@@ -68,12 +68,12 @@ CommandInfo Command::getCommandInfo()
 	return _commandInfo;
 }
 
-const std::vector<std::wstring> Command::getArgs() const
+const easy_list::list<std::wstring> Command::getArgs() const
 {
 	return _args;
 }
 
-Command::Command(std::vector<std::wstring> args, CommandInfo commandInfo) :
+Command::Command(easy_list::list<std::wstring> args, CommandInfo commandInfo) :
 	_args(args),
 	_commandInfo(commandInfo)
 {}

@@ -2,6 +2,7 @@
 #include <algorithm>
 #include <time.h>
 #include <random>
+#include <easy_list.h>
 #include "Play.h"
 #include "InputHandler.h"
 #include "Question.h"
@@ -56,23 +57,16 @@ bool Play::updateAnswer(std::wstring answer)
 
 DECLARE_CMD_FUNC(Play::cmdFuncPlay)
 {
+	if (args.empty())
+		_questions = QuestionList::get();
+	else
+		_questions = QuestionList::get().select([](Question* q) -> bool { q->getTags().contains(})
+
 	std::wcout << L"Starting play with ";
-	_questions = std::vector<Question*>();
+	_questions = easy_list::list<Question*>();
 	if (args.empty())
 	{
-		_questions = QuestionList::get();
 		std::wcout << L"all ";
-	}
-	else
-	{
-		std::vector<Question*> questionList = QuestionList::get();
-		for (unsigned int i = 0; i < questionList.size(); i++)
-		{
-			std::vector<std::wstring> thisQuestionTags = questionList[i]->getTags();
-			std::transform(thisQuestionTags.begin(), thisQuestionTags.end(), thisQuestionTags.begin(), toUpper);
-			if (shareAnyElems<std::wstring>(args, thisQuestionTags))
-				_questions.push_back(questionList[i]);
-		}
 	}
 	std::wcout << _questions.size()
 		<< (_questions.size() > 1 ? L" cards" : L" card") << L"...\n\n"
@@ -164,7 +158,7 @@ std::wstring Play::getCurrentCorrectAnswer()
 }
 
 PlayStage Play::_stage = PlayStage::QUESTION;
-std::vector<Question*> Play::_questions = std::vector<Question*>();
+easy_list::list<Question*> Play::_questions = easy_list::list<Question*>();
 unsigned int Play::_index = 0;
 int Play::_correct = 0;
 int Play::_wrong = 0;

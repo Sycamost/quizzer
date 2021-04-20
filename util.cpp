@@ -97,9 +97,9 @@ const YesNo getYesNo(std::wstring str)
 	return YesNo::OTHER;
 }
 
-std::vector<std::wstring> splitByWord(std::wstring wstr)
+easy_list::list<std::wstring> splitByWord(std::wstring wstr)
 {
-	std::vector<std::wstring> result = std::vector<std::wstring>();
+	easy_list::list<std::wstring> result = easy_list::list<std::wstring>();
 
 	std::wstring currentStr = L"";
 	for (unsigned int i = 0; i < wstr.length(); i++)

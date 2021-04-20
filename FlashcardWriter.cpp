@@ -1,6 +1,6 @@
 #include <iostream>
 #include <string>
-#include <vector>
+#include <easy_list.h>
 #include <Windows.h>
 #include <exception>
 #include <fstream>
@@ -116,7 +116,7 @@ namespace FlashcardWriter
 		return false;
 	}
 
-	Question* constructCurrent(std::vector<std::wstring> tags)
+	Question* constructCurrent(easy_list::list<std::wstring> tags)
 	{
 		if (front == L"")
 			return nullptr;

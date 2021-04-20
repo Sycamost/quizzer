@@ -4,9 +4,9 @@
 #include "globals.h"
 #include "QuestionTypeInfo.h"
 
-std::vector<std::wstring> Question::readTags(std::wifstream& stream)
+easy_list::list<std::wstring> Question::readTags(std::wifstream& stream)
 {
-	std::vector<std::wstring> tags = std::vector<std::wstring>();
+	easy_list::list<std::wstring> tags = easy_list::list<std::wstring>();
 	while (!stream.eof())
 	{
 		std::wstring line = getInputLine(stream);
@@ -19,7 +19,7 @@ std::vector<std::wstring> Question::readTags(std::wifstream& stream)
 	return tags;
 }
 
-Question::Question(QuestionType type, std::vector<std::wstring> tags) :
+Question::Question(QuestionType type, easy_list::list<std::wstring> tags) :
 	_type(type),
 	_tags(tags)
 {}
@@ -33,7 +33,7 @@ void Question::write(std::wofstream& stream)
 	stream << L"\n";
 }
 
-std::vector<std::wstring> Question::getTags()
+easy_list::list<std::wstring> Question::getTags()
 {
 	return _tags;
 }
