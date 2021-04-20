@@ -1,6 +1,4 @@
 #include <iostream>
-#include <algorithm>
-#include <time.h>
 #include <random>
 #include <easy_list.h>
 #include "Play.h"
@@ -60,7 +58,10 @@ DECLARE_CMD_FUNC(Play::cmdFuncPlay)
 	if (args.empty())
 		_questions = QuestionList::get();
 	else
-		_questions = QuestionList::get().select([](Question* q) -> bool { q->getTags().contains(})
+	{
+		auto questionHasAnyTag = [args](Question* q) -> bool { return q->getTags().shares(args); };
+		_questions = QuestionList::get().select(questionHasAnyTag);
+	}
 
 	std::wcout << L"Starting play with ";
 	_questions = easy_list::list<Question*>();
@@ -69,15 +70,15 @@ DECLARE_CMD_FUNC(Play::cmdFuncPlay)
 		std::wcout << L"all ";
 	}
 	std::wcout << _questions.size()
-		<< (_questions.size() > 1 ? L" cards" : L" card") << L"...\n\n"
+		<< (_questions.size() == 1 ? L" card" : L" cards") << L"...\n\n"
 		<< Globals::horizontalDoubleRule << L"\n\n"
 		<< L"You'll get given questions, and you'll have to answer correctly. "
 		<< L"If you think you've been marked down unfairly, type the command <"
 		<< toLower(CommandInfo::get(CommandType::BOOST)->getCode())
-		<< L"> before the next card rolls on. Good luck!\n\n"
+		<< L"> before the next question rolls in. Good luck!\n\n"
 		<< Globals::horizontalRule << L"\n\n";
 
-	std::shuffle(_questions.begin(), _questions.end(), std::default_random_engine((unsigned int)time(NULL)));
+	_questions.shuffle();
 	_index = 0;
 	_correct = 0;
 	_wrong = 0;

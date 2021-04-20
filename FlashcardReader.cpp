@@ -32,7 +32,7 @@ namespace FlashcardReader
 			return nullptr;
 		if (back == L"")
 			return nullptr;
-		bool caseSensitive = (options.count(toUpper(Globals::optionCaseSensitive), &Option::getOption) >= 1);
+		bool caseSensitive = options.contains(toUpper(Globals::optionCaseSensitive), &Option::getOption);
 		return new Flashcard(front, back, caseSensitive, tags);
 	}
 

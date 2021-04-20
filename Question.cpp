@@ -28,8 +28,8 @@ void Question::write(std::wofstream& stream)
 {
 	writeChildData(stream);
 	stream << Globals::fileEscapeChar << L"tags\n";
-	for (unsigned int i = 0; i < _tags.size(); i++)
-		stream << _tags[i] << L"\n";
+	for (auto tag : _tags)
+		stream << tag << L"\n";
 	stream << L"\n";
 }
 

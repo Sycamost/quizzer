@@ -19,7 +19,7 @@ void QuestionList::append(Question* question)
 
 void QuestionList::append(easy_list::list<Question*> questions)
 {
-	questionList.insert(questionList.end(), questions.begin(), questions.end());
+	questionList += questions;
 }
 
 void QuestionList::clear()

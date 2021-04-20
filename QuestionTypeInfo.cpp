@@ -26,7 +26,8 @@ const easy_list::list<QuestionTypeInfo>::const_iterator QuestionTypeInfo::get(st
 
 const std::string QuestionTypeInfo::getFileAddress() const
 {
-	std::wstring typeName = toLower(_displaySingular);
-	std::replace(typeName.begin(), typeName.end(), L' ', L'_');
-	return "userdata_" + std::string(typeName.begin(), typeName.end()) + ".txt";
+	std::string typeName = std::string(_displaySingular.begin(), _displaySingular.end());
+	easy_list::list<char> fileAddress = easy_list::list<char>(typeName.begin(), typeName.end());
+	fileAddress = fileAddress.replace('_', ' ');
+	return "userdata_" + std::string(fileAddress.begin(), fileAddress.end());
 }

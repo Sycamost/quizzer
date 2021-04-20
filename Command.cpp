@@ -45,17 +45,15 @@ Command* Command::read(std::wifstream& stream)
 Command* Command::read(std::wstring userInput)
 {
 	easy_list::list<std::wstring> words = splitByWord(toUpper(userInput));
-	if (words.size() == 0)
+	if (words.size() == 0 || words[0].size() == 0 || words[0][0] != L'\\')
 		return nullptr;
 	std::wstring code = words[0].substr(1);
 
 	auto cmdInfoIter = CommandInfo::get(code);
-	if (cmdInfoIter == CommandInfo::getList()->end())
+	if (cmdInfoIter == CommandInfo::getList()->npos())
 		return nullptr;
 
-	return new Command(
-		easy_list::list<std::wstring>(words.begin() + 1, words.end(), std::allocator<std::wstring>()),
-		*cmdInfoIter);
+	return new Command(words.slice(1), *cmdInfoIter);
 }
 
 InputHandler::Returns Command::doCommandFunc()

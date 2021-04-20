@@ -33,7 +33,7 @@ Option* Option::readOption(std::wstring userInput)
 
 	return new Option(
 		words[0].substr(Globals::fileEscapeChar.size()),
-		easy_list::list<std::wstring>(words.begin() + 1, words.end()));
+		words.slice(1));
 }
 
 void Option::constructor(std::wstring option, easy_list::list<std::wstring> args)
@@ -49,7 +49,7 @@ Option::Option(std::wstring option)
 
 Option::Option(std::wstring option, std::wstring arg)
 {
-	constructor(option, easy_list::list<std::wstring>(1, arg));
+	constructor(option, easy_list::list<std::wstring>({ arg }));
 }
 
 Option::Option(std::wstring option, easy_list::list<std::wstring> args)
@@ -77,7 +77,7 @@ easy_list::list<std::wstring> Option::getArguments() const
 void Option::write(std::wofstream& stream)
 {
 	stream << Globals::fileEscapeChar << _option;
-	for (unsigned int i = 0; i < _args.size(); i++)
-		stream << L" " << _args[i];
+	for (auto arg : _args)
+		stream << L" " << arg;
 	stream << L"\n";
 }

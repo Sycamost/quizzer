@@ -110,13 +110,12 @@ easy_list::list<Question*> QuestionWriter::writeToFile()
 		return easy_list::list<Question*>();
 	}
 
-	int numWritten;
-	for (numWritten = 0; numWritten < _newQuestions.size(); numWritten++)
-		_newQuestions[numWritten]->write(file);
+	for (Question* question : _newQuestions)
+		question->write(file);
 
 	file.close();
 
-	return easy_list::list<Question*>(_newQuestions.begin(), _newQuestions.begin() + numWritten, std::allocator<Question*>());
+	return _newQuestions;
 }
 
 void QuestionWriter::setStage(Stage stage)
