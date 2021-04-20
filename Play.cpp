@@ -55,12 +55,26 @@ bool Play::updateAnswer(std::wstring answer)
 
 DECLARE_CMD_FUNC(Play::cmdFuncPlay)
 {
-	if (args.empty())
-		_questions = QuestionList::get();
-	else
+	_questions = QuestionList::get();
+	if (_questions.empty())
+	{
+		std::wcout << L"Can't play, because there are no questions loaded.\n";
+		return InputHandler::Returns::SUCCESS;
+	}
+
+	if (!args.empty())
 	{
 		auto questionHasAnyTag = [args](Question* q) -> bool { return q->getTags().shares(args); };
-		_questions = QuestionList::get().select(questionHasAnyTag);
+		_questions = _questions.select(questionHasAnyTag);
+
+		if (_questions.empty())
+		{
+			if (args.size() == 1)
+				std::wcout << L"Can't play with that tag, because there are no questions loaded with that tag.\n";
+			else
+				std::wcout << L"Can't play with those tags, because there are no questions loaded with any of those tags.\n";
+			return InputHandler::Returns::SUCCESS;
+		}
 	}
 
 	std::wcout << L"Starting play with ";
