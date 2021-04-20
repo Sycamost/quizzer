@@ -9,13 +9,13 @@
 const easy_list::list<CommandInfo>* CommandInfo::getList()
 {
 	static const auto list = easy_list::list<CommandInfo>({
-		CommandInfo(CommandType::QUIT, L"QUIT", &cmdFuncQuit),
-		CommandInfo(CommandType::EXIT, L"EXIT", &cmdFuncQuit),
-		CommandInfo(CommandType::WRITE, L"WRITE", &Write::cmdFuncWrite),
-		CommandInfo(CommandType::CANCEL, L"CANCEL", &Write::cmdFuncCancel),
-		CommandInfo(CommandType::BOOST, L"BOOST", &Play::cmdFuncBoost),
-		CommandInfo(CommandType::CONCEDE, L"CONCEDE", &Play::cmdFuncConcede),
-		CommandInfo(CommandType::PLAY, L"PLAY", &Play::cmdFuncPlay)
+		CommandInfo(CommandType::QUIT, L"quit", &cmdFuncQuit),
+		CommandInfo(CommandType::EXIT, L"exit", &cmdFuncQuit),
+		CommandInfo(CommandType::WRITE, L"write", &Write::cmdFuncWrite),
+		CommandInfo(CommandType::CANCEL, L"cancel", &Write::cmdFuncCancel),
+		CommandInfo(CommandType::BOOST, L"boost", &Play::cmdFuncBoost),
+		CommandInfo(CommandType::CONCEDE, L"concede", &Play::cmdFuncConcede),
+		CommandInfo(CommandType::PLAY, L"play", &Play::cmdFuncPlay)
 	});
 	return &list;
 }
@@ -44,18 +44,16 @@ Command* Command::read(std::wifstream& stream)
 
 Command* Command::read(std::wstring userInput)
 {
-	std::vector<std::wstring> words = splitByWord(toUpper(userInput));
-	if (words.size() == 0)
+	easy_list::list<std::wstring> words = splitByWord(toLower(userInput));
+	if (words.size() == 0 || words[0].size() == 0 || words[0][0] != L'\\')
 		return nullptr;
 	std::wstring code = words[0].substr(1);
 
 	auto cmdInfoIter = CommandInfo::get(code);
-	if (cmdInfoIter == CommandInfo::getList()->end())
+	if (cmdInfoIter == CommandInfo::getList()->npos())
 		return nullptr;
 
-	return new Command(
-		std::vector<std::wstring>(words.begin() + 1, words.end(), std::allocator<std::wstring>()),
-		*cmdInfoIter);
+	return new Command(words.slice(1), *cmdInfoIter);
 }
 
 InputHandler::Returns Command::doCommandFunc()
@@ -68,12 +66,12 @@ CommandInfo Command::getCommandInfo()
 	return _commandInfo;
 }
 
-const std::vector<std::wstring> Command::getArgs() const
+const easy_list::list<std::wstring> Command::getArgs() const
 {
 	return _args;
 }
 
-Command::Command(std::vector<std::wstring> args, CommandInfo commandInfo) :
+Command::Command(easy_list::list<std::wstring> args, CommandInfo commandInfo) :
 	_args(args),
 	_commandInfo(commandInfo)
 {}

@@ -1,5 +1,5 @@
 #pragma once
-#include <vector>
+#include <easy_list.h>
 #include <string>
 #include "Flashcard.h"
 #include "Command.h"
@@ -25,7 +25,7 @@ public:
 	static std::wstring getCurrentCorrectAnswer();
 private:
 	static PlayStage _stage;
-	static std::vector<Question*> _questions;
+	static easy_list::list<Question*> _questions;
 	static unsigned int _index;
 	static int _correct;
 	static int _wrong;

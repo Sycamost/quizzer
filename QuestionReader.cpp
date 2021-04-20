@@ -1,4 +1,4 @@
-#include<easy_list.h>
+#include <easy_list.h>
 #include "QuestionReader.h"
 #include "Option.h"
 #include "util.h"
@@ -7,7 +7,7 @@
 QuestionReader::QuestionReader(
 	void(*clearChildData)(),
 	void(*readChildData)(std::wstring line),
-	Question*(*constructCurrent)(easy_list::list<Option> options, std::vector<std::wstring> tags))
+	Question*(*constructCurrent)(easy_list::list<Option> options, easy_list::list<std::wstring> tags))
 	:
 	_clearChildData(clearChildData),
 	_readChildData(readChildData),
@@ -17,7 +17,7 @@ QuestionReader::QuestionReader(
 Question* QuestionReader::read(std::wifstream& stream)
 {
 	Stage stage = Stage::CHILD_DATA;
-	std::vector<std::wstring> tags = std::vector<std::wstring>();
+	easy_list::list<std::wstring> tags = easy_list::list<std::wstring>();
 	_clearChildData();
 
 	easy_list::list<Option> options = Option::readOptions(stream);

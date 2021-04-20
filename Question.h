@@ -1,5 +1,5 @@
 #pragma once
-#include <vector>
+#include <easy_list.h>
 #include <string>
 #include <fstream>
 #include <map>
@@ -8,18 +8,18 @@
 class Question
 {
 private:
-	static std::vector<Question*> _questionList;
+	static easy_list::list<Question*> _questionList;
 protected:
 	QuestionType _type;
-	std::vector<std::wstring> _tags;
-	static std::vector<std::wstring> readTags(std::wifstream& stream);
+	easy_list::list<std::wstring> _tags;
+	static easy_list::list<std::wstring> readTags(std::wifstream& stream);
 	virtual void writeChildData(std::wofstream& stream) = 0;
 public:
-	Question(QuestionType type, std::vector<std::wstring> tags = std::vector<std::wstring>());
+	Question(QuestionType type, easy_list::list<std::wstring> tags = easy_list::list<std::wstring>());
 	virtual std::wstring getQuestion() = 0;
 	virtual std::wstring getAnswer() = 0;
 	virtual bool isCorrect(std::wstring guess) = 0;
 	void write(std::wofstream& stream);
-	std::vector<std::wstring> getTags();
+	easy_list::list<std::wstring> getTags();
 	QuestionType getType();
 };
