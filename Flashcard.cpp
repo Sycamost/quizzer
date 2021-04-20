@@ -4,8 +4,6 @@
 #include "util.h"
 #include "Option.h"
 
-const std::wstring Flashcard::_optCaseSensitive = L"case_sensitive";
-
 Flashcard::Flashcard(std::wstring question, std::wstring answer, bool caseSensitive, easy_list::list<std::wstring> tags) :
 	Question(QuestionType::FLASHCARD, tags),
 	_question(question),
@@ -26,13 +24,13 @@ std::wstring Flashcard::getAnswer()
 
 bool Flashcard::isCorrect(std::wstring guess)
 {
-	return _caseSensitive ? (guess == _answer) : (toUpper(guess) == toUpper(_answer));
+	return _caseSensitive ? (guess == _answer) : (toLower(guess) == toLower(_answer));
 }
 
 void Flashcard::writeChildData(std::wofstream& stream)
 {
 	if (_caseSensitive)
-		Option(_optCaseSensitive).write(stream);
+		Option(Globals::optionCaseSensitive).write(stream);
 	stream << _question << L"\n";
 	stream << _answer << L"\n";
 }

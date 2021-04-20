@@ -23,7 +23,7 @@ easy_list::list<Option> Option::readOptions(std::wifstream& stream)
 
 Option* Option::readOption(std::wstring userInput)
 {
-	easy_list::list<std::wstring> words = splitByWord(toUpper(userInput));
+	easy_list::list<std::wstring> words = splitByWord(toLower(userInput));
 	if (words.size() == 0)
 		return nullptr;
 

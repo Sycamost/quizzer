@@ -53,15 +53,6 @@ bool inputYesNo(std::wstring message, bool doPrintResult)
 	}
 }
 
-std::wstring toUpper(std::wstring wstr)
-{
-	std::wstring result = L"";
-	for (unsigned int i = 0; i < wstr.length(); i++) {
-		result.push_back(std::toupper(wstr[i]));
-	}
-	return result;
-}
-
 std::wstring toLower(std::wstring wstr)
 {
 	std::wstring result = L"";
@@ -87,10 +78,10 @@ std::wstring indent(std::wstring wstr, int numTabs)
 
 const YesNo getYesNo(std::wstring str)
 {
-	str = toUpper(str);
-	if (str == L"Y" || str == L"YES" || str == L"1" || str == L"T" || str == L"TRUE")
+	str = toLower(str);
+	if (str == L"y" || str == L"yes" || str == L"1" || str == L"T" || str == L"true")
 		return YesNo::YES;
-	if (str == L"N" || str == L"NO" || str == L"0" || str == L"F" || str == L"FALSE")
+	if (str == L"n" || str == L"no" || str == L"0" || str == L"F" || str == L"false")
 		return YesNo::NO;
 	if (Command::read(str) != nullptr)
 		return YesNo::COMMAND;

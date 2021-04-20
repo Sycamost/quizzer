@@ -24,7 +24,6 @@ private:
 };
 std::wstring getInputLine(std::wistream &stream = std::wcin);
 bool inputYesNo(std::wstring message, bool doPrintResult = true);
-std::wstring toUpper(std::wstring wstr);
 std::wstring toLower(std::wstring wstr);
 std::wstring indent(std::wstring wstr, int numTabs);
 const YesNo getYesNo(std::wstring wstr);

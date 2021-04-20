@@ -9,7 +9,7 @@
 const easy_list::list<QuestionTypeInfo>* QuestionTypeInfo::getList()
 {
 	static const auto list = easy_list::list<QuestionTypeInfo>({
-		QuestionTypeInfo(QuestionType::FLASHCARD, L"flashcard", L"FLASHCARD", FlashcardWriter::get(), FlashcardReader::get())
+		QuestionTypeInfo(QuestionType::FLASHCARD, L"flashcard", L"flashcard", FlashcardWriter::get(), FlashcardReader::get())
 	});
 	return &list;
 }
