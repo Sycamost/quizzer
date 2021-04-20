@@ -64,7 +64,6 @@ DECLARE_CMD_FUNC(Play::cmdFuncPlay)
 	}
 
 	std::wcout << L"Starting play with ";
-	_questions = easy_list::list<Question*>();
 	if (args.empty())
 	{
 		std::wcout << L"all ";
