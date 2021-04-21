@@ -1,4 +1,5 @@
 #pragma once
+#include <type_traits>
 #include <string>
 #include "HandlerReturns.h"
 #include "Command.h"
@@ -8,14 +9,18 @@
 
 using InputHandlerFunc = InputHandlerReturns(*)(std::wstring);
 
+template <typename ..._CommandTypee>
+void setHandling(InputHandlerFunc inputHandlerFunc, _CommandTypee... validCommandTypes);
+void setHandlingDefault();
+
 class CommandHandler {
 private:
 	using Returns = CommandHandlerReturns;
 public:
 	static CommandHandlerReturns call(std::wstring input);
 private:
-	template <typename ..._CommandTypee, std::enable_if_t<std::conjunction_v<std::is_same<_CommandTypee, CommandType>...>, bool> = true>
-	friend void setHandling(InputHandlerFunc inputHandlerFunc, _CommandTypee... validCommandTypes);
+	template <typename ..._CommandTypee>
+	friend void setHandling<_CommandTypee...>(InputHandlerFunc inputHandlerFunc, _CommandTypee... validCommandTypes);
 	friend void setHandlingDefault();
 	static easy_list::list<CommandType> _validCommandTypes;
 };
@@ -29,11 +34,7 @@ public:
 private:
 	static Func _handlerFunc;
 	static void set(Func func);
-	template <typename ..._CommandTypee, std::enable_if_t<std::conjunction_v<std::is_same<_CommandTypee, CommandType>...>, bool> = true>
-	friend void setHandling(InputHandlerFunc inputHandlerFunc, _CommandTypee... validCommandTypes);
+	template <typename ..._CommandTypee>
+	friend void setHandling<_CommandTypee...>(InputHandlerFunc inputHandlerFunc, _CommandTypee... validCommandTypes);
 	friend void setHandlingDefault();
 };
-
-template <typename ..._CommandTypee, std::enable_if_t<std::conjunction_v<std::is_same<_CommandTypee, CommandType>...>, bool> = true>
-void setHandling(InputHandlerFunc inputHandlerFunc, _CommandTypee... validCommandTypes);
-void setHandlingDefault();
