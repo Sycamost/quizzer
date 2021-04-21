@@ -33,7 +33,7 @@ InputHandlerReturns InputHandler::call(std::wstring input)
 InputHandlerFunc getDefaultInputHandlerFunc()
 {
 	static DEFINE_INPUT_HANDLER_FUNC(defaultInputHandlerFunc) {
-		std::wcout << L"Please enter a command. Commands are preceded by a backslash <\\>, e.g. <\play>.\n";
+		std::wcout << L"Please enter a command. Commands are preceded by a backslash <\\>, e.g. <play>.\n";
 		return InputHandlerReturns::SUCCESS;
 	};
 	return defaultInputHandlerFunc;
