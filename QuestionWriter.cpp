@@ -30,6 +30,7 @@ void QuestionWriter::writeQuestion()
 
 void QuestionWriter::writeTags()
 {
+	_tags = easy_list::list<std::wstring>();
 	askForTag();
 }
 
