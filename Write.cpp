@@ -29,15 +29,14 @@ void Write::nextQuestion()
 DEFINE_CMD_FUNC(Write::cmdFuncWrite) {
 
 	if (args.size() == 0)
-		return InputHandler::Returns::TOO_FEW_ARGS;
+		return CommandHandlerReturns::TOO_FEW_ARGS;
 
 	auto questionTypeInfo = QuestionTypeInfo::get(args[0]);
 	if (questionTypeInfo == QuestionTypeInfo::getList()->npos())
-		return InputHandler::Returns::INVALID_ARGS;
+		return CommandHandlerReturns::INVALID_ARGS;
 
-	InputHandler::set(getWriteHandler());
 	Write::startWriting(*questionTypeInfo);
-	return InputHandler::Returns::SUCCESS;
+	return CommandHandlerReturns::SUCCESS;
 };
 
 DEFINE_CMD_FUNC(Write::cmdFuncCancel) {
