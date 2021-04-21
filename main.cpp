@@ -15,55 +15,59 @@ int main() {
 	std::wcout << L"Read " << QuestionList::get().size() << L" questions from file.\n\n";
 	std::wcout << L"Welcome to Quizzer!\n\n";
 
-	while (true)
+	bool doContinue = true;
+	while (doContinue)
 	{
 		std::wstring userInput = getInputLine();
-		InputHandler::Returns ret = InputHandler::call(userInput);
 
-		if (ret == InputHandler::Returns::SUCCESS)
+		if (userInput.size() == 0)
 			continue;
 
-		if (ret == InputHandler::Returns::CMD_NOT_RECOGNISED)
+		// Command
+		if (userInput[0] == L'\\')
 		{
-			std::wcout << L"Command not recognised. Please enter a valid command.\n";
-			continue;
-		}
 
-		if (ret == InputHandler::Returns::QUIT_APP)
-		{
-			break;
-		}
+			CommandHandlerReturns ret = CommandHandler::call(userInput);
 
-		if (ret == InputHandler::Returns::TOO_FEW_ARGS)
-		{
-			std::wcout << L"Too few arguments were provided for that command.\n";
-			continue;
-		}
+			switch (ret)
+			{
+				case CommandHandlerReturns::SUCCESS:
+					break;
 
-		if (ret == InputHandler::Returns::INVALID_ARGS)
-		{
-			std::wcout << L"Invalid arguments were provided for that command.\n";
-			continue;
-		}
+				case CommandHandlerReturns::CMD_NOT_RECOGNISED:
+					std::wcout << L"Command not recognised. Please enter a valid command.\n";
+					break;
 
-		if (ret == InputHandler::Returns::INVALID_STATE)
-		{
-			std::wcout << L"That command is invalid right now.\n";
-			continue;
+				case CommandHandlerReturns::QUIT_APP:
+					doContinue = false;
+					break;
+
+				case CommandHandlerReturns::TOO_FEW_ARGS:
+					std::wcout << L"Too few arguments were provided for that command.\n";
+					break;
+
+				case CommandHandlerReturns::INVALID_ARGS:
+					std::wcout << L"Invalid arguments were provided for that command.\n";
+					break;
+
+				case CommandHandlerReturns::INVALID_STATE:
+					std::wcout << L"That command is invalid right now.\n";
+					break;
+			}
 		}
 	}
 
 	return 0;
 }
 
-extern DECLARE_CMD_FUNC(cmdFuncQuit) {
+extern DEFINE_CMD_FUNC(cmdFuncQuit) {
 
 	if (inputYesNo(L"Are you sure you want to exit the app?"))
 	{
 		std::wcout << L"Exiting app...\n";
-		return InputHandler::Returns::QUIT_APP;
+		return CommandHandlerReturns::QUIT_APP;
 	}
 
 	std::wcout << L"Not exiting app.\n";
-	return InputHandler::Returns::SUCCESS;;
+	return CommandHandlerReturns::SUCCESS;;
 };

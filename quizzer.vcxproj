@@ -126,6 +126,7 @@
     <ClCompile Include="QuestionWriter.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="HandlerReturns.h" />
     <ClInclude Include="Handlers.h" />
     <ClInclude Include="Command.h" />
     <ClInclude Include="Flashcard.h" />

@@ -1,25 +1,28 @@
 #include <iostream>
+#include <easy_list.h>
 #include "Handlers.h"
 #include "Command.h"
 
-CommandHandlerFunc getDefaultCommandHandlerFunc();
 InputHandlerFunc getDefaultInputHandlerFunc();
-
-CommandHandlerFunc CommandHandler::_handlerFunc { getDefaultCommandHandlerFunc() };
 InputHandlerFunc InputHandler::_handlerFunc{ getDefaultInputHandlerFunc() };
+easy_list::list<CommandType> CommandHandler::_validCommandTypes{ easy_list::list<CommandType>() };
 
-void CommandHandler::set(Func handler)
+CommandHandlerReturns CommandHandler::call(std::wstring input)
 {
-	_handlerFunc = handler;
+	Command* command = Command::read(input);
+
+	if (command == nullptr)
+		return CommandHandlerReturns::CMD_NOT_RECOGNISED;
+
+	if (_validCommandTypes.contains(command->getCommandInfo().getType()))
+		return command->doCommandFunc();
+
+	return CommandHandlerReturns::INVALID_STATE;
 }
+
 void InputHandler::set(Func handler)
 {
 	_handlerFunc = handler;
-}
-
-CommandHandlerReturns CommandHandler::call(Command command)
-{
-	return _handlerFunc(command);
 }
 InputHandlerReturns InputHandler::call(std::wstring input)
 {
@@ -53,14 +56,20 @@ InputHandlerFunc getDefaultInputHandlerFunc()
 	return defaultInputHandlerFunc;
 }
 
-void setHandlers(CommandHandlerFunc commandHandlerFunc, InputHandlerFunc inputHandlerFunc)
+template <typename ..._CommandTypee, std::enable_if_t<std::conjunction_v<std::is_same<_CommandTypee, CommandType>...>, bool> = true>
+void setHandling(InputHandlerFunc inputHandlerFunc, _CommandTypee... validCommandTypes)
 {
-	CommandHandler::set(commandHandlerFunc);
 	InputHandler::set(inputHandlerFunc);
+	_validCommandTypes = easy_list::list({ validCommandTypes... });
 }
 
-void setHandlersDefault()
+void setHandlingDefault()
 {
-	CommandHandler::set(getDefaultCommandHandlerFunc());
-	InputHandler::set(getDefaultInputHandlerFunc());
+	setHandling(
+		getDefaultInputHandlerFunc(),
+		CommandType::EXIT,
+		CommandType::QUIT,
+		CommandType::PLAY,
+		CommandType::WRITE
+	);
 }

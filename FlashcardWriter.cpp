@@ -12,115 +12,112 @@
 
 namespace FlashcardWriter
 {
-	enum class Stage {
-		FRONT,
-		BACK,
-		CASE_SENSITIVE,
-		SLEEP
-	};
-
-	Stage stage{ Stage::SLEEP };
 	std::wstring front{ L"" };
 	std::wstring back{ L"" };
 	bool caseSensitive{ false };
-	const std::wstring startWritingMessage{
-		L"Enter the values for new flashcards' front, back and any tags.\nOnce you're finished adding tags, leave the next tag blank.\nThe front and back cannot be blank.\nUse <"
-		+ toLower(CommandInfo::get(CommandType::CANCEL)->getCode())
-		+ L"> to cancel adding the current card.\n" };
 
-	void setFlashcardWriteStage(Stage stage)
+	void askFront();
+	void askBack();
+	void askCaseSensitive();
+
+	InputHandlerReturns frontInputHandlerFunc(std::wstring input)
 	{
-
-		if (stage == Stage::FRONT)
+		if (input.empty())
 		{
-			front = L"";
-			back = L"";
-			caseSensitive = false;
-			std::wcout << L"Front:\t";
-			FlashcardWriter::stage = stage;
-			return;
+			askFront();
+			return InputHandlerReturns::SUCCESS;
 		}
 
-		else if (stage == Stage::BACK)
-		{
-			std::wcout << L"Back:\t";
-			FlashcardWriter::stage = stage;
-			return;
-		}
-
-		else if (stage == Stage::CASE_SENSITIVE)
-		{
-			std::wcout << L"Case-sensitive? [Y/N]:\t";
-			FlashcardWriter::stage = stage;
-			return;
-		}
-
-		else if (stage == Stage::SLEEP)
-		{
-			FlashcardWriter::stage = stage;
-			return;
-		}
+		front = input;
+		askBack();
+		return InputHandlerReturns::SUCCESS;
 	}
 
-	void startInput()
+	InputHandlerReturns backInputHandlerFunc(std::wstring input)
 	{
-		setFlashcardWriteStage(Stage::FRONT);
+		if (input.empty())
+		{
+			askBack();
+			return InputHandlerReturns::SUCCESS;
+		}
+
+		back = input;
+		QuestionWriter::writeTags();
+		return InputHandlerReturns::SUCCESS;
 	}
 
-	void resetLastStep()
+	InputHandlerReturns caseSensitiveInputHandlerFunc(std::wstring input)
 	{
-		setFlashcardWriteStage(stage);
+		auto yesNo = getYesNo(input);
+
+		if (yesNo || !yesNo)
+		{
+			caseSensitive = yesNo;
+			QuestionWriter::writeTags();
+			return InputHandlerReturns::SUCCESS;
+		}
+
+		std::wcout << L"Please enter either \"yes\" or \"no\".";
+		askCaseSensitive();
+		return InputHandlerReturns::SUCCESS;
 	}
 
-	bool input(std::wstring userInput)
+	void askFront()
 	{
-		if (stage == Stage::FRONT)
+		std::wcout << L"Front:\t";
+		setHandling(&frontInputHandlerFunc, CommandType::CANCEL);
+	}
+
+	void askBack()
+	{
+		std::wcout << L"Back:\t";
+		setHandling(&backInputHandlerFunc, CommandType::CANCEL);
+	}
+
+	void askCaseSensitive()
+	{
+		std::wcout << L"Case-sensitive? [Y/N]:\t";
+		setHandling(&caseSensitiveInputHandlerFunc, CommandType::CANCEL);
+	}
+
+	void writeFlashcard()
+	{
+		front = L"";
+		back = L"";
+		caseSensitive = false;
+
+		std::wcout <<
+			L"Enter the values for new flashcards' front, back and any tags.\n"
+			<< L"Once you're finished adding tags, leave the next tag blank.\n"
+			<< L"The front and back cannot be blank.\nUse <"
+			<< toLower(CommandInfo::get(CommandType::CANCEL)->getCode())
+			<< L"> to cancel adding the current card.\n\n";
+
+		askFront();
+		setHandling(&frontInputHandlerFunc, CommandType::CANCEL);
+		return;
+	}
+
+	bool resetLastStep()
+	{
+		if (front.empty())
 		{
-			if (userInput == L"")
-			{
-				resetLastStep();
-				return true;
-			}
-			front = userInput;
-			setFlashcardWriteStage(Stage::BACK);
+			askFront();
 			return true;
 		}
-
-		if (stage == Stage::BACK)
+		else if (back.empty())
 		{
-			if (userInput == L"")
-			{
-				resetLastStep();
-				return true;
-			}
-			back = userInput;
-			setFlashcardWriteStage(Stage::CASE_SENSITIVE);
+			askBack();
 			return true;
 		}
-
-		if (stage == Stage::CASE_SENSITIVE)
-		{
-			YesNo yesNo = getYesNo(userInput);
-
-			if (yesNo || !yesNo)
-			{
-				caseSensitive = yesNo;
-				setFlashcardWriteStage(Stage::SLEEP);
-				return false;
-			}
-
-			resetLastStep();
-			return true;
-		}
-
 		return false;
 	}
 
 	Question* constructCurrent(easy_list::list<std::wstring> tags)
 	{
-		if (front == L"")
+		if (front.empty())
 			return nullptr;
-		if (back == L"")
+		if (back.empty())
 			return nullptr;
 		return new Flashcard(front, back, caseSensitive, tags);
 	}
@@ -129,9 +126,7 @@ namespace FlashcardWriter
 	{
 		static QuestionWriter writer = QuestionWriter(
 			QuestionType::FLASHCARD,
-			startWritingMessage,
-			&startInput,
-			&input,
+			&writeFlashcard,
 			&resetLastStep,
 			&constructCurrent
 		);

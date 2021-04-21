@@ -9,89 +9,47 @@
 #include "Handlers.h"
 #include "util.h"
 
-QuestionWriter::Stage QuestionWriter::_stage = QuestionWriter::Stage::CHILD_DATA;
 easy_list::list<std::wstring> QuestionWriter::_tags = easy_list::list<std::wstring>();
 
 QuestionWriter::QuestionWriter(
 	QuestionType type,
-	std::wstring startWritingMessage,
-	void(*startInputData)(),
-	bool(*inputData)(std::wstring userInput),
-	void(*resetLastChildDataStep)(),
-	Question*(*constructCurrent)(easy_list::list<std::wstring> tags))
+	void(*writeChildData)(),
+	bool(*resetLastChildDataStep)(),
+	Question* (*constructCurrent)(easy_list::list<std::wstring> tags))
 	:
 	_type(type),
-	_startWritingMessage(startWritingMessage),
-	_startInputData(startInputData),
-	_inputData(inputData),
+	_writeChildData(writeChildData),
 	_resetLastChildDataStep(resetLastChildDataStep),
 	_constructCurrent(constructCurrent)
 {}
 
-const std::wstring QuestionWriter::getStartWritingMessage() const
+void QuestionWriter::writeQuestion()
 {
-	return _startWritingMessage;
+	_writeChildData();
 }
 
-void QuestionWriter::startInput()
+void QuestionWriter::writeTags()
 {
-	_stage = Stage::CHILD_DATA;
-	_tags = easy_list::list<std::wstring>();
-	_startInputData();
+	askForTag();
 }
 
-void QuestionWriter::resetLastStep()
+void QuestionWriter::askForTag()
 {
-	if (_stage == Stage::CHILD_DATA)
-	{
-		_resetLastChildDataStep();
-		return;
-	}
-
-	else if (_stage == Stage::TAGS)
-	{
-		setStage(Stage::TAGS);
-		return;
-	}
+	std::wcout << L"Tag " << _tags.size() + 1 << L":\t";
+	setHandling(&tagsInputHandlerFunc, CommandType::CANCEL);
 }
 
-void QuestionWriter::processInput(std::wstring userInput)
+InputHandlerReturns QuestionWriter::tagsInputHandlerFunc(std::wstring input)
 {
-	if (_stage == Stage::CHILD_DATA)
+	if (input.empty())
 	{
-		if (!_inputData(userInput))
-			setStage(Stage::TAGS);
-		return;
+		Write::nextQuestion();
+		return InputHandlerReturns::SUCCESS;
 	}
 
-	else if (_stage == Stage::TAGS)
-	{
-		if (userInput == L"")
-		{
-			Question* newQuestion = _constructCurrent(_tags);
-			if (newQuestion == nullptr)
-			{
-				std::wcout << L"Something went wrong constructing the "
-					<< QuestionTypeInfo::get(_type)->getDisplaySingular()
-					<< " from the input given. Please try again, and ensure all inputs are valid.\n";
-				return;
-			}
-			_newQuestions.push_back(newQuestion);
-			Write::nextQuestion();
-			return;
-		}
-
-		else if (userInput.find(L' ') != std::wstring::npos)
-		{
-			std::wcout << L"Tags must not contain spaces.\n";
-			resetLastStep();
-			return;
-		}
-
-		_tags.push_back(userInput);
-		setStage(Stage::TAGS);
-		return;
-	}
+	_tags.push_back(input);
+	askForTag();
+	return InputHandlerReturns::SUCCESS;
 }
 
 easy_list::list<Question*> QuestionWriter::writeToFile()
@@ -118,20 +76,11 @@ easy_list::list<Question*> QuestionWriter::writeToFile()
 	return _newQuestions;
 }
 
-void QuestionWriter::setStage(Stage stage)
+void QuestionWriter::resetLastStep()
 {
-	if (stage == Stage::CHILD_DATA)
+	// Try resetting the last child data step. If that fails, reset the last tag step.
+	if (!_resetLastChildDataStep())
 	{
-		_startInputData();
-		return;
+		askForTag();
 	}
-
-	else if (stage == Stage::TAGS)
-	{
-		_stage = stage;
-		std::wcout << L"Tag " << (_tags.size() + 1) << L":\t";
-		return;
-	}
-
-	return;
 }

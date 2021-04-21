@@ -1,38 +1,23 @@
 #pragma once
 #include <string>
+#include "HandlerReturns.h"
 #include "Command.h"
 
-#define DECLARE_CMD_HANDLER_FUNC(funcName) const CommandHandlerFunc funcName
-#define DEFINE_CMD_HANDLER_FUNC(funcName) const CommandHandlerFunc funcName = [](Command command) -> CommandHandlerReturns
 #define DECLARE_INPUT_HANDLER_FUNC(funcName) const InputHandlerFunc funcName
 #define DEFINE_INPUT_HANDLER_FUNC(funcName) const InputHandlerFunc funcName = [](std::wstring input) -> InputHandlerReturns
 
-enum class CommandHandlerReturns {
-	SUCCESS,
-	CMD_NOT_RECOGNISED,
-	QUIT_APP,
-	TOO_FEW_ARGS,
-	INVALID_ARGS,
-	INVALID_STATE
-};
-using CommandHandlerFunc = CommandHandlerReturns(*)(Command);
-enum class InputHandlerReturns {
-	SUCCESS,
-	INVALID_INPUT
-};
 using InputHandlerFunc = InputHandlerReturns(*)(std::wstring);
 
 class CommandHandler {
 private:
 	using Returns = CommandHandlerReturns;
-	using Func = CommandHandlerFunc;
 public:
-	static Returns call(Command command);
+	static CommandHandlerReturns call(std::wstring input);
 private:
-	static Func _handlerFunc;
-	static void set(Func func);
-	friend void setHandlers(CommandHandlerFunc commandHandlerFunc, InputHandlerFunc inputHandlerFunc);
-	friend void setHandlersDefault();
+	template <typename ..._CommandTypee, std::enable_if_t<std::conjunction_v<std::is_same<_CommandTypee, CommandType>...>, bool> = true>
+	friend void setHandling(InputHandlerFunc inputHandlerFunc, _CommandTypee... validCommandTypes);
+	friend void setHandlingDefault();
+	static easy_list::list<CommandType> _validCommandTypes;
 };
 
 class InputHandler {
@@ -44,9 +29,11 @@ public:
 private:
 	static Func _handlerFunc;
 	static void set(Func func);
-	friend void setHandlers(CommandHandlerFunc commandHandlerFunc, InputHandlerFunc inputHandlerFunc);
-	friend void setHandlersDefault();
+	template <typename ..._CommandTypee, std::enable_if_t<std::conjunction_v<std::is_same<_CommandTypee, CommandType>...>, bool> = true>
+	friend void setHandling(InputHandlerFunc inputHandlerFunc, _CommandTypee... validCommandTypes);
+	friend void setHandlingDefault();
 };
 
-void setHandlers(CommandHandlerFunc commandHandlerFunc, InputHandlerFunc inputHandlerFunc);
-void setHandlersDefault();
+template <typename ..._CommandTypee, std::enable_if_t<std::conjunction_v<std::is_same<_CommandTypee, CommandType>...>, bool> = true>
+void setHandling(InputHandlerFunc inputHandlerFunc, _CommandTypee... validCommandTypes);
+void setHandlingDefault();

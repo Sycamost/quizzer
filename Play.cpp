@@ -8,35 +8,37 @@
 #include "QuestionList.h"
 #include "globals.h"
 
-InputHandler::Handler getPlayHandler();
+InputHandlerFunc getReceiveAnswerInputHandler();
+InputHandlerFunc getNextQuestionInputHandler();
 
-PlayStage Play::getStage() {
-	return _stage;
-}
-
-void Play::setStage(PlayStage stage)
+/// <summary>
+/// If there's another question to ask, asks it and waits for an answer. If not, ends play.
+/// </summary>
+void Play::askQuestion()
 {
-	if (stage == PlayStage::QUESTION)
+	// Hang on - have we finished all the questions yet?
+	if (_index >= _questions.size())
 	{
-		_stage = stage;
-
-		_hasAnswered = false;
-
-		if (_index >= _questions.size())
-		{
-			finishPlaying();
-			return;
-		}
-
-		std::wcout << L"\n" << _questions[_index]->getQuestion() << L"\n";
+		finishPlaying();
 		return;
 	}
 
-	if (stage == PlayStage::ANSWER)
-	{
-		_stage = stage;
-		_index++;
-	}
+	// Ask the question...
+	_hasAnswered = false;
+	std::wcout << L"\n" << _questions[_index]->getQuestion() << L"\n";
+
+	// ... and wait for an answer.
+	setHandling(getReceiveAnswerInputHandler(), CommandType::CONCEDE);
+	return;
+}
+
+/// <summary>
+/// Moves the counter on to the next question, and waits to see if the user wants to boost the last question before moving on.
+/// </summary>
+void Play::nextQuestion()
+{
+	setHandling(getNextQuestionInputHandler(), CommandType::CONCEDE, CommandType::BOOST);
+	_index++;
 }
 
 bool Play::updateAnswer(std::wstring answer)
@@ -53,13 +55,13 @@ bool Play::updateAnswer(std::wstring answer)
 	return _isCorrect;
 }
 
-DECLARE_CMD_FUNC(Play::cmdFuncPlay)
+DEFINE_CMD_FUNC(Play::cmdFuncPlay)
 {
 	_questions = QuestionList::get();
 	if (_questions.empty())
 	{
 		std::wcout << L"Can't play, because there are no questions loaded.\n";
-		return InputHandler::Returns::SUCCESS;
+		return CommandHandlerReturns::SUCCESS;
 	}
 
 	if (!args.empty())
@@ -73,7 +75,7 @@ DECLARE_CMD_FUNC(Play::cmdFuncPlay)
 				std::wcout << L"Can't play with that tag, because there are no questions loaded with that tag.\n";
 			else
 				std::wcout << L"Can't play with those tags, because there are no questions loaded with any of those tags.\n";
-			return InputHandler::Returns::SUCCESS;
+			return CommandHandlerReturns::SUCCESS;
 		}
 	}
 
@@ -96,13 +98,11 @@ DECLARE_CMD_FUNC(Play::cmdFuncPlay)
 	_correct = 0;
 	_wrong = 0;
 
-	setStage(PlayStage::QUESTION);
-
-	InputHandler::set(getPlayHandler());
-	return InputHandler::Returns::SUCCESS;
+	askQuestion();
+	return CommandHandlerReturns::SUCCESS;
 };
 
-DECLARE_CMD_FUNC(Play::cmdFuncConcede)
+DEFINE_CMD_FUNC(Play::cmdFuncConcede)
 {
 	std::wstring message = L"Are you sure you want to finish playing?";
 
@@ -119,7 +119,7 @@ DECLARE_CMD_FUNC(Play::cmdFuncConcede)
 	if (inputYesNo(message))
 		Play::finishPlaying();
 
-	return InputHandler::Returns::SUCCESS;
+	return CommandHandlerReturns::SUCCESS;
 };
 
 void Play::finishPlaying()
@@ -134,10 +134,10 @@ void Play::finishPlaying()
 		std::wcout << L" and " << numSkipped << L" skipped";
 	std::wcout << L".\n" << Globals::horizontalDoubleRule << L"\n\n";
 
-	InputHandler::setDefault();
+	setHandlingDefault();
 }
 
-DECLARE_CMD_FUNC(Play::cmdFuncBoost)
+DEFINE_CMD_FUNC(Play::cmdFuncBoost)
 {
 	if (_hasAnswered && !_isCorrect)
 	{
@@ -145,10 +145,10 @@ DECLARE_CMD_FUNC(Play::cmdFuncBoost)
 		_correct++;
 		_wrong--;
 		std::wcout << L"Boosted!\n";
-		Play::setStage(PlayStage::QUESTION);
-		return InputHandler::Returns::SUCCESS;
+		askQuestion();
+		return CommandHandlerReturns::SUCCESS;
 	}
-	return InputHandler::Returns::INVALID_STATE;
+	return CommandHandlerReturns::INVALID_STATE;
 };
 
 int Play::getNumCorrect()
@@ -171,7 +171,7 @@ std::wstring Play::getCurrentCorrectAnswer()
 	return _questions[_index]->getAnswer();
 }
 
-PlayStage Play::_stage = PlayStage::QUESTION;
+//PlayStage Play::_stage = PlayStage::QUESTION;
 easy_list::list<Question*> Play::_questions = easy_list::list<Question*>();
 unsigned int Play::_index = 0;
 int Play::_correct = 0;
@@ -179,55 +179,37 @@ int Play::_wrong = 0;
 bool Play::_hasAnswered = false;
 bool Play::_isCorrect = true;
 
-InputHandler::Handler getPlayHandler()
+InputHandlerFunc getReceiveAnswerInputHandler()
 {
-	static InputHandler::Handler playHandler = [](std::wstring input) -> InputHandler::Returns
-	{
-		Command* command = Command::read(input);
-		if (command != nullptr)
+	static DEFINE_INPUT_HANDLER_FUNC(receiveAnswerInputHandler) {
+
+		bool isCorrect = Play::updateAnswer(input);
+
+		if (isCorrect)
 		{
-			CommandInfo cmdInfo = command->getCommandInfo();
-
-			if (cmdInfo.getType() == CommandType::CONCEDE)
-				return command->doCommandFunc();
-
-			else if (cmdInfo.getType() == CommandType::BOOST && Play::getStage() == PlayStage::ANSWER)
-				return command->doCommandFunc();
-
-			return InputHandler::Returns::INVALID_STATE;
+			std::wcout << L"Correct! Press enter to continue.\n\n";
+			Play::nextQuestion();
+			return InputHandlerReturns::SUCCESS;
 		}
-
-		if (Play::getStage() == PlayStage::QUESTION)
+		else
 		{
-			bool isCorrect = Play::updateAnswer(input);
-
-			if (isCorrect)
-			{
-				std::wcout << L"Correct! Press enter to continue.\n\n";
-				Play::setStage(PlayStage::ANSWER);
-				return InputHandler::Returns::SUCCESS;
-			}
-			else
-			{
-				std::wcout << L"Incorrect! The correct answer was:\n"
-					<< indent(Play::getCurrentCorrectAnswer(), 1)
-					<< "\nPress enter to continue, or enter the command <"
-					<< toLower(CommandInfo::get(CommandType::BOOST)->getCode())
-					<< "> if you have been marked down unfairly.\n";
-				Play::setStage(PlayStage::ANSWER);
-				return InputHandler::Returns::SUCCESS;
-			}
+			std::wcout << L"Incorrect! The correct answer was:\n"
+				<< indent(Play::getCurrentCorrectAnswer(), 1)
+				<< "\nPress enter to continue, or enter the command <"
+				<< toLower(CommandInfo::get(CommandType::BOOST)->getCode())
+				<< "> if you have been marked down unfairly.\n";
+			Play::nextQuestion();
+			return InputHandlerReturns::SUCCESS;
 		}
-
-		if (Play::getStage() == PlayStage::ANSWER)
-		{
-			Play::setStage(PlayStage::QUESTION);
-			return InputHandler::Returns::SUCCESS;
-		}
-
-		std::wcout << L"\nSomething went wrong interpreting that input. Exiting play...\n";
-		Play::finishPlaying();
-		return InputHandler::Returns::CMD_NOT_RECOGNISED;
 	};
-	return playHandler;
+	return receiveAnswerInputHandler;
+}
+
+InputHandlerFunc getNextQuestionInputHandler()
+{
+	static DEFINE_INPUT_HANDLER_FUNC(nextQuestionInputHandler) {
+		Play::askQuestion();
+		return InputHandlerReturns::SUCCESS;
+	};
+	return nextQuestionInputHandler;
 }
