@@ -10,6 +10,5 @@ enum class CommandHandlerReturns {
 };
 
 enum class InputHandlerReturns {
-	SUCCESS,
-	INVALID_INPUT
+	SUCCESS
 };

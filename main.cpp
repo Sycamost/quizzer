@@ -34,10 +34,6 @@ int main() {
 				case CommandHandlerReturns::SUCCESS:
 					break;
 
-				case CommandHandlerReturns::CMD_NOT_RECOGNISED:
-					std::wcout << L"Command not recognised. Please enter a valid command.\n";
-					break;
-
 				case CommandHandlerReturns::QUIT_APP:
 					doContinue = false;
 					break;
@@ -53,8 +49,26 @@ int main() {
 				case CommandHandlerReturns::INVALID_STATE:
 					std::wcout << L"That command is invalid right now.\n";
 					break;
+
+				case CommandHandlerReturns::CMD_NOT_RECOGNISED:
+				default:
+					std::wcout << L"Command not recognised. Please enter a valid command.\n";
+					break;
 			}
+
+			continue;
 		}
+
+		// Input
+		auto ret = InputHandler::call(userInput);
+		/* Will we ever find a use for input handler return values?
+		switch (ret)
+		{
+		case InputHandlerReturns::SUCCESS:
+		default:
+			break;
+		}
+		*/
 	}
 
 	return 0;
