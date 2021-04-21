@@ -2,7 +2,7 @@
 #include <string>
 #include <easy_list.h>
 #include <fstream>
-#include "InputHandler.h"
+#include "Handlers.h"
 
 #define DEFINE_CMD_FUNC(func) const CommandFunc func
 #define DECLARE_CMD_FUNC(func) const CommandFunc func = [](easy_list::list<std::wstring> args = easy_list::list<std::wstring>()) -> InputHandler::Returns

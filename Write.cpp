@@ -4,7 +4,7 @@
 #include "QuestionWriter.h"
 #include "Write.h"
 #include "Command.h"
-#include "InputHandler.h"
+#include "Handlers.h"
 #include "util.h"
 
 QuestionTypeInfo Write::_typeInfo{ QuestionTypeInfo::getList()->front() };

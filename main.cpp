@@ -1,6 +1,6 @@
 #include <iostream>
 #include <easy_list.h>
-#include "InputHandler.h"
+#include "Handlers.h"
 #include "util.h"
 #include "globals.h"
 #include "Question.h"

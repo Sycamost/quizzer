@@ -6,7 +6,7 @@
 #include "Option.h"
 #include "Command.h"
 #include "Write.h"
-#include "InputHandler.h"
+#include "Handlers.h"
 #include "util.h"
 
 QuestionWriter::Stage QuestionWriter::_stage = QuestionWriter::Stage::CHILD_DATA;

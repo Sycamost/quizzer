@@ -81,12 +81,12 @@
     <ClCompile Include="FlashcardReader.cpp">
       <Filter>Source Files\Read</Filter>
     </ClCompile>
-    <ClCompile Include="InputHandler.cpp">
+    <ClCompile Include="Handlers.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="InputHandler.h">
+    <ClInclude Include="Handlers.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="util.h">

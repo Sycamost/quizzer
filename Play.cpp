@@ -2,7 +2,7 @@
 #include <random>
 #include <easy_list.h>
 #include "Play.h"
-#include "InputHandler.h"
+#include "Handlers.h"
 #include "Question.h"
 #include "util.h"
 #include "QuestionList.h"
