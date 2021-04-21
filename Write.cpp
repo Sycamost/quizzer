@@ -14,9 +14,9 @@ void Write::nextQuestion()
 	std::wstring message =
 		L"Would you like to write another "
 		+ _typeInfo.getDisplaySingular()
-		+ L"? [Y/N]";
+		+ L"?";
 
-	if (inputYesNo(message))
+	if (inputYesNo(L"Would you like to write another " + _typeInfo.getDisplaySingular() + L"?"))
 	{
 		_typeInfo.getWriter()->writeQuestion();
 		return;
