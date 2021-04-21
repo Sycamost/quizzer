@@ -4,8 +4,8 @@
 #include "HandlerReturns.h"
 #include "Command.h"
 
-#define DECLARE_INPUT_HANDLER_FUNC(funcName) const InputHandlerFunc funcName
-#define DEFINE_INPUT_HANDLER_FUNC(funcName) const InputHandlerFunc funcName = [](std::wstring input) -> InputHandlerReturns
+#define DECLARE_INPUT_HANDLER_FUNC(funcName) InputHandlerReturns funcName(std::wstring input)
+#define DEFINE_INPUT_HANDLER_FUNC(funcName) InputHandlerReturns funcName(std::wstring input)
 
 using InputHandlerFunc = InputHandlerReturns(*)(std::wstring);
 

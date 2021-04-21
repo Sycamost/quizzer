@@ -21,7 +21,7 @@ public:
 private:
 
 	static easy_list::list<std::wstring> _tags;
-	static InputHandlerReturns tagsInputHandlerFunc(std::wstring input);
+	static DECLARE_INPUT_HANDLER_FUNC(tagsInputHandlerFunc);
 	static void askForTag();
 
 	QuestionType _type;

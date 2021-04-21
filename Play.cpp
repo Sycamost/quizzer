@@ -8,8 +8,8 @@
 #include "QuestionList.h"
 #include "globals.h"
 
-InputHandlerFunc getReceiveAnswerInputHandler();
-InputHandlerFunc getNextQuestionInputHandler();
+DECLARE_INPUT_HANDLER_FUNC(receiveAnswerInputHandler);
+DECLARE_INPUT_HANDLER_FUNC(nextQuestionInputHandler);
 
 /// <summary>
 /// If there's another question to ask, asks it and waits for an answer. If not, ends play.
@@ -28,7 +28,7 @@ void Play::askQuestion()
 	std::wcout << L"\n" << _questions[_index]->getQuestion() << L"\n";
 
 	// ... and wait for an answer.
-	setHandling(getReceiveAnswerInputHandler(), CommandType::CONCEDE);
+	setHandling(&receiveAnswerInputHandler, CommandType::CONCEDE);
 	return;
 }
 
@@ -37,7 +37,7 @@ void Play::askQuestion()
 /// </summary>
 void Play::nextQuestion()
 {
-	setHandling(getNextQuestionInputHandler(), CommandType::CONCEDE, CommandType::BOOST);
+	setHandling(&nextQuestionInputHandler, CommandType::CONCEDE, CommandType::BOOST);
 	_index++;
 }
 
@@ -179,37 +179,30 @@ int Play::_wrong = 0;
 bool Play::_hasAnswered = false;
 bool Play::_isCorrect = true;
 
-InputHandlerFunc getReceiveAnswerInputHandler()
+DEFINE_INPUT_HANDLER_FUNC(receiveAnswerInputHandler)
 {
-	static DEFINE_INPUT_HANDLER_FUNC(receiveAnswerInputHandler) {
+	bool isCorrect = Play::updateAnswer(input);
 
-		bool isCorrect = Play::updateAnswer(input);
-
-		if (isCorrect)
-		{
-			std::wcout << L"Correct! Press enter to continue.\n\n";
-			Play::nextQuestion();
-			return InputHandlerReturns::SUCCESS;
-		}
-		else
-		{
-			std::wcout << L"Incorrect! The correct answer was:\n"
-				<< indent(Play::getCurrentCorrectAnswer(), 1)
-				<< "\nPress enter to continue, or enter the command <"
-				<< toLower(CommandInfo::get(CommandType::BOOST)->getCode())
-				<< "> if you have been marked down unfairly.\n";
-			Play::nextQuestion();
-			return InputHandlerReturns::SUCCESS;
-		}
-	};
-	return receiveAnswerInputHandler;
+	if (isCorrect)
+	{
+		std::wcout << L"Correct! Press enter to continue.\n\n";
+		Play::nextQuestion();
+		return InputHandlerReturns::SUCCESS;
+	}
+	else
+	{
+		std::wcout << L"Incorrect! The correct answer was:\n"
+			<< indent(Play::getCurrentCorrectAnswer(), 1)
+			<< "\nPress enter to continue, or enter the command <"
+			<< toLower(CommandInfo::get(CommandType::BOOST)->getCode())
+			<< "> if you have been marked down unfairly.\n";
+		Play::nextQuestion();
+		return InputHandlerReturns::SUCCESS;
+	}
 }
 
-InputHandlerFunc getNextQuestionInputHandler()
+DEFINE_INPUT_HANDLER_FUNC(nextQuestionInputHandler)
 {
-	static DEFINE_INPUT_HANDLER_FUNC(nextQuestionInputHandler) {
-		Play::askQuestion();
-		return InputHandlerReturns::SUCCESS;
-	};
-	return nextQuestionInputHandler;
+	Play::askQuestion();
+	return InputHandlerReturns::SUCCESS;
 }

@@ -4,16 +4,9 @@
 #include "Flashcard.h"
 #include "Command.h"
 
-//enum class PlayStage {
-//	QUESTION,
-//	ANSWER
-//};
-
 class Play
 {
 public:
-	//static PlayStage getStage();
-	//static void setStage(PlayStage stage);
 	static void askQuestion();
 	static void nextQuestion();
 	static bool updateAnswer(std::wstring answer);

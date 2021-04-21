@@ -20,7 +20,7 @@ namespace FlashcardWriter
 	void askBack();
 	void askCaseSensitive();
 
-	InputHandlerReturns frontInputHandlerFunc(std::wstring input)
+	DEFINE_INPUT_HANDLER_FUNC(frontInputHandlerFunc)
 	{
 		if (input.empty())
 		{
@@ -33,7 +33,7 @@ namespace FlashcardWriter
 		return InputHandlerReturns::SUCCESS;
 	}
 
-	InputHandlerReturns backInputHandlerFunc(std::wstring input)
+	DEFINE_INPUT_HANDLER_FUNC(backInputHandlerFunc)
 	{
 		if (input.empty())
 		{
@@ -46,7 +46,7 @@ namespace FlashcardWriter
 		return InputHandlerReturns::SUCCESS;
 	}
 
-	InputHandlerReturns caseSensitiveInputHandlerFunc(std::wstring input)
+	DEFINE_INPUT_HANDLER_FUNC(caseSensitiveInputHandlerFunc)
 	{
 		auto yesNo = getYesNo(input);
 

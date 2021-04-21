@@ -39,7 +39,7 @@ void QuestionWriter::askForTag()
 	setHandling(&tagsInputHandlerFunc, CommandType::CANCEL);
 }
 
-InputHandlerReturns QuestionWriter::tagsInputHandlerFunc(std::wstring input)
+DEFINE_INPUT_HANDLER_FUNC(QuestionWriter::tagsInputHandlerFunc)
 {
 	if (input.empty())
 	{

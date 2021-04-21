@@ -4,16 +4,12 @@
 #include "Command.h"
 #include "HandlerReturns.h"
 
-InputHandlerFunc getDefaultInputHandlerFunc()
-{
-	static DEFINE_INPUT_HANDLER_FUNC(defaultInputHandlerFunc) {
-		std::wcout << L"Please enter a command. Commands are preceded by a backslash <\\>, e.g. <play>.\n";
-		return InputHandlerReturns::SUCCESS;
-	};
-	return defaultInputHandlerFunc;
+DEFINE_INPUT_HANDLER_FUNC(defaultInputHandlerFunc) {
+	std::wcout << L"Please enter a command. Commands are preceded by a backslash <\\>, e.g. <\\play>.\n";
+	return InputHandlerReturns::SUCCESS;
 }
 #define DEFAULT_VALID_COMMAND_TYPES CommandType::EXIT, CommandType::QUIT, CommandType::PLAY, CommandType::WRITE
-InputHandlerFunc InputHandler::_handlerFunc{ getDefaultInputHandlerFunc() };
+InputHandlerFunc InputHandler::_handlerFunc{ &defaultInputHandlerFunc };
 easy_list::list<CommandType> CommandHandler::_validCommandTypes{ easy_list::list<CommandType>({ DEFAULT_VALID_COMMAND_TYPES }) };
 
 CommandHandlerReturns CommandHandler::call(std::wstring input)
@@ -29,12 +25,12 @@ CommandHandlerReturns CommandHandler::call(std::wstring input)
 	return CommandHandlerReturns::INVALID_STATE;
 }
 
-InputHandlerReturns InputHandler::call(std::wstring input)
+DEFINE_INPUT_HANDLER_FUNC(InputHandler::call)
 {
 	return _handlerFunc(input);
 }
 
 void setHandlingDefault()
 {
-	setHandling(getDefaultInputHandlerFunc(), DEFAULT_VALID_COMMAND_TYPES);
+	setHandling(&defaultInputHandlerFunc, DEFAULT_VALID_COMMAND_TYPES);
 }
