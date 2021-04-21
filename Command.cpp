@@ -5,6 +5,7 @@
 #include "main.h"
 #include "Play.h"
 #include "util.h"
+#include "HandlerReturns.h"
 
 const easy_list::list<CommandInfo>* CommandInfo::getList()
 {
@@ -56,12 +57,12 @@ Command* Command::read(std::wstring userInput)
 	return new Command(words.slice(1), *cmdInfoIter);
 }
 
-InputHandler::Returns Command::doCommandFunc()
+CommandHandlerReturns Command::doCommandFunc() const
 {
 	return _commandInfo.callFunc(_args);
 }
 
-CommandInfo Command::getCommandInfo()
+const CommandInfo Command::getCommandInfo() const
 {
 	return _commandInfo;
 }

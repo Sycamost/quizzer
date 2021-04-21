@@ -31,6 +31,12 @@
     <Filter Include="Source Files\Read">
       <UniqueIdentifier>{65322f17-1307-4fa4-9559-2cde6a065d27}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\UI">
+      <UniqueIdentifier>{0231912c-f7f7-4082-9477-01513c669854}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\UI">
+      <UniqueIdentifier>{3471cffe-4e7e-47b8-a032-2bf420ad27e0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -57,9 +63,6 @@
     <ClCompile Include="Option.cpp">
       <Filter>Source Files\Question</Filter>
     </ClCompile>
-    <ClCompile Include="Command.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="QuestionWriter.cpp">
       <Filter>Source Files\Write</Filter>
     </ClCompile>
@@ -81,14 +84,14 @@
     <ClCompile Include="FlashcardReader.cpp">
       <Filter>Source Files\Read</Filter>
     </ClCompile>
-    <ClCompile Include="InputHandler.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="Command.cpp">
+      <Filter>Source Files\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="Handlers.cpp">
+      <Filter>Source Files\UI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="InputHandler.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="util.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -106,9 +109,6 @@
     </ClInclude>
     <ClInclude Include="Option.h">
       <Filter>Header Files\Question</Filter>
-    </ClInclude>
-    <ClInclude Include="Command.h">
-      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="main.h">
       <Filter>Header Files</Filter>
@@ -139,6 +139,15 @@
     </ClInclude>
     <ClInclude Include="Read.h">
       <Filter>Header Files\Read</Filter>
+    </ClInclude>
+    <ClInclude Include="Command.h">
+      <Filter>Header Files\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Handlers.h">
+      <Filter>Header Files\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="HandlerReturns.h">
+      <Filter>Header Files\UI</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
