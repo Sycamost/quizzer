@@ -21,10 +21,6 @@ CommandHandlerReturns CommandHandler::call(std::wstring input)
 	return CommandHandlerReturns::INVALID_STATE;
 }
 
-void InputHandler::set(Func handler)
-{
-	_handlerFunc = handler;
-}
 InputHandlerReturns InputHandler::call(std::wstring input)
 {
 	return _handlerFunc(input);
@@ -37,14 +33,6 @@ InputHandlerFunc getDefaultInputHandlerFunc()
 		return InputHandlerReturns::SUCCESS;
 	};
 	return defaultInputHandlerFunc;
-}
-
-template <typename ..._CommandTypee>
-void setHandling(InputHandlerFunc inputHandlerFunc, _CommandTypee... validCommandTypes)
-{
-	static_assert(std::conjunction_v<std::is_same<_CommandTypee, CommandType>...>);
-	InputHandler::set(inputHandlerFunc);
-	CommandHandler::_validCommandTypes = easy_list::list({ validCommandTypes... });
 }
 
 void setHandlingDefault()
