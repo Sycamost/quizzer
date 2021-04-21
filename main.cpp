@@ -20,11 +20,8 @@ int main() {
 	{
 		std::wstring userInput = getInputLine();
 
-		if (userInput.size() == 0)
-			continue;
-
 		// Command
-		if (userInput[0] == L'\\')
+		if (!userInput.empty() && userInput[0] == L'\\')
 		{
 
 			CommandHandlerReturns ret = CommandHandler::call(userInput);
