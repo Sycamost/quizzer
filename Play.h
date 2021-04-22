@@ -24,6 +24,5 @@ private:
 	static unsigned int _index;
 	static int _correct;
 	static int _wrong;
-	static bool _hasAnswered;
 	static bool _isCorrect;
 };

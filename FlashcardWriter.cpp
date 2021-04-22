@@ -64,20 +64,20 @@ namespace FlashcardWriter
 
 	void askFront()
 	{
-		std::wcout << L"Front:\t";
-		setHandling(&frontInputHandlerFunc, CommandType::CANCEL);
+		static const std::wstring msg = L"Front:\t";
+		setHandling(msg, &frontInputHandlerFunc, CommandType::CANCEL);
 	}
 
 	void askBack()
 	{
-		std::wcout << L"Back:\t";
-		setHandling(&backInputHandlerFunc, CommandType::CANCEL);
+		static const std::wstring msg = L"Back:\t";
+		setHandling(msg, &backInputHandlerFunc, CommandType::CANCEL);
 	}
 
 	void askCaseSensitive()
 	{
-		std::wcout << L"Case-sensitive? [Y/N]:\t";
-		setHandling(&caseSensitiveInputHandlerFunc, CommandType::CANCEL);
+		static const std::wstring msg = L"Case-sensitive? [Y/N]:\t";
+		setHandling(msg, &caseSensitiveInputHandlerFunc, CommandType::CANCEL);
 	}
 
 	void writeFlashcard()
@@ -94,7 +94,6 @@ namespace FlashcardWriter
 			<< L"> to cancel adding the current card.\n\n";
 
 		askFront();
-		setHandling(&frontInputHandlerFunc, CommandType::CANCEL);
 		return;
 	}
 

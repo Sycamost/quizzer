@@ -10,6 +10,8 @@ public:
 	static void nextQuestion();
 private:
 	static QuestionTypeInfo _typeInfo;
+	static easy_list::list<Question*> _newQuestions;
 	static void startWriting(const QuestionTypeInfo qti);
+	static easy_list::list<Question*> writeToFile();
 	static void finishWriting();
 };

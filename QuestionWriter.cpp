@@ -1,5 +1,6 @@
 #include <algorithm>
 #include <iostream>
+#include <functional>
 #include "Question.h"
 #include "QuestionWriter.h"
 #include "QuestionTypeInfo.h"
@@ -9,7 +10,7 @@
 #include "Handlers.h"
 #include "util.h"
 
-easy_list::list<std::wstring> QuestionWriter::_tags = easy_list::list<std::wstring>();
+easy_list::list<std::wstring> QuestionWriter::_tags{ easy_list::list<std::wstring>() };
 
 QuestionWriter::QuestionWriter(
 	QuestionType type,
@@ -36,8 +37,8 @@ void QuestionWriter::writeTags()
 
 void QuestionWriter::askForTag()
 {
-	std::wcout << L"Tag " << _tags.size() + 1 << L":\t";
-	setHandling(&tagsInputHandlerFunc, CommandType::CANCEL);
+	std::wstring msg = L"Tag " + std::to_wstring(_tags.size() + 1) + L":\t";
+	setHandling(msg, &tagsInputHandlerFunc, CommandType::CANCEL);
 }
 
 DEFINE_INPUT_HANDLER_FUNC(QuestionWriter::tagsInputHandlerFunc)
@@ -53,30 +54,6 @@ DEFINE_INPUT_HANDLER_FUNC(QuestionWriter::tagsInputHandlerFunc)
 	return InputHandlerReturns::SUCCESS;
 }
 
-easy_list::list<Question*> QuestionWriter::writeToFile()
-{
-	std::wofstream file;
-	try
-	{
-		file.open(QuestionTypeInfo::get(_type)->getFileAddress(), std::ios::app);
-		if (!file.is_open())
-			throw std::exception("File did not open correctly.");
-	}
-	catch (std::exception e)
-	{
-		std::wcout << L"Oops! Something went wrong when trying to access the destination file. We got the following error message:\n"
-			<< e.what() << L"\n";
-		return easy_list::list<Question*>();
-	}
-
-	for (Question* question : _newQuestions)
-		question->write(file);
-
-	file.close();
-
-	return _newQuestions;
-}
-
 void QuestionWriter::resetLastStep()
 {
 	// Try resetting the last child data step. If that fails, reset the last tag step.
@@ -84,4 +61,9 @@ void QuestionWriter::resetLastStep()
 	{
 		askForTag();
 	}
+}
+
+Question* QuestionWriter::constructCurrent()
+{
+	return _constructCurrent(_tags);
 }
