@@ -8,9 +8,16 @@
 #include "util.h"
 
 QuestionTypeInfo Write::_typeInfo{ QuestionTypeInfo::getList()->front() };
+easy_list::list<Question*> Write::_newQuestions{ easy_list::list<Question*>() };
 
 void Write::nextQuestion()
 {
+	Question* question = _typeInfo.getWriter()->constructCurrent();
+	if (question == nullptr)
+		std::wcout << L"Sorry, that question couldn't be constructed properly for some reason.\n";
+	else
+		_newQuestions.push_back(question);
+
 	std::wstring message =
 		L"Would you like to write another "
 		+ _typeInfo.getDisplaySingular()
@@ -43,7 +50,7 @@ DEFINE_CMD_FUNC(Write::cmdFuncCancel) {
 	std::wcout << L"\n";
 	if (inputYesNo(L"Are you sure you want to cancel writing the current question?"))
 	{
-		_typeInfo.getWriter()->writeQuestion();
+		nextQuestion();
 		return CommandHandlerReturns::SUCCESS;
 	}
 	_typeInfo.getWriter()->resetLastStep();
@@ -57,9 +64,32 @@ void Write::startWriting(const QuestionTypeInfo qti)
 	_typeInfo.getWriter()->writeQuestion();
 }
 
+easy_list::list<Question*> Write::writeToFile()
+{
+	std::wofstream file;
+	try
+	{
+		file.open(_typeInfo.getFileAddress(), std::ios::app);
+		if (!file.is_open())
+			throw std::exception("File did not open correctly.");
+	}
+	catch (std::exception e)
+	{
+		std::wcout << L"Oops! Something went wrong when trying to access the destination file. We got the following error message:\n"
+			<< e.what() << L"\n";
+		return easy_list::list<Question*>();
+	}
+
+	for (Question* question : _newQuestions)
+		question->write(file);
+
+	file.close();
+	return _newQuestions;
+}
+
 void Write::finishWriting()
 {
 	std::wcout << L"\nFinished writing new " << _typeInfo.getDisplayPlural() << L".\n";
-	QuestionList::append(_typeInfo.getWriter()->writeToFile());
+	QuestionList::append(writeToFile());
 	setHandlingDefault();
 }

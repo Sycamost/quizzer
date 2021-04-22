@@ -15,8 +15,8 @@ public:
 	);
 	void writeQuestion();
 	static void writeTags();
-	easy_list::list<Question*> writeToFile();
 	void resetLastStep();
+	Question* constructCurrent();
 
 private:
 
@@ -28,5 +28,4 @@ private:
 	void(*_writeChildData)();
 	bool(*_resetLastChildDataStep)();
 	Question* (*_constructCurrent)(easy_list::list<std::wstring> tags);
-	easy_list::list<Question*> _newQuestions;
 };

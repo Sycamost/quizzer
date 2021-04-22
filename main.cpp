@@ -35,21 +35,29 @@ int main() {
 					doContinue = false;
 					break;
 
+				case CommandHandlerReturns::RESET_INPUT:
+					InputHandler::reset();
+					break;
+
 				case CommandHandlerReturns::TOO_FEW_ARGS:
 					std::wcout << L"Too few arguments were provided for that command.\n";
+					InputHandler::reset();
 					break;
 
 				case CommandHandlerReturns::INVALID_ARGS:
 					std::wcout << L"Invalid arguments were provided for that command.\n";
+					InputHandler::reset();
 					break;
 
 				case CommandHandlerReturns::INVALID_STATE:
 					std::wcout << L"That command is invalid right now.\n";
+					InputHandler::reset();
 					break;
 
 				case CommandHandlerReturns::CMD_NOT_RECOGNISED:
 				default:
 					std::wcout << L"Command not recognised. Please enter a valid command.\n";
+					InputHandler::reset();
 					break;
 			}
 
