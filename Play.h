@@ -1,7 +1,6 @@
 #pragma once
 #include <easy_list.h>
 #include <string>
-#include "Flashcard.h"
 #include "Command.h"
 
 class Play

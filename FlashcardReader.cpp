@@ -1,4 +1,5 @@
 #include "Flashcard.h"
+#include "FlashcardWriter.h"
 #include "FlashcardReader.h"
 #include "QuestionReader.h"
 #include "Option.h"
