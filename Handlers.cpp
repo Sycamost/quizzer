@@ -9,7 +9,7 @@ DEFINE_INPUT_HANDLER_FUNC(defaultInputHandlerFunc) {
 	return InputHandlerReturns::SUCCESS;
 }
 DEFINE_BEFORE_HANDLER_FUNC(defaultBeforeHandlerFunc) {}
-#define DEFAULT_VALID_COMMAND_TYPES CommandType::EXIT, CommandType::QUIT, CommandType::PLAY, CommandType::WRITE
+#define DEFAULT_VALID_COMMAND_TYPES CommandType::QUIT, CommandType::PLAY, CommandType::WRITE
 InputHandlerFunc InputHandler::_handlerFunc{ &defaultInputHandlerFunc };
 BeforeHandlerFunc InputHandler::_beforeHandlerFunc{ &defaultBeforeHandlerFunc };
 std::wstring InputHandler::_beforeHandlerMsg{ L"" };

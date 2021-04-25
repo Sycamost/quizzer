@@ -10,7 +10,6 @@
 enum class CommandType {
 	CANCEL,
 	QUIT,
-	EXIT,
 	WRITE,
 	BOOST,
 	CONCEDE,
@@ -22,7 +21,7 @@ using CommandFunc = CommandHandlerReturns(*)(easy_list::list<std::wstring> args)
 class CommandInfo {
 public:
 	const CommandType getType() const { return _type; }
-	const std::wstring getCode() const { return _code; }
+	const std::wstring getCode() const { return _codes[0]; }
 	const CommandFunc* getFunc() const { return _func; }
 	CommandHandlerReturns callFunc(easy_list::list<std::wstring> args) const { return (*_func)(args); }
 	static const easy_list::list<CommandInfo>* getList();
@@ -34,12 +33,13 @@ public:
 	}
 private:
 	const CommandType _type;
-	const std::wstring _code;
+	const easy_list::list<std::wstring> _codes;
 	const CommandFunc* _func;
-	CommandInfo(const CommandType type, const std::wstring code, const CommandFunc* func) :
+	bool hasCode(std::wstring code) { return _codes.contains(code); }
+	CommandInfo(const CommandType type, std::initializer_list<std::wstring> codes, const CommandFunc* func) :
 		_type(type),
-		_code(code),
-		_func(func)
+		_func(func),
+		_codes(codes)
 	{}
 };
 

@@ -1,5 +1,6 @@
 #include <algorithm>
 #include <easy_list.h>
+#include <cstdarg>
 #include "Command.h"
 #include "Write.h"
 #include "main.h"
@@ -10,13 +11,12 @@
 const easy_list::list<CommandInfo>* CommandInfo::getList()
 {
 	static const auto list = easy_list::list<CommandInfo>({
-		CommandInfo(CommandType::QUIT, L"quit", &cmdFuncQuit),
-		CommandInfo(CommandType::EXIT, L"exit", &cmdFuncQuit),
-		CommandInfo(CommandType::WRITE, L"write", &Write::cmdFuncWrite),
-		CommandInfo(CommandType::CANCEL, L"cancel", &Write::cmdFuncCancel),
-		CommandInfo(CommandType::BOOST, L"boost", &Play::cmdFuncBoost),
-		CommandInfo(CommandType::CONCEDE, L"concede", &Play::cmdFuncConcede),
-		CommandInfo(CommandType::PLAY, L"play", &Play::cmdFuncPlay)
+		CommandInfo(CommandType::QUIT, { L"quit", L"exit" }, &cmdFuncQuit),
+		CommandInfo(CommandType::WRITE, { L"write" }, &Write::cmdFuncWrite),
+		CommandInfo(CommandType::CANCEL, { L"cancel" }, &Write::cmdFuncCancel),
+		CommandInfo(CommandType::BOOST, { L"boost" }, &Play::cmdFuncBoost),
+		CommandInfo(CommandType::CONCEDE, { L"concede" }, &Play::cmdFuncConcede),
+		CommandInfo(CommandType::PLAY, { L"play" }, &Play::cmdFuncPlay)
 	});
 	return &list;
 }
@@ -28,7 +28,7 @@ const easy_list::list<CommandInfo>::const_iterator CommandInfo::get(const Comman
 
 const easy_list::list<CommandInfo>::const_iterator CommandInfo::get(const std::wstring code)
 {
-	return getList()->search(code, &CommandInfo::getCode);
+	return getList()->search(true, &CommandInfo::hasCode, code);
 }
 
 Command* Command::read(std::wifstream& stream)
