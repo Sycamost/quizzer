@@ -124,6 +124,20 @@ DEFINE_CMD_FUNC(Play::cmdFuncConcede)
 	return CommandHandlerReturns::RESET_INPUT;
 }
 
+DEFINE_CMD_FUNC(Play::cmdFuncBoost)
+{
+	if (!_isCorrect)
+	{
+		_isCorrect = true;
+		_correct++;
+		_wrong--;
+		std::wcout << L"Boosted!\n";
+		askQuestion();
+		return CommandHandlerReturns::SUCCESS;
+	}
+	return CommandHandlerReturns::INVALID_STATE;
+}
+
 void Play::finishPlaying()
 {
 	std::wcout << L"\n" << Globals::horizontalRule << L"\n";
@@ -137,20 +151,6 @@ void Play::finishPlaying()
 	std::wcout << L".\n" << Globals::horizontalDoubleRule << L"\n\n";
 
 	setHandlingDefault();
-}
-
-DEFINE_CMD_FUNC(Play::cmdFuncBoost)
-{
-	if (!_isCorrect)
-	{
-		_isCorrect = true;
-		_correct++;
-		_wrong--;
-		std::wcout << L"Boosted!\n";
-		askQuestion();
-		return CommandHandlerReturns::SUCCESS;
-	}
-	return CommandHandlerReturns::INVALID_STATE;
 }
 
 int Play::getNumCorrect()
