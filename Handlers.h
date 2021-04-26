@@ -13,60 +13,17 @@
 using BeforeHandlerFunc = BeforeHandlerReturns(*)();
 using InputHandlerFunc = InputHandlerReturns(*)(std::wstring);
 
-/// <summary>
-/// Sets the state of command/input handling.
-/// </summary>
-/// <param name="beforeHandlerFunc">This function will be called before asking for user input, and when the state is reset.</param>
-/// <param name="inputHandlerFunc">This function will handle (non-command) user input.</param>
-/// <param name="...validCommandTypes">These command types precisely will be executed until this function is called again.</param>
-template <typename ..._CommandTypee>
-void setHandling(const BeforeHandlerFunc& beforeHandlerFunc, const InputHandlerFunc& inputHandlerFunc, const _CommandTypee... validCommandTypes)
-{
-	static_assert(std::conjunction_v<std::is_same<_CommandTypee, CommandType>...>);
-	InputHandler::_beforeHandlerFunc = beforeHandlerFunc;
-	InputHandler::_handlerFunc = inputHandlerFunc;
-	InputHandler::_beforeHandlerMsg = L"";
-	CommandHandler::_validCommandTypes = easy_list::list({ validCommandTypes... });
-	InputHandler::reset();
-}
-
-/// <summary>
-/// Sets the state of command/input handling. (Use this overload if you want nothing to happen before the user gives input.)
-/// </summary>
-/// <param name="inputHandlerFunc">This function will handle (non-command) user input.</param>
-/// <param name="...validCommandTypes">These command types precisely will be executed until this function is called again.</param>
-template <typename ..._CommandTypee>
-void setHandling(const InputHandlerFunc& inputHandlerFunc, const _CommandTypee... validCommandTypes)
-{
-	setHandling([]() -> BeforeHandlerReturns {}, inputHandlerFunc, validCommandTypes...);
-}
-
-/// <summary>
-/// Sets the state of command/input handling.
-/// </summary>
-/// <param name="beforeHandlerMsg">This message will be displayed before asking for user input, and when the state is reset.</param>
-/// <param name="inputHandlerFunc">This function will handle (non-command) user input.</param>
-/// <param name="...validCommandTypes">These command types precisely will be executed until this function is called again.</param>
-template <typename ..._CommandTypee>
-void setHandling(const std::wstring beforeHandlerMsg, const InputHandlerFunc& inputHandlerFunc, const _CommandTypee... validCommandTypes)
-{
-	static_assert(std::conjunction_v<std::is_same<_CommandTypee, CommandType>...>);
-	InputHandler::_beforeHandlerFunc = nullptr;
-	InputHandler::_handlerFunc = inputHandlerFunc;
-	InputHandler::_beforeHandlerMsg = beforeHandlerMsg;
-	CommandHandler::_validCommandTypes = easy_list::list({ validCommandTypes... });
-	InputHandler::reset();
-}
-
+void setInputHandling(const BeforeHandlerFunc& beforeHandlerFunc, const InputHandlerFunc& inputHandlerFunc);
+void setInputHandling(const InputHandlerFunc& inputHandlerFunc);
+void setInputHandling(const std::wstring beforeHandlerMsg, const InputHandlerFunc& inputHandlerFunc);
+void setCommandHandling(const easy_list::list<CommandType> validCommandTypes);
 void setHandlingDefault();
 
 class CommandHandler {
-	template <typename ..._CommandTypee>
-	friend void setHandling(const BeforeHandlerFunc& beforeHandlerFunc, const InputHandlerFunc& inputHandlerFunc, const _CommandTypee... validCommandTypes);
-	template <typename ..._CommandTypee>
-	friend void setHandling(const std::wstring beforeHandlerMsg, const InputHandlerFunc& inputHandlerFunc, const _CommandTypee... validCommandTypes);
-	template <typename ..._CommandTypee>
-	friend void setHandling(const InputHandlerFunc& inputHandlerFunc, const _CommandTypee... validCommandTypes);
+	friend void setInputHandling(const BeforeHandlerFunc& beforeHandlerFunc, const InputHandlerFunc& inputHandlerFunc);
+	friend void setInputHandling(const std::wstring beforeHandlerMsg, const InputHandlerFunc& inputHandlerFunc);
+	friend void setInputHandling(const InputHandlerFunc& inputHandlerFunc);
+	friend void setCommandHandling(const easy_list::list<CommandType> validCommandTypes);
 	friend void setHandlingDefault();
 private:
 	using Returns = CommandHandlerReturns;
@@ -76,12 +33,10 @@ public:
 };
 
 class InputHandler {
-	template <typename ..._CommandTypee>
-	friend void setHandling(const BeforeHandlerFunc& beforeHandlerFunc, const InputHandlerFunc& inputHandlerFunc, const _CommandTypee... validCommandTypes);
-	template <typename ..._CommandTypee>
-	friend void setHandling(const std::wstring beforeHandlerMsg, const InputHandlerFunc& inputHandlerFunc, const _CommandTypee... validCommandTypes);
-	template <typename ..._CommandTypee>
-	friend void setHandling(const InputHandlerFunc& inputHandlerFunc, const _CommandTypee... validCommandTypes);
+	friend void setInputHandling(const BeforeHandlerFunc& beforeHandlerFunc, const InputHandlerFunc& inputHandlerFunc);
+	friend void setInputHandling(const std::wstring beforeHandlerMsg, const InputHandlerFunc& inputHandlerFunc);
+	friend void setInputHandling(const InputHandlerFunc& inputHandlerFunc);
+	friend void setCommandHandling(const easy_list::list<CommandType> validCommandTypes);
 	friend void setHandlingDefault();
 private:
 	using Returns = InputHandlerReturns;
