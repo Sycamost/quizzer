@@ -102,7 +102,7 @@ DEFINE_CMD_FUNC(Play::cmdFuncPlay)
 
 	askQuestion();
 	return CommandHandlerReturns::SUCCESS;
-};
+}
 
 DEFINE_CMD_FUNC(Play::cmdFuncConcede)
 {
@@ -122,7 +122,7 @@ DEFINE_CMD_FUNC(Play::cmdFuncConcede)
 		Play::finishPlaying();
 
 	return CommandHandlerReturns::RESET_INPUT;
-};
+}
 
 void Play::finishPlaying()
 {
@@ -151,7 +151,7 @@ DEFINE_CMD_FUNC(Play::cmdFuncBoost)
 		return CommandHandlerReturns::SUCCESS;
 	}
 	return CommandHandlerReturns::INVALID_STATE;
-};
+}
 
 int Play::getNumCorrect()
 {

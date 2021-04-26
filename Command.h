@@ -4,8 +4,8 @@
 #include <fstream>
 #include "HandlerReturns.h"
 
-#define DECLARE_CMD_FUNC(funcName) const CommandFunc funcName
-#define DEFINE_CMD_FUNC(funcName) const CommandFunc funcName = [](easy_list::list<std::wstring> args = easy_list::list<std::wstring>()) -> CommandHandlerReturns
+#define DECLARE_CMD_FUNC(funcName) CommandHandlerReturns funcName(easy_list::list<std::wstring> args = easy_list::list<std::wstring>())
+#define DEFINE_CMD_FUNC(funcName) CommandHandlerReturns funcName(easy_list::list<std::wstring> args)
 
 enum class CommandType {
 	CANCEL,
@@ -22,8 +22,8 @@ class CommandInfo {
 public:
 	const CommandType getType() const { return _type; }
 	const std::wstring getCode() const { return _codes[0]; }
-	const CommandFunc* getFunc() const { return _func; }
-	CommandHandlerReturns callFunc(easy_list::list<std::wstring> args) const { return (*_func)(args); }
+	const CommandFunc getFunc() const { return _func; }
+	CommandHandlerReturns callFunc(easy_list::list<std::wstring> args) const { return _func(args); }
 	static const easy_list::list<CommandInfo>* getList();
 	static const easy_list::list<CommandInfo>::const_iterator get(const CommandType type);
 	static const easy_list::list<CommandInfo>::const_iterator get(const std::wstring code);
@@ -34,12 +34,12 @@ public:
 private:
 	const CommandType _type;
 	const easy_list::list<std::wstring> _codes;
-	const CommandFunc* _func;
-	bool hasCode(std::wstring code) { return _codes.contains(code); }
-	CommandInfo(const CommandType type, std::initializer_list<std::wstring> codes, const CommandFunc* func) :
+	const CommandFunc _func;
+	bool hasCode(const std::wstring& code) const { return _codes.contains(code); }
+	CommandInfo(const CommandType type, easy_list::list<std::wstring> codes, const CommandFunc func) :
 		_type(type),
-		_func(func),
-		_codes(codes)
+		_codes(codes),
+		_func(func)
 	{}
 };
 

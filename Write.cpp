@@ -44,7 +44,7 @@ DEFINE_CMD_FUNC(Write::cmdFuncWrite) {
 
 	Write::startWriting(*questionTypeInfo);
 	return CommandHandlerReturns::SUCCESS;
-};
+}
 
 DEFINE_CMD_FUNC(Write::cmdFuncCancel) {
 	std::wcout << L"\n";
@@ -55,7 +55,7 @@ DEFINE_CMD_FUNC(Write::cmdFuncCancel) {
 	}
 	_typeInfo.getWriter()->resetLastStep();
 	return CommandHandlerReturns::SUCCESS;
-};
+}
 
 void Write::startWriting(const QuestionTypeInfo qti)
 {

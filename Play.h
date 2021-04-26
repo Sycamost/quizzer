@@ -2,6 +2,7 @@
 #include <easy_list.h>
 #include <string>
 #include "Command.h"
+#include "Question.h"
 
 class Play
 {
