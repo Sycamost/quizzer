@@ -4,7 +4,7 @@ A command-line console app for practicing user-made quiz questions.
 
 ## Commands
 
-Commands all follow the syntax, <code>\\\<command> [arg1] [arg2] ...</code>, where <code>[arg1], [arg2], ...</code> are any arguments, and <code><command></code> is the command code. The backslash <code>\\</code> is to distinguish commands from other inputs, such as writing new questions or answering questions. If the user provides more arguments than the command handler knows what to do with, the handler discards the excess arguments and carries on.
+Commands all follow the syntax, <code>\\\<command\> [arg1] [arg2] ...</code>, where <code>[arg1], [arg2], ...</code> are any arguments, and <code>\<command\></code> is the command code. The backslash <code>\\</code> is to distinguish commands from other inputs, such as writing new questions or answering questions. If the user provides more arguments than the command handler knows what to do with, the handler discards the excess arguments and carries on.
 
 See [Play](#Play) for more on the <code>play</code> command, and see [Write](#Write) for more on the <code>write</code> command.
 
@@ -55,7 +55,7 @@ The syntax for the write command is as follows:
 
 	\write <type>
 
-where <code><type></code> is the name of one of the implemented question types. (No commands are ever case-sensitive.)
+where <code>\<type\></code> is the name of one of the implemented question types. (No commands are ever case-sensitive.)
 
 The user is then led step-by-step through the process of writing new questions of the respective type. If they want to cancel writing a question halfway through, they may use the <code>cancel</code> command at any time. The new questions are written to file, and loaded ready for play, once the user has finished adding new questions.
 
