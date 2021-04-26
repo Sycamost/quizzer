@@ -90,7 +90,7 @@ namespace FlashcardWriter
 			L"Enter the values for new flashcards' front, back and any tags.\n"
 			<< L"Once you're finished adding tags, leave the next tag blank.\n"
 			<< L"The front and back cannot be blank.\nUse <"
-			<< toLower(CommandInfo::get(CommandType::CANCEL)->getCode())
+			<< toLower(CommandInfo::getFirstCode(CommandType::CANCEL))
 			<< L"> to cancel adding the current card.\n\n";
 
 		askFront();

@@ -10,51 +10,46 @@
 
 const easy_list::list<CommandInfo>* CommandInfo::getList()
 {
+	static const easy_list::list<std::wstring> quitCodes{ L"quit", L"exit" };
 	static const auto list = easy_list::list<CommandInfo>({
-		CommandInfo(CommandType::QUIT, { L"quit", L"exit" }, &cmdFuncQuit),
+		CommandInfo(CommandType::QUIT_MAIN, quitCodes, &cmdFuncQuit),
 		CommandInfo(CommandType::WRITE, { L"write" }, &Write::cmdFuncWrite),
 		CommandInfo(CommandType::CANCEL, { L"cancel" }, &Write::cmdFuncCancel),
+		CommandInfo(CommandType::PLAY, { L"play" }, &Play::cmdFuncPlay),
 		CommandInfo(CommandType::BOOST, { L"boost" }, &Play::cmdFuncBoost),
 		CommandInfo(CommandType::CONCEDE, { L"concede" }, &Play::cmdFuncConcede),
-		CommandInfo(CommandType::PLAY, { L"play" }, &Play::cmdFuncPlay)
+		CommandInfo(CommandType::QUIT_PLAY, quitCodes, &Play::cmdFuncQuitPlay)
 	});
 	return &list;
 }
 
-const easy_list::list<CommandInfo>::const_iterator CommandInfo::get(const CommandType type)
+const std::wstring CommandInfo::getFirstCode(const CommandType ct)
 {
-	return getList()->search(type, &CommandInfo::getType);
+	easy_list::list<CommandInfo> list = *getList();
+	auto iter = list.search(ct, &CommandInfo::getType);
+	if (iter == list.npos())
+		return L"#ERROR#";
+	return iter->getCode();
 }
 
-const easy_list::list<CommandInfo>::const_iterator CommandInfo::get(const std::wstring code)
+/// <summary>
+/// Finds all the commands which the given input could be a match for. (Doesn't check which commands are currently valid to actually call.)
+/// </summary>
+/// <param name="input">The input to interpret.</param>
+/// <returns>A list of all commands that could ever be made from the given input.</returns>
+easy_list::list<Command> Command::makePossibleCommands(std::wstring input)
 {
-	return getList()->search(true, &CommandInfo::hasCode, code);
-}
-
-Command* Command::read(std::wifstream& stream)
-{
-	std::streampos pos = stream.tellg();
-	std::wstring line = getInputLine(stream);
-	if (line.size() == 0 || line[0] != L'\\')
-	{
-		stream.seekg(pos);
-		return nullptr;
-	}
-	return read(line);
-}
-
-Command* Command::read(std::wstring userInput)
-{
-	easy_list::list<std::wstring> words = splitByWord(toLower(userInput));
+	easy_list::list<std::wstring> words = splitByWord(toLower(input));
 	if (words.size() == 0 || words[0].size() == 0 || words[0][0] != L'\\')
-		return nullptr;
+		return {};
 	std::wstring code = words[0].substr(1);
 
-	auto cmdInfoIter = CommandInfo::get(code);
-	if (cmdInfoIter == CommandInfo::getList()->npos())
-		return nullptr;
+	auto possibleCommandInfos = CommandInfo::getList()->select(code, &CommandInfo::getCode);
 
-	return new Command(words.slice(1), *cmdInfoIter);
+	auto args = words.slice(1);
+	return possibleCommandInfos.transform<Command>(
+		[args](CommandInfo ci) -> Command { return Command(args, ci); }
+	);
 }
 
 CommandHandlerReturns Command::doCommandFunc() const

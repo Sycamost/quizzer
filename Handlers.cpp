@@ -9,7 +9,7 @@ DEFINE_INPUT_HANDLER_FUNC(defaultInputHandlerFunc) {
 	return InputHandlerReturns::SUCCESS;
 }
 DEFINE_BEFORE_HANDLER_FUNC(defaultBeforeHandlerFunc) {}
-#define DEFAULT_VALID_COMMAND_TYPES CommandType::QUIT, CommandType::PLAY, CommandType::WRITE
+#define DEFAULT_VALID_COMMAND_TYPES CommandType::QUIT_MAIN, CommandType::PLAY, CommandType::WRITE
 InputHandlerFunc InputHandler::_handlerFunc{ &defaultInputHandlerFunc };
 BeforeHandlerFunc InputHandler::_beforeHandlerFunc{ &defaultBeforeHandlerFunc };
 std::wstring InputHandler::_beforeHandlerMsg{ L"" };
@@ -65,17 +65,27 @@ void setHandlingDefault()
 	setCommandHandling({ DEFAULT_VALID_COMMAND_TYPES });
 }
 
+/// <summary>
+/// Searches the list of valid commands for one matching the input - if any found, calls the first.
+/// </summary>
+/// <param name="input">The input to try to interpret as a command.</param>
+/// <returns>If a matching valid command was found, the result of the call of the first matching valid command. Otherwise, a suitable error return value.</returns>
 CommandHandlerReturns CommandHandler::call(std::wstring input)
 {
-	Command* command = Command::read(input);
+	using CommandList = easy_list::list<Command>;
+	CommandList possibleCommands = Command::makePossibleCommands(input);
 
-	if (command == nullptr)
+	if (possibleCommands.empty())
 		return CommandHandlerReturns::CMD_NOT_RECOGNISED;
 
-	if (_validCommandTypes.contains(command->getCommandInfo().getType()))
-		return command->doCommandFunc();
+	possibleCommands = possibleCommands.select(
+		[](Command c) -> bool { return _validCommandTypes.contains(c.getCommandInfo().getType()); }
+	);
 
-	return CommandHandlerReturns::INVALID_STATE;
+	if (possibleCommands.empty())
+		return CommandHandlerReturns::INVALID_STATE;
+
+	return possibleCommands[0].doCommandFunc();
 }
 
 DEFINE_INPUT_HANDLER_FUNC(InputHandler::call)

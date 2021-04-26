@@ -13,7 +13,7 @@ DECLARE_INPUT_HANDLER_FUNC(nextQuestionInputHandler);
 
 const easy_list::list<CommandType> getValidPlayCommands()
 {
-	static const auto list = easy_list::list<CommandType>({ CommandType::CONCEDE });
+	static const easy_list::list<CommandType> list{ CommandType::CONCEDE, CommandType::QUIT_PLAY };
 	return list;
 }
 
@@ -44,7 +44,7 @@ void Play::nextQuestion()
 	static const std::wstring correctMsg = L"Press enter to continue.\n";
 	static const std::wstring wrongMsg =
 		L"Press enter to continue, or enter the command <"
-		+ toLower(CommandInfo::get(CommandType::BOOST)->getCode())
+		+ toLower(CommandInfo::getFirstCode(CommandType::BOOST))
 		+ L"> if you have been marked down unfairly.\n";
 	_index++;
 	setInputHandling(_isCorrect ? correctMsg : wrongMsg, &nextQuestionInputHandler);
@@ -95,7 +95,7 @@ DEFINE_CMD_FUNC(Play::cmdFuncPlay)
 		<< Globals::horizontalDoubleRule << L"\n\n"
 		<< L"You'll get given questions, and you'll have to answer correctly. "
 		<< L"If you think you've been marked down unfairly, type the command <"
-		<< toLower(CommandInfo::get(CommandType::BOOST)->getCode())
+		<< toLower(CommandInfo::getFirstCode(CommandType::BOOST))
 		<< L"> before the next question rolls in. Good luck!\n\n"
 		<< Globals::horizontalRule << L"\n\n";
 

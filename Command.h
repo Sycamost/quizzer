@@ -9,7 +9,8 @@
 
 enum class CommandType {
 	CANCEL,
-	QUIT,
+	QUIT_MAIN,
+	QUIT_PLAY,
 	WRITE,
 	BOOST,
 	CONCEDE,
@@ -25,8 +26,7 @@ public:
 	const CommandFunc getFunc() const { return _func; }
 	CommandHandlerReturns callFunc(easy_list::list<std::wstring> args) const { return _func(args); }
 	static const easy_list::list<CommandInfo>* getList();
-	static const easy_list::list<CommandInfo>::const_iterator get(const CommandType type);
-	static const easy_list::list<CommandInfo>::const_iterator get(const std::wstring code);
+	static const std::wstring getFirstCode(const CommandType ct);
 	bool operator==(const CommandInfo& other)
 	{
 		return _type == other._type;
@@ -47,8 +47,7 @@ private:
 class Command
 {
 public:
-	static Command* read(std::wifstream& stream);
-	static Command* read(std::wstring userInput);
+	static easy_list::list<Command> makePossibleCommands(std::wstring input);
 	CommandHandlerReturns doCommandFunc() const;
 	const CommandInfo getCommandInfo() const;
 	const easy_list::list<std::wstring> getArgs() const;
