@@ -7,6 +7,7 @@ class Write
 public:
 	static DECLARE_CMD_FUNC(cmdFuncWrite);
 	static DECLARE_CMD_FUNC(cmdFuncCancel);
+	static DECLARE_CMD_FUNC(cmdFuncQuitWrite);
 	static void nextQuestion();
 private:
 	static QuestionTypeInfo _typeInfo;

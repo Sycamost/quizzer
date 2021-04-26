@@ -42,9 +42,10 @@ DEFINE_CMD_FUNC(Write::cmdFuncWrite) {
 	if (questionTypeInfo == QuestionTypeInfo::getList()->npos())
 		return CommandHandlerReturns::INVALID_ARGS;
 
+	setCommandHandling({ CommandType::CANCEL, CommandType::QUIT_WRITE });
 	Write::startWriting(*questionTypeInfo);
 	return CommandHandlerReturns::SUCCESS;
-};
+}
 
 DEFINE_CMD_FUNC(Write::cmdFuncCancel) {
 	std::wcout << L"\n";
@@ -55,7 +56,18 @@ DEFINE_CMD_FUNC(Write::cmdFuncCancel) {
 	}
 	_typeInfo.getWriter()->resetLastStep();
 	return CommandHandlerReturns::SUCCESS;
-};
+}
+
+DEFINE_CMD_FUNC(Write::cmdFuncQuitWrite)
+{
+	std::wcout << L"\n";
+	if (inputYesNo(L"Are you sure you want to cancel writing the current question and quit the app?"))
+	{
+		finishWriting();
+		return CommandHandlerReturns::QUIT_APP;
+	}
+	return CommandHandlerReturns::RESET_INPUT;
+}
 
 void Write::startWriting(const QuestionTypeInfo qti)
 {

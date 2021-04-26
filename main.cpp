@@ -79,7 +79,7 @@ int main() {
 	return 0;
 }
 
-extern DEFINE_CMD_FUNC(cmdFuncQuit) {
+DEFINE_CMD_FUNC(cmdFuncQuit) {
 
 	if (inputYesNo(L"Are you sure you want to exit the app?"))
 	{
@@ -89,4 +89,4 @@ extern DEFINE_CMD_FUNC(cmdFuncQuit) {
 
 	std::wcout << L"Not exiting app.\n";
 	return CommandHandlerReturns::SUCCESS;;
-};
+}

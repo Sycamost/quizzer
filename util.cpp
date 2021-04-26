@@ -83,7 +83,7 @@ const YesNo getYesNo(std::wstring str)
 		return YesNo::YES;
 	if (str == L"n" || str == L"no" || str == L"0" || str == L"F" || str == L"false")
 		return YesNo::NO;
-	if (Command::read(str) != nullptr)
+	if (!Command::makePossibleCommands(str).empty())
 		return YesNo::COMMAND;
 	return YesNo::OTHER;
 }
