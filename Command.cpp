@@ -15,6 +15,7 @@ const easy_list::list<CommandInfo>* CommandInfo::getList()
 		CommandInfo(CommandType::QUIT_MAIN, quitCodes, &cmdFuncQuit),
 		CommandInfo(CommandType::WRITE, { L"write" }, &Write::cmdFuncWrite),
 		CommandInfo(CommandType::CANCEL, { L"cancel" }, &Write::cmdFuncCancel),
+		CommandInfo(CommandType::QUIT_WRITE, quitCodes, &Write::cmdFuncQuitWrite),
 		CommandInfo(CommandType::PLAY, { L"play" }, &Play::cmdFuncPlay),
 		CommandInfo(CommandType::BOOST, { L"boost" }, &Play::cmdFuncBoost),
 		CommandInfo(CommandType::CONCEDE, { L"concede" }, &Play::cmdFuncConcede),
