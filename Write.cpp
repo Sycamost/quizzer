@@ -42,6 +42,7 @@ DEFINE_CMD_FUNC(Write::cmdFuncWrite) {
 	if (questionTypeInfo == QuestionTypeInfo::getList()->npos())
 		return CommandHandlerReturns::INVALID_ARGS;
 
+	setCommandHandling({ CommandType::CANCEL, CommandType::QUIT_WRITE });
 	Write::startWriting(*questionTypeInfo);
 	return CommandHandlerReturns::SUCCESS;
 }
