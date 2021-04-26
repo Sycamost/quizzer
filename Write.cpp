@@ -57,6 +57,17 @@ DEFINE_CMD_FUNC(Write::cmdFuncCancel) {
 	return CommandHandlerReturns::SUCCESS;
 }
 
+DEFINE_CMD_FUNC(Write::cmdFuncQuitWrite)
+{
+	std::wcout << L"\n";
+	if (inputYesNo(L"Are you sure you want to cancel writing the current question and quit the app?"))
+	{
+		finishWriting();
+		return CommandHandlerReturns::QUIT_APP;
+	}
+	return CommandHandlerReturns::RESET_INPUT;
+}
+
 void Write::startWriting(const QuestionTypeInfo qti)
 {
 	std::wcout << "Writing new " << qti.getDisplayPlural() << L"...\n\n";
