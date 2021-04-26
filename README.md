@@ -26,7 +26,8 @@ What children are there of <code>Question</code>?
 | :------------- | :----------------------------------------------------------------------- | :----------------- |
 | Flashcard      | Shows the user the front, they have to guess what's on the back.         | :heavy_check_mark: |
 | MultipleChoice | Asks the user a multiple-choice question, they have to guess the option. | :x:                |
-| SweetieJar     | Asks the user a question, they have to guess a number to some accuracy.  | :x:                |
+| SweetieJar     | The user must guess a number to some specified accuracy.                 | :x:                |
+| Birthday       | The user must guess a date to some given accuracy.                       | :x:                |
 | Partition      | The user must correctly partition given items into given categories.     | :x:                |
 
 ## Write
