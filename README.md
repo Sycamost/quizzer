@@ -2,6 +2,25 @@
 
 A command-line console app for practicing user-made quiz questions.
 
+## Commands
+
+Commands all follow the syntax, <code>\<command> [arg1] [arg2] ...</code>, where <code>[arg1], [arg2], ...</code> are any arguments, and <code><command></code> is the command code. The backslash <code>\</code> is to distinguish commands from other inputs, such as writing new questions or answering questions. If the user provides more arguments than the command handler knows what to do with, the handler discards the excess arguments and carries on.
+
+See [Play](#Play) for more on the <code>play</code> command, and see [Write](#Write) for more on the <code>write</code> command.
+
+At any time, the user may call the quit command with <code>\quit</code> or <code>\exit</code>. No prizes for guessing what it does!
+
+When in play, the following commands may be valid:
+
+	\concede
+	\boost
+
+The concede command ends play early, skipping any remaining questions. The boost command should be used just after giving a wrong answer, and re-marks your answer as correct - you should use this if you think you have been marked down unfairly, for example, if you made a minor spelling mistake or typo.
+
+When writing new questions, the <code>\cancel</code> command may be valid. This scraps the question you're currently writing, and asks if you would like to carry on afterwards.
+
+***!!! NOT IMPLEMENTED YET !!!*** When writing new questions, you may also be able to use the <code>\save</code> command, which saves your writing progress, and then returns you to where you were with your writing. You can even call this in the middle of writing a question!
+
 ## Play
 
 This is the syntax for the play command:
