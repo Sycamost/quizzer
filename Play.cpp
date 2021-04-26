@@ -104,26 +104,6 @@ DEFINE_CMD_FUNC(Play::cmdFuncPlay)
 	return CommandHandlerReturns::SUCCESS;
 }
 
-DEFINE_CMD_FUNC(Play::cmdFuncConcede)
-{
-	std::wstring message = L"Are you sure you want to finish playing?";
-
-	int numSkipped = getNumSkipped();
-	if (numSkipped > 0)
-	{
-		message += L" You still have "
-			+ std::to_wstring(numSkipped)
-			+ L" question"
-			+ (numSkipped > 1 ? L"s " : L" ")
-			+ L"to play.";
-	}
-
-	if (inputYesNo(message))
-		Play::finishPlaying();
-
-	return CommandHandlerReturns::RESET_INPUT;
-}
-
 DEFINE_CMD_FUNC(Play::cmdFuncBoost)
 {
 	if (!_isCorrect)
@@ -136,6 +116,40 @@ DEFINE_CMD_FUNC(Play::cmdFuncBoost)
 		return CommandHandlerReturns::SUCCESS;
 	}
 	return CommandHandlerReturns::INVALID_STATE;
+}
+
+bool Play::inputYesNoFinishPlaying(std::wstring message)
+{
+	int numSkipped = getNumSkipped();
+	if (numSkipped > 0)
+	{
+		message += L" You still have "
+			+ std::to_wstring(numSkipped)
+			+ L" question"
+			+ (numSkipped > 1 ? L"s " : L" ")
+			+ L"to play.";
+	}
+	return inputYesNo(message);
+}
+
+DEFINE_CMD_FUNC(Play::cmdFuncConcede)
+{
+	if (inputYesNoFinishPlaying(L"Are you sure you want to finish playing?"))
+	{
+		Play::finishPlaying();
+		return CommandHandlerReturns::SUCCESS;
+	}
+	return CommandHandlerReturns::RESET_INPUT;
+}
+
+DEFINE_CMD_FUNC(Play::cmdFuncQuitPlay)
+{
+	if (inputYesNoFinishPlaying(L"Are you sure you want to finish playing and quit the app?"))
+	{
+		Play::finishPlaying();
+		return CommandHandlerReturns::QUIT_APP;
+	}
+	return CommandHandlerReturns::RESET_INPUT;
 }
 
 void Play::finishPlaying()
