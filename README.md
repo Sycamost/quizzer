@@ -4,7 +4,7 @@ A command-line console app for practicing user-made quiz questions.
 
 ## Commands
 
-Commands all follow the syntax, <code>\\<command> [arg1] [arg2] ...</code>, where <code>[arg1], [arg2], ...</code> are any arguments, and <code><command></code> is the command code. The backslash <code>\\</code> is to distinguish commands from other inputs, such as writing new questions or answering questions. If the user provides more arguments than the command handler knows what to do with, the handler discards the excess arguments and carries on.
+Commands all follow the syntax, <code>\\\<command> [arg1] [arg2] ...</code>, where <code>[arg1], [arg2], ...</code> are any arguments, and <code><command></code> is the command code. The backslash <code>\\</code> is to distinguish commands from other inputs, such as writing new questions or answering questions. If the user provides more arguments than the command handler knows what to do with, the handler discards the excess arguments and carries on.
 
 See [Play](#Play) for more on the <code>play</code> command, and see [Write](#Write) for more on the <code>write</code> command.
 
@@ -12,8 +12,8 @@ At any time, the user may call the quit command with <code>\\quit</code> or <cod
 
 When in play, the following commands may be valid:
 
-	\\concede
-	\\boost
+	\concede
+	\boost
 
 The concede command ends play early, skipping any remaining questions. The boost command should be used just after giving a wrong answer, and re-marks your answer as correct - you should use this if you think you have been marked down unfairly, for example, if you made a minor spelling mistake or typo.
 
@@ -25,7 +25,7 @@ When writing new questions, the <code>\\cancel</code> command may be valid. This
 
 This is the syntax for the play command:
 
-	\\play [tag1] [tag2] ...
+	\play [tag1] [tag2] ...
 
 If at least one tag is specified, the app plays all and only questions with at least one of the specified tags. If no tags are specified, all questions are played. Questions are always randomly shuffled before play.
 
@@ -53,7 +53,7 @@ What children are there of <code>Question</code>?
 
 The syntax for the write command is as follows:
 
-	\\write <type>
+	\write <type>
 
 where <code><type></code> is the name of one of the implemented question types. (No commands are ever case-sensitive.)
 
