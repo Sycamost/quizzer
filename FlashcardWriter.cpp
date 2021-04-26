@@ -65,19 +65,19 @@ namespace FlashcardWriter
 	void askFront()
 	{
 		static const std::wstring msg = L"Front:\t";
-		setHandling(msg, &frontInputHandlerFunc, CommandType::CANCEL);
+		setInputHandling(msg, &frontInputHandlerFunc);
 	}
 
 	void askBack()
 	{
 		static const std::wstring msg = L"Back:\t";
-		setHandling(msg, &backInputHandlerFunc, CommandType::CANCEL);
+		setInputHandling(msg, &backInputHandlerFunc);
 	}
 
 	void askCaseSensitive()
 	{
 		static const std::wstring msg = L"Case-sensitive? [Y/N]:\t";
-		setHandling(msg, &caseSensitiveInputHandlerFunc, CommandType::CANCEL);
+		setInputHandling(msg, &caseSensitiveInputHandlerFunc);
 	}
 
 	void writeFlashcard()

@@ -10,6 +10,12 @@
 #include "Handlers.h"
 #include "util.h"
 
+const easy_list::list<CommandType> getValidWriteCommands()
+{
+	static const auto list = easy_list::list<CommandType>({ CommandType::CANCEL });
+	return list;
+}
+
 easy_list::list<std::wstring> QuestionWriter::_tags{ easy_list::list<std::wstring>() };
 
 QuestionWriter::QuestionWriter(
@@ -38,7 +44,8 @@ void QuestionWriter::writeTags()
 void QuestionWriter::askForTag()
 {
 	std::wstring msg = L"Tag " + std::to_wstring(_tags.size() + 1) + L":\t";
-	setHandling(msg, &tagsInputHandlerFunc, CommandType::CANCEL);
+	setInputHandling(msg, &tagsInputHandlerFunc);
+	setCommandHandling(getValidWriteCommands());
 }
 
 DEFINE_INPUT_HANDLER_FUNC(QuestionWriter::tagsInputHandlerFunc)

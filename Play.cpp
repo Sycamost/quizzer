@@ -11,6 +11,12 @@
 DECLARE_INPUT_HANDLER_FUNC(receiveAnswerInputHandler);
 DECLARE_INPUT_HANDLER_FUNC(nextQuestionInputHandler);
 
+const easy_list::list<CommandType> getValidPlayCommands()
+{
+	static const auto list = easy_list::list<CommandType>({ CommandType::CONCEDE });
+	return list;
+}
+
 /// <summary>
 /// If there's another question to ask, asks it and waits for an answer. If not, ends play.
 /// </summary>
@@ -25,7 +31,8 @@ void Play::askQuestion()
 
 	// Ask the question and wait for an answer.
 	const std::wstring msg = L"\nFront:\t" + _questions[_index]->getQuestion() + L"\nBack:\t";
-	setHandling(msg, &receiveAnswerInputHandler, CommandType::CONCEDE);
+	setInputHandling(msg, &receiveAnswerInputHandler);
+	setCommandHandling(getValidPlayCommands());
 	return;
 }
 
@@ -40,11 +47,8 @@ void Play::nextQuestion()
 		+ toLower(CommandInfo::get(CommandType::BOOST)->getCode())
 		+ L"> if you have been marked down unfairly.\n";
 	_index++;
-	setHandling(
-		_isCorrect ? correctMsg : wrongMsg,
-		&nextQuestionInputHandler,
-		CommandType::CONCEDE, CommandType::BOOST
-	);
+	setInputHandling(_isCorrect ? correctMsg : wrongMsg, &nextQuestionInputHandler);
+	setCommandHandling(getValidPlayCommands() + CommandType::BOOST);
 }
 
 bool Play::updateAnswer(std::wstring answer)
