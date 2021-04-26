@@ -86,7 +86,7 @@ DEFINE_CMD_FUNC(Play::cmdFuncPlay)
 	}
 
 	std::wcout << L"Starting play with ";
-	if (args.empty())
+	if (args.empty() && _questions.size() > 1)
 	{
 		std::wcout << L"all ";
 	}
