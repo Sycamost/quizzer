@@ -24,6 +24,7 @@ class CommandInfo {
 public:
 	const CommandType getType() const { return _type; }
 	const std::wstring getCode() const { return _codes[0]; }
+	const bool hasCode(const std::wstring code) const { return _codes.contains(code); }
 	const CommandFunc getFunc() const { return _func; }
 	CommandHandlerReturns callFunc(easy_list::list<std::wstring> args) const { return _func(args); }
 	static const easy_list::list<CommandInfo>* getList();
@@ -36,7 +37,6 @@ private:
 	const CommandType _type;
 	const easy_list::list<std::wstring> _codes;
 	const CommandFunc _func;
-	bool hasCode(const std::wstring& code) const { return _codes.contains(code); }
 	CommandInfo(const CommandType type, easy_list::list<std::wstring> codes, const CommandFunc func) :
 		_type(type),
 		_codes(codes),

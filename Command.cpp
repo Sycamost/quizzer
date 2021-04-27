@@ -45,7 +45,7 @@ easy_list::list<Command> Command::makePossibleCommands(std::wstring input)
 		return {};
 	std::wstring code = words[0].substr(1);
 
-	auto possibleCommandInfos = CommandInfo::getList()->select(code, &CommandInfo::getCode);
+	auto possibleCommandInfos = CommandInfo::getList()->select(true, &CommandInfo::hasCode, code);
 
 	auto args = words.slice(1);
 	return possibleCommandInfos.transform<Command>(
