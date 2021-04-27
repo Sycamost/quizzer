@@ -30,7 +30,7 @@ void Play::askQuestion()
 	}
 
 	// Ask the question and wait for an answer.
-	const std::wstring msg = L"\nFront:\t" + _questions[_index]->getQuestion() + L"\nBack:\t";
+	const std::wstring msg = _questions[_index]->getQuestion() + L"\n";
 	setInputHandling(msg, &receiveAnswerInputHandler);
 	setCommandHandling(getValidPlayCommands());
 	return;
@@ -91,7 +91,7 @@ DEFINE_CMD_FUNC(Play::cmdFuncPlay)
 		std::wcout << L"all ";
 	}
 	std::wcout << _questions.size()
-		<< (_questions.size() == 1 ? L" card" : L" cards") << L"...\n\n"
+		<< (_questions.size() == 1 ? L" question" : L" questions") << L"...\n\n"
 		<< Globals::horizontalDoubleRule << L"\n\n"
 		<< L"You'll get given questions, and you'll have to answer correctly. "
 		<< L"If you think you've been marked down unfairly, type the command <"

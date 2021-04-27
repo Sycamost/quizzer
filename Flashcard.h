@@ -19,5 +19,4 @@ public:
 	bool isCaseSensitive();
 	void setCaseSensitive();
 	void setCaseInsensitive();
-	static Question* readFlashcard(std::wifstream& stream);
 };

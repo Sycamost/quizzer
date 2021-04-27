@@ -44,7 +44,7 @@ What children are there of <code>Question</code>?
 | Name           | Description                                                              | Implemented?       |
 | :------------- | :----------------------------------------------------------------------- | :----------------- |
 | Flashcard      | Shows the user the front, they have to guess what's on the back.         | :heavy_check_mark: |
-| MultipleChoice | Asks the user a multiple-choice question, they have to guess the option. | :x:                |
+| MultipleChoice | Asks the user a multiple-choice question, they have to guess the option. | :heavy_check_mark: |
 | SweetieJar     | The user must guess a number to some specified accuracy.                 | :x:                |
 | Birthday       | The user must guess a date to some given accuracy.                       | :x:                |
 | Partition      | The user must correctly partition given items into given categories.     | :x:                |
@@ -67,16 +67,6 @@ There is no way to delete questions in-app. The user may do so manually. Questio
 
 In this program, each flashcard has a string value for the front, a string value for the back, and a list of zero or more string tags.
 
-Flashcards are stored in <code>userdata_flashcard.txt</code>. The front, back and tags are separated by line breaks, and flashcards are separated by a blank line. They may or not be marked with a case-sensitivity option. For example, if the file contains two flashcards, the latter of which is case-sensitive, <code>userdata_flashcard.txt</code> may look like this:
+### Multiple Choice
 
-	This is the front of flashcard 1.
-	This is the back of flashcard 1.
-	tag1
-	tag2
-	tag3
-
-	%%case_sensitive
-	This is the front of flashcard 2.
-	This is the back of flashcard 2.
-	tag2
-	tag4
+Multiple choice questions come with a question, a correct answer, and a collection of incorrect answers. The user is presented with the question and all the alternative answers and asked which answer is the correct one.

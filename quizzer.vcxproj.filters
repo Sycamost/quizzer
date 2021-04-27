@@ -90,6 +90,15 @@
     <ClCompile Include="Handlers.cpp">
       <Filter>Source Files\UI</Filter>
     </ClCompile>
+    <ClCompile Include="MultipleChoice.cpp">
+      <Filter>Source Files\Question</Filter>
+    </ClCompile>
+    <ClCompile Include="MultipleChoiceReader.cpp">
+      <Filter>Source Files\Read</Filter>
+    </ClCompile>
+    <ClCompile Include="MultipleChoiceWriter.cpp">
+      <Filter>Source Files\Write</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="util.h">
@@ -149,5 +158,17 @@
     <ClInclude Include="HandlerReturns.h">
       <Filter>Header Files\UI</Filter>
     </ClInclude>
+    <ClInclude Include="MultipleChoice.h">
+      <Filter>Header Files\Question</Filter>
+    </ClInclude>
+    <ClInclude Include="MultipleChoiceReader.h">
+      <Filter>Header Files\Read</Filter>
+    </ClInclude>
+    <ClInclude Include="MultipleChoiceWriter.h">
+      <Filter>Header Files\Write</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <CopyFileToFolders Include="README.md" />
   </ItemGroup>
 </Project>

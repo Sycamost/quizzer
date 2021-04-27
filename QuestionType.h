@@ -1,5 +1,6 @@
 #pragma once
 
 enum class QuestionType {
-	FLASHCARD
+	FLASHCARD,
+	MULTIPLE_CHOICE
 };
