@@ -28,33 +28,18 @@ private:
 	std::wstring _code;
 	QuestionWriter _writer;
 	QuestionReader _reader;
+	std::string _fileAddress;
 	QuestionTypeInfo(
 		QuestionType type,
 		std::wstring display,
 		std::wstring code,
 		QuestionWriter writer,
-		QuestionReader reader)
-		:
-		_type(type),
-		_displaySingular(display),
-		_displayPlural(display + L"s"),
-		_code(code),
-		_writer(writer),
-		_reader(reader)
-	{}
+		QuestionReader reader);
 	QuestionTypeInfo(
 		QuestionType type,
 		std::wstring displaySingular,
 		std::wstring displayPlural,
 		std::wstring code,
 		QuestionWriter writer,
-		QuestionReader reader)
-		:
-		_type(type),
-		_displaySingular(displaySingular),
-		_displayPlural(displayPlural),
-		_code(code),
-		_writer(writer),
-		_reader(reader)
-	{}
+		QuestionReader reader);
 };

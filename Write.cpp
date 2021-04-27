@@ -81,9 +81,10 @@ easy_list::list<Question*> Write::writeToFile()
 	std::wofstream file;
 	try
 	{
-		file.open(_typeInfo.getFileAddress(), std::ios::app);
+		std::string fileAddress = _typeInfo.getFileAddress();
+		file.open(fileAddress, std::ios::app);
 		if (!file.is_open())
-			throw std::exception("File did not open correctly.");
+			throw std::exception((fileAddress + " did not open correctly.").c_str());
 	}
 	catch (std::exception e)
 	{

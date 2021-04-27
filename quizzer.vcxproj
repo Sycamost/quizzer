@@ -113,6 +113,18 @@
     <ClCompile Include="globals.cpp" />
     <ClCompile Include="Handlers.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="MultipleChoice.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
+    <ClCompile Include="MultipleChoiceReader.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
+    <ClCompile Include="MultipleChoiceWriter.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
     <ClCompile Include="Option.cpp" />
     <ClCompile Include="Play.cpp" />
     <ClCompile Include="Question.cpp" />
@@ -133,6 +145,18 @@
     <ClInclude Include="FlashcardReader.h" />
     <ClInclude Include="globals.h" />
     <ClInclude Include="main.h" />
+    <ClInclude Include="MultipleChoice.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
+    <ClInclude Include="MultipleChoiceReader.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
+    <ClInclude Include="MultipleChoiceWriter.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
     <ClInclude Include="Option.h" />
     <ClInclude Include="Play.h" />
     <ClInclude Include="Question.h" />
@@ -145,6 +169,11 @@
     <ClInclude Include="Write.h" />
     <ClInclude Include="FlashcardWriter.h" />
     <ClInclude Include="QuestionWriter.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <CopyFileToFolders Include="README.md">
+      <FileType>Document</FileType>
+    </CopyFileToFolders>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
