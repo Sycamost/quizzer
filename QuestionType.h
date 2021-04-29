@@ -2,5 +2,6 @@
 
 enum class QuestionType {
 	FLASHCARD,
-	MULTIPLE_CHOICE
+	MULTIPLE_CHOICE,
+	SWEETIE_JAR
 };
