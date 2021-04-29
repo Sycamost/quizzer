@@ -140,6 +140,18 @@
     <ClCompile Include="QuestionReader.cpp" />
     <ClCompile Include="QuestionTypeInfo.cpp" />
     <ClCompile Include="Read.cpp" />
+    <ClCompile Include="SweetieJar.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
+    <ClCompile Include="SweetieJarReader.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
+    <ClCompile Include="SweetieJarWriter.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
     <ClCompile Include="util.cpp" />
     <ClCompile Include="Write.cpp" />
     <ClCompile Include="FlashcardWriter.cpp" />
@@ -173,6 +185,18 @@
     <ClInclude Include="QuestionType.h" />
     <ClInclude Include="QuestionTypeInfo.h" />
     <ClInclude Include="Read.h" />
+    <ClInclude Include="SweetieJar.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
+    <ClInclude Include="SweetieJarReader.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
+    <ClInclude Include="SweetieJarWriter.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
     <ClInclude Include="util.h" />
     <ClInclude Include="Write.h" />
     <ClInclude Include="FlashcardWriter.h" />

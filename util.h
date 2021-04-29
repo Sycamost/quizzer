@@ -2,6 +2,9 @@
 #include <string>
 #include <iostream>
 #include <easy_list.h>
+#include <type_traits>
+#include <sstream>
+#include <locale>
 
 class YesNo {
 public:
@@ -28,3 +31,5 @@ std::wstring toLower(std::wstring wstr);
 std::wstring indent(std::wstring wstr, int numTabs);
 const YesNo getYesNo(std::wstring wstr);
 easy_list::list<std::wstring> splitByWord(std::wstring wstr);
+std::wstring formatNumber(const long long number, const size_t precision = SIZE_MAX, const size_t leadingZeroes = 0, const size_t minExp = SIZE_MAX);
+std::wstring formatNumber(long double number, const size_t precision = SIZE_MAX, const size_t leadingZeroes = 0, const size_t minExp = SIZE_MAX);
