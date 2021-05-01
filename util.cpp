@@ -197,6 +197,10 @@ bool interpretSize(std::wstring input, size_t* result)
 size_t countDecimalPoints(std::wstring input)
 {
 	static const auto numberWchars = easy_list::list<wchar_t>({ L'0', L'1', L'2', L'3', L'4', L'5', L'6', L'7', L'8', L'9' });
+
+	if (!easy_list::list<wchar_t>(input.begin(), input.end()).contains(L'.'))
+		return 0;
+
 	size_t count = 0;
 	for (int i = input.size() - 1; i >= 0; i--)
 	{
@@ -206,6 +210,20 @@ size_t countDecimalPoints(std::wstring input)
 			return 0;
 		else
 			count++;
+	}
+
+	return count;
+}
+
+size_t countLeadingZeroes(std::wstring input)
+{
+	size_t count = 0;
+	for (int i = 0; i < input.size(); i++)
+	{
+		if (input[i] == L'0')
+			count++;
+		else
+			break;
 	}
 	return count;
 }
