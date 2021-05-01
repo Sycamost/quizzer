@@ -159,3 +159,13 @@ std::wstring formatNumber(const long double number, const size_t precision, cons
 
 	return result;
 }
+
+std::string wstrToStr(std::wstring wstr)
+{
+	return std::string(wstr.begin(), wstr.end());
+}
+
+std::wstring strToWstr(std::string str)
+{
+	return std::wstring(str.begin(), str.end());
+}
