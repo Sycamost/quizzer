@@ -194,6 +194,12 @@ bool interpretSize(std::wstring input, size_t* result)
 	return *strEnd != cstrLine;
 }
 
+bool isNumericalWchar(wchar_t wch)
+{
+	static const auto numberWchars = easy_list::list<wchar_t>({ L'0', L'1', L'2', L'3', L'4', L'5', L'6', L'7', L'8', L'9' });
+	return numberWchars.contains(wch);
+}
+
 bool isExponentString(std::wstring wstr)
 {
 	static auto expList = easy_list::list<std::wstring>({ L"e", L"exp", L"Exp", L"E", L"EXP", L"x10^", L"x 10^", L"*^", L"⏨" });
@@ -202,14 +208,31 @@ bool isExponentString(std::wstring wstr)
 
 size_t countSignificantFigures(std::wstring input)
 {
-	static const auto numberWchars = easy_list::list<wchar_t>({ L'0', L'1', L'2', L'3', L'4', L'5', L'6', L'7', L'8', L'9' });
-
 	size_t count = 0;
-	for (wchar_t wch : input)
+	auto inputList = easy_list::list<wchar_t>(input);
+	bool leadingZero = true;
+	for (size_t i = 0; i < input.size(); i++)
 	{
-		if (numberWchars.contains(wch))
-			count++;
+		// If it's a number, add to the count and continue
+		if (isNumericalWchar(input[i]))
+		{
+			if (input[i] != L'0')
+				leadingZero = false;
+			if (!leadingZero)
+				count++;
+			continue;
+		}
 
+		// Is it an exponent string here? If so, we're finished.
+		bool isExp = false;
+		for (size_t len = 1; i + len <= input.size(); len++)
+		{
+			if (isExponentString(inputList.slice(i, len)))
+				return count;
+		}
+
+		// Otherwise shut our eyes and hope nothing's wrong. It could be a decimal point.
+		// (This function assumes that we are indeed passed a valid number string.)
 	}
 }
 
