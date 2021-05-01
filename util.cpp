@@ -169,3 +169,27 @@ std::wstring strToWstr(std::string str)
 {
 	return std::wstring(str.begin(), str.end());
 }
+
+bool interpretLongDouble(std::wstring input, long double* result)
+{
+	char* cstrLine = new char;
+	std::strcpy(cstrLine, wstrToStr(input).c_str());
+	char** strEnd = new char*;
+	*result = std::strtold(cstrLine, strEnd);
+	return *result != HUGE_VALL && *strEnd != cstrLine;
+}
+
+bool interpretSize(std::wstring input, size_t* result)
+{
+	char* cstrLine = new char;
+	std::strcpy(cstrLine, wstrToStr(input).c_str());
+	char** strEnd = new char*;
+	auto ulResult = std::strtoul(cstrLine, strEnd, 10);
+
+	if (ulResult > (unsigned long)SIZE_MAX)
+		*result = SIZE_MAX;
+	else
+		*result = static_cast<size_t>(ulResult);
+
+	return *strEnd != cstrLine;
+}
