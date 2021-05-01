@@ -82,7 +82,7 @@ const easy_list::list<QuestionTypeInfo>* QuestionTypeInfo::getList()
 		},
 		QuestionTypeInfo{
 			QuestionType::SWEETIE_JAR,
-			L"SweetieJar",
+			L"sweetie jar",
 			L"sweetiejar",
 			SweetieJarWriter::get(),
 			SweetieJarReader::get()
