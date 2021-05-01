@@ -145,8 +145,8 @@ std::wstring formatNumber(const long double number, const size_t precision, cons
 	// Do exponents only if no leading zeroes were specified and we have enough digits
 	if (leadingZeroes == 0 && numDigits >= minExp)
 	{
-		// Do exponent - pretend this number is smaller than it is, format it, then add the exponent string on the end.
-		return formatNumber(number / (std::powl(10, numDigits - 1)), 0, precision) + L"e" + std::to_wstring(numDigits - 1);
+		// Do exponent - pretend this number is smaller than it is, format it, then add the exponent string on the end. Also, forget about leading zeroes.
+		return formatNumber(number / (std::powl(10, numDigits - 1)), precision) + L"e" + std::to_wstring(numDigits - 1);
 	}
 
 	// Make it just precise enough
