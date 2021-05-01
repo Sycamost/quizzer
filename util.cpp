@@ -133,7 +133,7 @@ std::wstring getDigit(const long double number, size_t digit)
 	return std::to_wstring(result);
 }
 
-std::wstring formatNumber(const long double number, const size_t precision, const size_t leadingZeroes, const size_t minExp)
+std::wstring formatNumber(const long double number, const size_t sigFigs, const size_t leadingZeroes, const size_t minExp)
 {
 	size_t numDigits = 0;
 	for (long double quotient = number; quotient >= 1.0; quotient /= 10.0)
@@ -146,11 +146,11 @@ std::wstring formatNumber(const long double number, const size_t precision, cons
 	if (leadingZeroes == 0 && numDigits >= minExp)
 	{
 		// Do exponent - pretend this number is smaller than it is, format it, then add the exponent string on the end. Also, forget about leading zeroes.
-		return formatNumber(number / (std::powl(10, numDigits - 1)), precision) + L"e" + std::to_wstring(numDigits - 1);
+		return formatNumber(number / (std::powl(10, numDigits - 1)), sigFigs) + L"e" + std::to_wstring(numDigits - 1);
 	}
 
-	// Make it just precise enough
-	for (size_t i = 0; i < precision; i++)
+	// Write just enough significant figures
+	for (size_t i = 0; i < sigFigs; i++)
 	{
 		if (i == numDigits)
 			result.push_back(L'.');
