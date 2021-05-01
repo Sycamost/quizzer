@@ -35,3 +35,5 @@ std::wstring formatNumber(const long long number, const size_t precision = SIZE_
 std::wstring formatNumber(long double number, const size_t precision = SIZE_MAX, const size_t leadingZeroes = 0, const size_t minExp = SIZE_MAX);
 std::string wstrToStr(std::wstring);
 std::wstring strToWstr(std::string);
+bool interpretLongDouble(std::wstring input, long double* result);
+bool interpretSize(std::wstring input, size_t* result);
