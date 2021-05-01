@@ -37,6 +37,7 @@ std::string wstrToStr(std::wstring);
 std::wstring strToWstr(std::string);
 bool interpretLongDouble(std::wstring input, long double* result);
 bool interpretSize(std::wstring input, size_t* result);
+bool isNumericalWchar(wchar_t wch);
 bool isExponentString(std::wstring wstr);
 size_t countSignificantFigures(std::wstring input);
 size_t countLeadingZeroes(std::wstring input);
