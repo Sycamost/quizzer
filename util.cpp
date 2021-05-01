@@ -1,4 +1,4 @@
-#include <iostream>
+﻿#include <iostream>
 #include <string>
 #include <math.h>
 #include "util.h"
@@ -194,25 +194,23 @@ bool interpretSize(std::wstring input, size_t* result)
 	return *strEnd != cstrLine;
 }
 
-size_t countDecimalPoints(std::wstring input)
+bool isExponentString(std::wstring wstr)
+{
+	static auto expList = easy_list::list<std::wstring>({ L"e", L"exp", L"Exp", L"E", L"EXP", L"x10^", L"x 10^", L"*^", L"⏨" });
+	return expList.contains(wstr);
+}
+
+size_t countSignificantFigures(std::wstring input)
 {
 	static const auto numberWchars = easy_list::list<wchar_t>({ L'0', L'1', L'2', L'3', L'4', L'5', L'6', L'7', L'8', L'9' });
 
-	if (!easy_list::list<wchar_t>(input.begin(), input.end()).contains(L'.'))
-		return 0;
-
 	size_t count = 0;
-	for (int i = input.size() - 1; i >= 0; i--)
+	for (wchar_t wch : input)
 	{
-		if (input[i] == L'.')
-			break;
-		else if (!numberWchars.contains(input[i]))
-			return 0;
-		else
+		if (numberWchars.contains(wch))
 			count++;
-	}
 
-	return count;
+	}
 }
 
 size_t countLeadingZeroes(std::wstring input)
