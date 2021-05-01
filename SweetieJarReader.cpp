@@ -1,4 +1,4 @@
-#include "safeprojectname.h"
+#include "SweetieJar.h"
 #include "SweetieJarReader.h"
 #include "QuestionReader.h"
 #include "Option.h"
@@ -8,56 +8,91 @@
 
 namespace SweetieJarReader
 {
-	static_assert(false, "SweetieJarWriter must have initialised global variables!");
-	/*
-	* The required inputs from the user should be stored in file-scope globals,
-	* which should be declared here. E.g.:
-	*
-	*	type memberOne{ value };
-	*	type memberTwo{ value };
-	*	...
-	*
-	*/
+	std::wstring question{ L"" };
+	long double number{ 0.l };
+	long double accuracy{ 0.l };
+	size_t decimalPoints{ 0ull };
+	size_t leadingZeroes{ 0ull };
+	size_t displayAsExp{ false };
+
+	enum class Stage {
+		QUESTION,
+		NUMBER,
+		ACCURACY,
+		DECIMALS,
+		ZEROES,
+		EXP,
+		NONE
+	} stage;
 
 	void clear()
 	{
-		static_assert(false, "SweetieJarReader::clear() hasn't been implemented yet!");
-		/* 
-		* 
-		* memberOne = L"";
-		* memberTwo = 0;
-		* memberThree = nullptr;
-		* ...
-		* 
-		*/
+		question = L"";
+		number = 0.l;
+		accuracy = 0.l;
+		decimalPoints = 0ull;
+		leadingZeroes = 0ull;
+		displayAsExp = false;
+		stage = Stage::QUESTION;
 	}
 
 	void read(std::wstring line)
 	{
-		static_assert(false, "SweetieJarReader::read() hasn't been implemented yet!");
-		/*
-		*	if (isInvalid(memberOne))
-		*		memberOne = line;
-		*	else if (isInvalid(memberTwo))
-		*		memberTwo = line;
-		*	...
-		* 
-		*/
+		if (stage == Stage::QUESTION)
+		{
+			if (line != L"")
+			{
+				question = line;
+				stage = Stage::NUMBER;
+			}
+			return;
+		}
+		else if (stage == Stage::NUMBER)
+		{
+			if (interpretLongDouble(line, &number))
+				stage = Stage::ACCURACY;
+			return;
+		}
+		else if (stage == Stage::ACCURACY)
+		{
+			if (interpretLongDouble(line, &accuracy))
+				stage = Stage::DECIMALS;
+			return;
+		}
+		else if (stage == Stage::DECIMALS)
+		{
+			if (interpretSize(line, &decimalPoints))
+				stage = Stage::ZEROES;
+			return;
+		}
+		else if (stage == Stage::ZEROES)
+		{
+			if (interpretSize(line, &leadingZeroes))
+				stage = Stage::EXP;
+			return;
+		}
+		else if (stage == Stage::EXP)
+		{
+			auto yesNo = getYesNo(line);
+			if (yesNo)
+			{
+				displayAsExp = true;
+				stage = Stage::NONE;
+			}
+			else if (!yesNo)
+			{
+				displayAsExp = false;
+				stage = Stage::NONE;
+			}
+			return;
+		}
 	}
 
 	Question* construct(easy_list::list<Option> options, easy_list::list<std::wstring> tags)
 	{
-		static_assert(false, "SweetieJarReader::construct() hasn't been implemented yet!");
-		/*
-		*	if (isInvalid(memberOne))
-		*		return nullptr;
-		*	if (isInvalid(memberTwo))
-		*		return nullptr;
-		*	...
-		* 
-		*	return new SweetieJar( ... );
-		* 
-		*/
+		if (stage == Stage::NONE)
+			return nullptr;
+		return new SweetieJar(question, number, accuracy, decimalPoints, leadingZeroes, displayAsExp, tags);
 	}
 
 	QuestionReader& get()

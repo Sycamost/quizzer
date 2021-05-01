@@ -1,4 +1,4 @@
-#include <iostream>
+﻿#include <iostream>
 #include <string>
 #include <easy_list.h>
 #include <Windows.h>
@@ -14,156 +14,154 @@
 
 namespace SweetieJarWriter
 {
-	static_assert(false, "SweetieJarWriter must have initialised global variables!");
-	/*
-	* The required inputs from the user should be stored in file-scope globals,
-	* which should be declared here. E.g.:
-	* 
-	*	type memberOne{ value };
-	*	type memberTwo{ value };
-	*	...
-	* 
-	*/
+	std::wstring question{ L"" };
+	long double number{ 0.l };
+	long double accuracy{ 0.l };
+	size_t decimalPoints{ 0ull };
+	size_t leadingZeroes{ 0ull };
+	bool displayAsExp{ false };
 
-	static_assert(false, "SweetieJarWriter must pre-declare its asking functions!");
-	/*
-	* The asking functions (see below) should be pre-declared here. E.g:
-	* 
-	*	void askMemberOne();
-	*	void askMemberTwo();
-	*	...
-	* 
-	*/
+	enum class Stage {
+		QUESTION,
+		NUMBER,
+		ACCURACY,
+		TAGS
+	} stage;
 
-	static_assert(false, "SweetieJarWriter must define its input handlers!");
-	/* 
-	* The input handlers should be given here. Typically, there will be a
-	* series of input handlers, one for each data member of SweetieJar, 
-	* each one passing on to the next when finished. The last handler should
-	* always hand back to the tag input handler by calling QuestionWriter::writeTags().
-	* So, this section should look something like:
-	* 
-	*	DEFINE_INPUT_HANDLER_FUNC(memberOneInputHandler)
-	*	{
-	*		if (isInvalid(input))
-	*		{
-	*			askMemberOne();
-	*			return InputHandlerReturns::SUCCESS;
-	*		}
-	* 
-	*		memberOne = input;
-	*		askMemberTwo();
-	*		return InputHandlerReturns::SUCCESS;
-	*	}
-	* 
-	*	...
-	* 
-	*	DEFINE_INPUT_HANDLER_FUNC(lastMemberInputHandler)
-	*	{
-	*		...
-	* 
-	*		lastMember = input;
-	*		QuestionWriter::writeTags();
-	*		return InputHandlerReturns::SUCCESS;
-	*	}
-	*/
+	void askQuestion();
+	void askNumber();
+	void askAccuracy();
 
-	static_assert(false, "SweetieJarWriter must define its asking functions!");
-	/*
-	* This is where the asking functions should be defined. The asking functions
-	* are implemented for each member data item, and simply make sure the input
-	* handler is set up to ask for, and receive, the respective member data items
-	* when called. E.g:
-	* 
-	*	void askMemberOne()
-	*	{
-	*		static const std::wstring msg = L"Member one:\t";
-	*		setInputHandling(msg, &memberOneInputHandler);
-	*	}
-	* 
-	*	void askMemberTwo()
-	*	{
-	*		...
-	*	}
-	* 
-	*	...
-	* 
-	*/
+	DEFINE_INPUT_HANDLER_FUNC(questionInputHandler)
+	{
+		if (input.empty())
+		{
+			askNumber();
+			return InputHandlerReturns::SUCCESS;
+		}
+
+		question = input;
+		askNumber();
+		return InputHandlerReturns::SUCCESS;
+	}
+
+	DEFINE_INPUT_HANDLER_FUNC(numberInputHandler)
+	{
+		if (!interpretLongDouble(input, &number))
+		{
+			askNumber();
+			return InputHandlerReturns::SUCCESS;
+		}
+
+		decimalPoints = countDecimalPoints(input);
+		leadingZeroes = countLeadingZeroes(input);
+
+		// Display with an exponent?
+		static auto expList = easy_list::list<std::wstring>({ L"e", L"exp", L"Exp", L"E", L"EXP", L"x10^", L"x 10^", L"*^", L"⏨" });
+		// Find substrings of the input (of a suitable length)
+		auto inputList = easy_list::list<wchar_t>(input.begin(), input.end());
+		static auto expListLengths = expList.transform<size_t>(&std::wstring::length).removeDuplicates();
+		auto inputListSubstrs = easy_list::list<std::wstring>();
+		for (size_t len : expListLengths)
+			inputListSubstrs += inputList.substrings(len);
+		// Check substrings for match
+		displayAsExp = inputListSubstrs.shares(expList);
+
+		askAccuracy();
+		return InputHandlerReturns::SUCCESS;
+	}
+
+
+	DEFINE_INPUT_HANDLER_FUNC(accuracyInputHandler)
+	{
+		if (!interpretLongDouble(input, &accuracy))
+		{
+			askAccuracy();
+			return InputHandlerReturns::SUCCESS;
+		}
+
+		stage = Stage::TAGS;
+		QuestionWriter::writeTags();
+		return InputHandlerReturns::SUCCESS;
+	}
+
+	void askQuestion()
+	{
+		static const std::wstring msg = L"Question:\t";
+		stage = Stage::QUESTION;
+		setInputHandling(msg, &questionInputHandler);
+	}
+
+	void askNumber()
+	{
+		static const std::wstring msg = L"Answer (as a plain number):\t";
+		stage = Stage::NUMBER;
+		setInputHandling(msg, &numberInputHandler);
+	}
+
+	void askAccuracy()
+	{
+		static const std::wstring msg = L"Required accuracy (as a plain number): ±\t";
+		stage = Stage::ACCURACY;
+		setInputHandling(msg, &accuracyInputHandler);
+	}
 
 	void writeSweetieJar()
 	{
-		static_assert(false, "SweetieJarWriter::writeSweetieJar() has not been implemented yet!");
+		question = L"";
+		number = 0.l;
+		accuracy = 0.l;
+		decimalPoints = 0ull;
+		leadingZeroes = 0ull;
+		displayAsExp = false;
+		stage = Stage::QUESTION;
 
-		/* Clear stored member data, e.g:
-		* 
-		*	memberOne = 0;
-		*	memberTwo = L"";
-		*	memberThree = nullptr;
-		*	...
-		* 
-		*/
-
-		// Start message to user - make sure to personalise this message for SweetieJar!
 		std::wcout <<
-			L"Enter the values for new SweetieJar's data and tags.\n"
+			L"Enter the values for new SweetieJar's question, the numerical answer, and the required accuracy for an answer to count as correct.\n"
 			<< L"Once you're finished adding tags, leave the next tag blank.\n"
-			<< L"Make sure your data inputs are valid (what does this mean for SweetieJar?).\nUse <"
+			<< L"Make sure the answer and accuracy are both numbers.\nUse <"
 			<< toLower(CommandInfo::getFirstCode(CommandType::CANCEL))
 			<< L"> to cancel adding the current SweetieJar.\n\n";
 
-		/* Call first asking function, e.g:
-		 * 
-		 *	askMemberOne();
-		 * 
-		 */
+		askQuestion();
 
 		return;
 	}
 
 	bool resetLastStep()
 	{
-		static_assert(false, "SweetieJarWriter::resetLastStep() has not been implemented yet!");
-		/*
-		*	if (isInvalid(memberOne))
-		*	{
-		*		askMemberOne();
-		*		return true;
-		*	}
-		*	else if (isInvalid(memberTwo))
-		*	{
-		*		askMemberTwo();
-		*		return true;
-		*	}
-		*	...
-		*	else if (isInvalid(lastMember))
-		*	{
-		*		askLastMember();
-		*		return true;
-		*	}
-		*	return false;
-		*/
+		if (stage == Stage::QUESTION)
+		{
+			askQuestion();
+			return true;
+		}
+
+		if (stage == Stage::NUMBER)
+		{
+			askNumber();
+			return true;
+		}
+
+		if (stage == Stage::ACCURACY)
+		{
+			askAccuracy();
+			return true;
+		}
+
+		return false;
 	}
 
 	Question* constructCurrent(easy_list::list<std::wstring> tags)
 	{
-		static_assert(false, "SweetieJarWriter::constructCurrent() has not been implemented yet!");
-		/*
-		 *	if (isInvalid(memberOne))
-		 *		return nullptr;
-		 *	if (isInvalid(memberTwo))
-		 *		return nullptr;
-		 *	...
-		 *	if (isInvalid(lastMember))
-		 *		return nullptr;
-		 *	return new SweetieJar(memberOne, memberTwo, ..., lastMember);
-		 * 
-		 */
+		if (stage != Stage::TAGS)
+			return nullptr;
+		return new SweetieJar(question, number, accuracy, decimalPoints, leadingZeroes, displayAsExp, tags);
 	}
 
 	QuestionWriter& get()
 	{
 		static QuestionWriter writer = QuestionWriter(
-			QuestionType::THIS_QUESTION_TYPE,
+			QuestionType::SWEETIE_JAR,
 			&writeSweetieJar,
 			&resetLastStep,
 			&constructCurrent
