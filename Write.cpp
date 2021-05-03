@@ -76,9 +76,18 @@ void Write::startWriting(const QuestionTypeInfo qti)
 	_typeInfo.getWriter()->writeQuestion();
 }
 
+void ensureFileEndsInLineBreak(std::wfstream& file)
+{
+	file.seekg(-1, std::ios_base::end);
+	wchar_t wch;
+	file.get(wch);
+	if (wch != L'\n')
+		file.putback(L'\n');
+}
+
 easy_list::list<Question*> Write::writeToFile()
 {
-	std::wofstream file;
+	std::wfstream file;
 	try
 	{
 		std::string fileAddress = _typeInfo.getFileAddress();
@@ -93,8 +102,10 @@ easy_list::list<Question*> Write::writeToFile()
 		return easy_list::list<Question*>();
 	}
 
+	ensureFileEndsInLineBreak(file);
+
 	for (Question* question : _newQuestions)
-		question->write(file);
+		question->write((std::wofstream&)file);
 
 	file.close();
 	return _newQuestions;
