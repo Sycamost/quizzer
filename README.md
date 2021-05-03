@@ -41,13 +41,14 @@ Every <code>Question</code> must be able to return its question string, be able 
 
 What children are there of <code>Question</code>?
 
-| Name           | Description                                                              | Implemented?       |
-| :------------- | :----------------------------------------------------------------------- | :----------------- |
-| Flashcard      | Shows the user the front, they have to guess what's on the back.         | :heavy_check_mark: |
-| MultipleChoice | Asks the user a multiple-choice question, they have to guess the option. | :heavy_check_mark: |
-| SweetieJar     | The user must guess a number to some specified accuracy.                 | :x:                |
-| Birthday       | The user must guess a date to some given accuracy.                       | :x:                |
-| Partition      | The user must correctly partition given items into given categories.     | :x:                |
+| Name           | Description                                                               | Implemented?       |
+| :------------- | :-----------------------------------------------------------------------  | :----------------- |
+| Flashcard      | Shows the user the front, they have to guess what's on the back.          | :heavy_check_mark: |
+| MultipleChoice | Asks the user a multiple-choice question, they have to guess the option.  | :heavy_check_mark: |
+| SweetieJar     | The user must guess a number to some specified accuracy.                  | :x:                |
+| Birthday       | The user must guess a date to some given accuracy.                        | :x:                |
+| Partition      | The user must correctly partition given items into given categories.      | :x:                |
+| TrueOrFalse    | The user must correctly guess whether a given statement is true or false. | :x:                |
 
 ## Write
 
