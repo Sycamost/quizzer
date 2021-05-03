@@ -126,11 +126,11 @@ std::wstring formatNumber(const long long number, const size_t precision, const 
 /// </summary>
 /// <param name="number">The number</param>
 /// <param name="digit">The zero-indexed digit</param>
-std::wstring getDigit(const long double number, size_t digit)
+std::wstring getDigit(const long double number, size_t digitIndex)
 {
-	long double result = number / std::powl(10, digit - 1);
-	result -= std::remainderl(result, 1);
-	return std::to_wstring(result);
+	long double digitAndAfter = number / std::powl(10, digitIndex);
+	long long digit = std::llroundl(digitAndAfter - std::remainderl(digitAndAfter, 1.l));
+	return std::to_wstring(digit);
 }
 
 std::wstring formatNumber(const long double number, const size_t sigFigs, const size_t leadingZeroes, const size_t minExp)
@@ -146,7 +146,7 @@ std::wstring formatNumber(const long double number, const size_t sigFigs, const 
 	if (leadingZeroes == 0 && numDigits >= minExp)
 	{
 		// Do exponent - pretend this number is smaller than it is, format it, then add the exponent string on the end. Also, forget about leading zeroes.
-		return formatNumber(number / (std::powl(10, numDigits - 1)), sigFigs) + L"e" + std::to_wstring(numDigits - 1);
+		return formatNumber(number / std::powl(10, numDigits - 1), sigFigs) + L"e" + std::to_wstring(numDigits - 1);
 	}
 
 	// Write just enough significant figures
@@ -202,7 +202,7 @@ bool isNumericalWchar(wchar_t wch)
 
 bool isExponentString(std::wstring wstr)
 {
-	static auto expList = easy_list::list<std::wstring>({ L"e", L"exp", L"Exp", L"E", L"EXP", L"x10^", L"x 10^", L"*^", L"⏨" });
+	static auto expList = easy_list::list<std::wstring>({ L"e", L"e+", L"exp", L"Exp", L"E", L"E+", L"EXP", L"x10^", L"x 10^", L"*^", L"⏨" });
 	return expList.contains(wstr);
 }
 

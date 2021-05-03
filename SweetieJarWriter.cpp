@@ -17,7 +17,7 @@ namespace SweetieJarWriter
 	std::wstring question{ L"" };
 	long double number{ 0.l };
 	long double accuracy{ 0.l };
-	size_t decimalPoints{ 0ull };
+	size_t sigFigs{ 0ull };
 	size_t leadingZeroes{ 0ull };
 	bool displayAsExp{ false };
 
@@ -53,19 +53,13 @@ namespace SweetieJarWriter
 			return InputHandlerReturns::SUCCESS;
 		}
 
-		decimalPoints = countDecimalPoints(input);
+		sigFigs = countSignificantFigures(input);
 		leadingZeroes = countLeadingZeroes(input);
 
 		// Display with an exponent?
-		static auto expList = easy_list::list<std::wstring>({ L"e", L"exp", L"Exp", L"E", L"EXP", L"x10^", L"x 10^", L"*^", L"⏨" });
-		// Find substrings of the input (of a suitable length)
-		auto inputList = easy_list::list<wchar_t>(input.begin(), input.end());
-		static auto expListLengths = expList.transform<size_t>(&std::wstring::length).removeDuplicates();
-		auto inputListSubstrs = easy_list::list<std::wstring>();
-		for (size_t len : expListLengths)
-			inputListSubstrs += inputList.substrings(len);
-		// Check substrings for match
-		displayAsExp = inputListSubstrs.shares(expList);
+		easy_list::list<wchar_t> inputList = easy_list::list<wchar_t>(input.begin(), input.end());
+		easy_list::list<std::wstring> inputListSubstrs = inputList.substrings().transform<std::wstring>(&easy_list::list<wchar_t>::toString);
+		displayAsExp = inputListSubstrs.contains(&isExponentString);
 
 		askAccuracy();
 		return InputHandlerReturns::SUCCESS;
@@ -111,7 +105,7 @@ namespace SweetieJarWriter
 		question = L"";
 		number = 0.l;
 		accuracy = 0.l;
-		decimalPoints = 0ull;
+		sigFigs = 0ull;
 		leadingZeroes = 0ull;
 		displayAsExp = false;
 		stage = Stage::QUESTION;
@@ -155,7 +149,7 @@ namespace SweetieJarWriter
 	{
 		if (stage != Stage::TAGS)
 			return nullptr;
-		return new SweetieJar(question, number, accuracy, decimalPoints, leadingZeroes, displayAsExp, tags);
+		return new SweetieJar(question, number, accuracy, sigFigs, leadingZeroes, displayAsExp, tags);
 	}
 
 	QuestionWriter& get()

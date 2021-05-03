@@ -11,7 +11,7 @@ namespace SweetieJarReader
 	std::wstring question{ L"" };
 	long double number{ 0.l };
 	long double accuracy{ 0.l };
-	size_t decimalPoints{ 0ull };
+	size_t sigFigs{ 0ull };
 	size_t leadingZeroes{ 0ull };
 	size_t displayAsExp{ false };
 
@@ -19,7 +19,7 @@ namespace SweetieJarReader
 		QUESTION,
 		NUMBER,
 		ACCURACY,
-		DECIMALS,
+		SIG_FIGS,
 		ZEROES,
 		EXP,
 		NONE
@@ -30,7 +30,7 @@ namespace SweetieJarReader
 		question = L"";
 		number = 0.l;
 		accuracy = 0.l;
-		decimalPoints = 0ull;
+		sigFigs = 0ull;
 		leadingZeroes = 0ull;
 		displayAsExp = false;
 		stage = Stage::QUESTION;
@@ -56,12 +56,12 @@ namespace SweetieJarReader
 		else if (stage == Stage::ACCURACY)
 		{
 			if (interpretLongDouble(line, &accuracy))
-				stage = Stage::DECIMALS;
+				stage = Stage::SIG_FIGS;
 			return;
 		}
-		else if (stage == Stage::DECIMALS)
+		else if (stage == Stage::SIG_FIGS)
 		{
-			if (interpretSize(line, &decimalPoints))
+			if (interpretSize(line, &sigFigs))
 				stage = Stage::ZEROES;
 			return;
 		}
@@ -90,9 +90,9 @@ namespace SweetieJarReader
 
 	Question* construct(easy_list::list<Option> options, easy_list::list<std::wstring> tags)
 	{
-		if (stage == Stage::NONE)
+		if (stage != Stage::NONE)
 			return nullptr;
-		return new SweetieJar(question, number, accuracy, decimalPoints, leadingZeroes, displayAsExp, tags);
+		return new SweetieJar(question, number, accuracy, sigFigs, leadingZeroes, displayAsExp, tags);
 	}
 
 	QuestionReader& get()
