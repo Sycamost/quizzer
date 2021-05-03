@@ -76,22 +76,40 @@ void Write::startWriting(const QuestionTypeInfo qti)
 	_typeInfo.getWriter()->writeQuestion();
 }
 
-void ensureFileEndsInLineBreak(std::wfstream& file)
+void ensureFileEndsInEmptyLine(std::string fileAddress)
 {
-	file.seekg(-1, std::ios_base::end);
-	wchar_t wch;
-	file.get(wch);
-	if (wch != L'\n')
-		file.putback(L'\n');
+	// We need the file to end in an empty line, which consists of two consecutive new-line characters.
+	std::wfstream file(fileAddress, std::ios_base::in | std::ios_base::out | std::ios_base::app);
+
+	auto newlinelen = 1;
+	auto buflen = newlinelen + 1;
+	auto newline = easy_list::list<wchar_t>(newlinelen, L'\n');
+	auto buf = easy_list::list<wchar_t>(buflen, L'\0');
+	auto endoff = -1;
+	
+	// One new-line character
+	file.seekg(endoff - newlinelen, std::ios_base::end);
+	file.get(buf.begin()._Ptr, buflen + 1, L'\0');
+	if (buf.slice(0, newlinelen) != newline)
+		file << L'\n';
+
+	// The second new-line character
+	file.seekg(endoff - newlinelen * 2, std::ios_base::end);
+	file.get(buf.begin()._Ptr, buflen + 1, L'\0');
+	if (buf.slice(0, newlinelen) != newline)
+		file << L'\n';
+
+	file.close();
 }
 
 easy_list::list<Question*> Write::writeToFile()
 {
-	std::wfstream file;
+	std::wofstream file;
 	try
 	{
 		std::string fileAddress = _typeInfo.getFileAddress();
-		file.open(fileAddress, std::ios_base::in | std::ios_base::out | std::ios_base::app);
+		ensureFileEndsInEmptyLine(fileAddress);
+		file.open(fileAddress, std::ios_base::app);
 		if (!file.is_open())
 			throw std::exception((fileAddress + " did not open correctly.").c_str());
 	}
@@ -102,10 +120,8 @@ easy_list::list<Question*> Write::writeToFile()
 		return easy_list::list<Question*>();
 	}
 
-	ensureFileEndsInLineBreak(file);
-
 	for (Question* question : _newQuestions)
-		question->write((std::wofstream&)file);
+		question->write(file);
 
 	file.close();
 	return _newQuestions;
