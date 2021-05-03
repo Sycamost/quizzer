@@ -5,6 +5,7 @@
 SweetieJar::SweetieJar(std::wstring question, long double number, long double accuracy, size_t sigFigs, size_t leadingZeroes, bool displayAsExp, easy_list::list<std::wstring> tags) :
 	Question(QuestionType::SWEETIE_JAR, tags),
 	_question(question),
+	_questionAppendix(L" Answer accurate to within " + formatNumber(_accuracy, _sigFigs, _leadingZeroes, _displayAsExp ? 0 : SIZE_MAX) + L"."),
 	_number(number),
 	_accuracy(accuracy),
 	_sigFigs(sigFigs),
@@ -15,6 +16,7 @@ SweetieJar::SweetieJar(std::wstring question, long double number, long double ac
 SweetieJar::SweetieJar(std::wstring question, long long number, long long accuracy, size_t sigFigs, size_t leadingZeroes, bool displayAsExp, easy_list::list<std::wstring> tags) :
 	Question(QuestionType::SWEETIE_JAR, tags),
 	_question(question),
+	_questionAppendix(L" Answer accurate to within " + formatNumber(_accuracy, _sigFigs, _leadingZeroes, _displayAsExp ? 0 : SIZE_MAX) + L"."),
 	_number((long double)number),
 	_accuracy((long double)accuracy),
 	_sigFigs(sigFigs),
@@ -24,8 +26,7 @@ SweetieJar::SweetieJar(std::wstring question, long long number, long long accura
 
 std::wstring SweetieJar::getQuestion()
 {
-	const std::wstring fullQuestion = _question + L" Answer accurate to within " + formatNumber(_accuracy, _sigFigs, _leadingZeroes, _displayAsExp ? 0 : SIZE_MAX) + L".";
-	return fullQuestion;
+	return _question + _questionAppendix;
 }
 
 std::wstring SweetieJar::getAnswer()

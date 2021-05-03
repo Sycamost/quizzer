@@ -8,6 +8,7 @@ class SweetieJar : public Question
 {
 private:
 	std::wstring _question;
+	std::wstring _questionAppendix;
 	long double _number;
 	long double _accuracy;
 	size_t _sigFigs;
