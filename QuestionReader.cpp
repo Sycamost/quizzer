@@ -27,9 +27,7 @@ Question* QuestionReader::read(std::wifstream& stream)
 		std::wstring line = getInputLine(stream);
 
 		if (line == L"")
-		{
-			return _constructCurrent(options, tags);
-		}
+			break;
 
 		else if (line == Globals::fileStartOfTags)
 		{
@@ -50,5 +48,8 @@ Question* QuestionReader::read(std::wifstream& stream)
 		}
 	}
 
-	return nullptr;
+	if (stage == Stage::TAGS)
+		return _constructCurrent(options, tags);
+	else
+		return nullptr;
 }

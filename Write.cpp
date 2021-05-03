@@ -91,7 +91,7 @@ easy_list::list<Question*> Write::writeToFile()
 	try
 	{
 		std::string fileAddress = _typeInfo.getFileAddress();
-		file.open(fileAddress, std::ios::app);
+		file.open(fileAddress, std::ios_base::in | std::ios_base::out | std::ios_base::app);
 		if (!file.is_open())
 			throw std::exception((fileAddress + " did not open correctly.").c_str());
 	}
