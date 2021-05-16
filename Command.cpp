@@ -30,7 +30,16 @@ const std::wstring CommandInfo::getFirstCode(const CommandType ct)
 	auto iter = list.search(ct, &CommandInfo::getType);
 	if (iter == list.npos())
 		return L"#ERROR#";
-	return iter->getCode();
+	return iter->getFirstCode();
+}
+
+CommandFlags readCommandFlag(std::wstring input)
+{
+	auto list = CommandFlagInfo::getList();
+	auto iter = list->search(true, &CommandFlagInfo::hasCode, input);
+	if (iter == list->npos())
+		return CommandFlags::NONE;
+	return iter->getFlag();
 }
 
 /// <summary>
@@ -47,15 +56,28 @@ easy_list::list<Command> Command::makePossibleCommands(std::wstring input)
 
 	auto possibleCommandInfos = CommandInfo::getList()->select(true, &CommandInfo::hasCode, code);
 
-	auto args = words.slice(1);
+	auto args = easy_list::list<std::wstring>();
+	auto flags = CommandFlags::NONE;
+
+	for each (auto word in words.slice(1))
+	{
+		if (!word.empty() && word[0] == L'-')
+		{
+			CommandFlags flag = readCommandFlag(word.substr(1));
+			flags &= flag;
+		}
+		else
+			args.push_back(word);
+	}
+
 	return possibleCommandInfos.transform<Command>(
-		[args](CommandInfo ci) -> Command { return Command(args, ci); }
+		[args, flags](CommandInfo ci) -> Command { return Command(args, flags, ci); }
 	);
 }
 
 CommandHandlerReturns Command::doCommandFunc() const
 {
-	return _commandInfo.callFunc(_args);
+	return _commandInfo.callFunc(_args, _flags);
 }
 
 const CommandInfo Command::getCommandInfo() const
@@ -68,7 +90,31 @@ const easy_list::list<std::wstring> Command::getArgs() const
 	return _args;
 }
 
-Command::Command(easy_list::list<std::wstring> args, CommandInfo commandInfo) :
+const CommandFlags Command::getFlags() const
+{
+	return _flags;
+}
+
+Command::Command(easy_list::list<std::wstring> args, CommandFlags flags, CommandInfo commandInfo) :
 	_args(args),
+	_flags(flags),
 	_commandInfo(commandInfo)
 {}
+
+const easy_list::list<CommandFlagInfo>* CommandFlagInfo::getList()
+{
+	static auto list = easy_list::list<CommandFlagInfo>({
+		// CommandFlagInfo declarations go here
+	});
+	return &list;
+}
+
+const std::wstring CommandFlagInfo::getFirstCode(const CommandFlags flag)
+{
+	auto list = *getList();
+	auto iter = list.search(flag, &CommandFlagInfo::getFlag);
+	if (iter == list.npos())
+		return L"";
+	else
+		return iter->getFirstCode();
+}
