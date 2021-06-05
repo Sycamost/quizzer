@@ -59,15 +59,33 @@ easy_list::list<Command> Command::makePossibleCommands(std::wstring input)
 	auto args = easy_list::list<std::wstring>();
 	auto flags = CommandFlags::NONE;
 
-	for each (auto word in words.slice(1))
+	// Get all args
+	for (int i = 1; i < words.size(); i++)
 	{
-		if (!word.empty() && word[0] == L'-')
+		std::wstring word = words[i];
+
+		if (word.empty())
+			continue;
+
+		// Store arg, unless it's a flag!
+		if (word[0] != L'-')
 		{
-			CommandFlags flag = readCommandFlag(word.substr(1));
-			flags &= flag;
-		}
-		else
 			args.push_back(word);
+		}
+
+		// Flags must always come together at the end. So if we've got
+		// a flag, retrieve flags until we run out flags, then finish.
+		else
+		{
+			for (; i < words.size(); i++)
+			{
+				word = words[i];
+				if (word[0] != L'-')
+					break;
+				flags &= readCommandFlag(word.substr(1));
+			}
+			break;
+		}
 	}
 
 	return possibleCommandInfos.transform<Command>(
