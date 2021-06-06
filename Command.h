@@ -5,8 +5,8 @@
 #include <template_helpers.h>
 #include "HandlerReturns.h"
 
-#define DECLARE_CMD_FUNC(funcName) CommandHandlerReturns funcName(easy_list::list<std::wstring> args, CommandFlags flags)
-#define DEFINE_CMD_FUNC(funcName) CommandHandlerReturns funcName(easy_list::list<std::wstring> args, CommandFlags flags)
+#define DECLARE_CMD_FUNC(funcName) CommandHandlerReturns funcName(easy_list::list<std::wstring> args, CommandFlagCollection flags)
+#define DEFINE_CMD_FUNC(funcName) CommandHandlerReturns funcName(easy_list::list<std::wstring> args, CommandFlagCollection flags)
 
 enum class CommandType {
 	CANCEL,
@@ -19,72 +19,93 @@ enum class CommandType {
 	PLAY
 };
 
-enum class CommandFlags : char {
-	NONE = 0,
-	//FIRST = 1 << 0,
-	//SECOND = 1 << 1,
-	//THIRD = 1 << 2,
-	//FOURTH = 1 << 3,
-};
-
-inline CommandFlags operator&(CommandFlags lhs, CommandFlags rhs)
-{
-	return (CommandFlags)((char)lhs & (char)rhs);
-}
-
-inline CommandFlags operator|(CommandFlags lhs, CommandFlags rhs)
-{
-	return (CommandFlags)((char)lhs | (char)rhs);
-}
-
-inline CommandFlags operator~(CommandFlags flags)
-{
-	return (CommandFlags)~(char)flags;
-}
-
-inline CommandFlags operator&=(CommandFlags lhs, CommandFlags rhs)
-{
-	return lhs = (CommandFlags)((char)lhs & (char)rhs);
-}
-
-inline CommandFlags operator|=(CommandFlags lhs, CommandFlags rhs)
-{
-	return lhs = (CommandFlags)((char)lhs | (char)rhs);
-}
-
-template<typename ..._CommandFlags, std::enable_if_t<std::conjunction_v<std::is_same<_CommandFlags, CommandFlags>...>, bool> = true>
-inline bool sharesAny(CommandFlags flags, CommandFlags first, _CommandFlags... rest)
-{
-	if ((flags & first) != CommandFlags::NONE) return true;
-	for each (CommandFlags other in std::tuple<CommandFlags>(rest...))
-	{
-		if ((flags & other) != CommandFlags::NONE)
-			return true;
-	}
-	return false;
-}
-
+/// <summary>
+/// Info associated with a type of flag (i.e. abstracted from any user-given values it might have when used).
+/// </summary>
 class CommandFlagInfo {
 public:
-	const CommandFlags getFlag() const { return _flag; }
 	const std::wstring getFirstCode() const { return _codes[0]; }
 	const bool hasCode(const std::wstring code) const { return _codes.contains(code); }
+	const bool requiresValue() const {}
 	static const easy_list::list<CommandFlagInfo>* getList();
-	static const std::wstring getFirstCode(const CommandFlags flag);
-	bool operator==(const CommandFlagInfo& other)
-	{
-		return _flag == other._flag;
-	}
+	static const easy_list::list<easy_list::list<CommandFlagInfo>>* getContradictoriesList();
+	bool operator==(const CommandFlagInfo& other) const;
 private:
-	const CommandFlags _flag;
 	const easy_list::list<std::wstring> _codes;
-	CommandFlagInfo(const CommandFlags flag, easy_list::list<std::wstring> codes) :
-		_flag(flag),
-		_codes(codes)
+	const bool _requiresValue;
+	const bool _allowsValue;
+	CommandFlagInfo(easy_list::list<std::wstring> codes) :
+		_codes(codes),
+		_requiresValue(false),
+		_allowsValue(false)
+	{}
+	CommandFlagInfo(easy_list::list<std::wstring> codes, bool takesValue) :
+		_codes(codes),
+		_requiresValue(takesValue),
+		_allowsValue(takesValue)
+	{}
+	CommandFlagInfo(easy_list::list<std::wstring> codes, bool requiresValue, bool allowsValue) :
+		_codes(codes),
+		_requiresValue(requiresValue),
+		_allowsValue(allowsValue)
 	{}
 };
 
-using CommandFunc = CommandHandlerReturns(*)(easy_list::list<std::wstring> args, CommandFlags flags);
+/// <summary>
+/// A concrete instance of a flag, i.e. flag type together with any value it has.
+/// </summary>
+class CommandFlag
+{
+public:
+	CommandFlag(CommandFlagInfo info) :
+		_info(info),
+		_hasValue(false),
+		_value(L"")
+	{}
+	CommandFlag(CommandFlagInfo info, std::wstring value) :
+		_info(info),
+		_hasValue(true),
+		_value(value)
+	{}
+	bool isValid() const;
+	bool contradicts(CommandFlag other) const;
+	bool operator==(const CommandFlag& rhs) const;
+	std::wstring toString() const {
+		if (isValid())
+			return _info.getFirstCode() + L"=" + _value;
+		return _info.getFirstCode();
+	}
+private:
+	CommandFlagInfo _info;
+	bool _hasValue;
+	std::wstring _value;
+};
+
+/// <summary>
+/// A collection of concrete instances of flags.
+/// </summary>
+/// <seealso cref="CommandFlag"/>
+class CommandFlagCollection
+{
+public:
+	CommandFlagCollection();
+	CommandFlagCollection(const CommandFlag& flag);
+	template<typename List, std::enable_if_t<std::is_convertible_v<List, easy_list::list<CommandFlag>>, bool> = true>
+	CommandFlagCollection(const List& data)
+	{
+		_data = static_cast<easy_list::list<CommandFlag>>(data);
+	}
+	bool isValid() const;
+	CommandFlagCollection& add(const CommandFlag& rhs);
+	CommandFlagCollection& add(const CommandFlagCollection& rhs);
+	bool sharesAny(const CommandFlagCollection& other) const;
+	std::wstring toString() const { return _data.transform<std::wstring>([](CommandFlag flag) -> std::wstring { return flag.toString(); }); }
+private:
+	easy_list::list<CommandFlag> _data;
+};
+
+
+using CommandFunc = CommandHandlerReturns(*)(easy_list::list<std::wstring> args, CommandFlagCollection flags);
 
 class CommandInfo {
 public:
@@ -95,10 +116,7 @@ public:
 	DEFINE_CMD_FUNC(callFunc) const { return _func(args, flags); }
 	static const easy_list::list<CommandInfo>* getList();
 	static const std::wstring getFirstCode(const CommandType ct);
-	bool operator==(const CommandInfo& other)
-	{
-		return _type == other._type;
-	}
+	bool operator==(const CommandInfo& other);
 private:
 	const CommandType _type;
 	const easy_list::list<std::wstring> _codes;
@@ -118,10 +136,10 @@ public:
 	CommandHandlerReturns doCommandFunc() const;
 	const CommandInfo getCommandInfo() const;
 	const easy_list::list<std::wstring> getArgs() const;
-	const CommandFlags getFlags() const;
+	const CommandFlagCollection getFlags() const;
 private:
 	CommandInfo _commandInfo;
 	easy_list::list<std::wstring> _args;
-	CommandFlags _flags;
-	Command(easy_list::list<std::wstring> args, CommandFlags flags, CommandInfo commandInfo);
+	CommandFlagCollection _flags;
+	Command(easy_list::list<std::wstring> args, CommandFlagCollection flags, CommandInfo commandInfo);
 };

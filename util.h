@@ -28,3 +28,4 @@ std::wstring toLower(std::wstring wstr);
 std::wstring indent(std::wstring wstr, int numTabs);
 const YesNo getYesNo(std::wstring wstr);
 easy_list::list<std::wstring> splitByWord(std::wstring wstr);
+easy_list::list<std::wstring> splitByWordOrQuotes(std::wstring wstr);
