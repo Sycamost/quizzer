@@ -13,9 +13,9 @@ bool CommandFlagInfo::operator==(const CommandFlagInfo& other) const
 	return (const CommandFlagInfo*)this == &other;
 }
 
-bool CommandFlag::isValid() const
+bool CommandFlag::isValid(CommandType commandType) const
 {
-	return !_hasValue || !_value.empty();
+	return (!_hasValue || !_value.empty()) && commandType == _info.getCommandType();
 }
 
 bool CommandFlag::contradicts(CommandFlag other) const
@@ -44,9 +44,9 @@ CommandFlagCollection::CommandFlagCollection(const CommandFlag& flag)
 	_data = easy_list::list<CommandFlag>({ flag });
 }
 
-bool CommandFlagCollection::isValid() const
+bool CommandFlagCollection::isValid(CommandType commandType) const
 {
-	if (_data.contains(false, &CommandFlag::isValid))
+	if (_data.contains(false, &CommandFlag::isValid, commandType))
 		return false;
 	if (_data.contains([this](CommandFlag flag1) -> bool { return _data.contains([flag1](CommandFlag flag2) -> bool { return flag1.contradicts(flag2); }); }))
 		return false;
@@ -103,8 +103,9 @@ const std::wstring CommandInfo::getFirstCode(const CommandType ct)
 /// Attempts to read the given input as a flag, returns null if it fails.
 /// </summary>
 /// <param name="input">The user input, not including any preceding flag markers such as '-'</param>
+/// <param name="commandType">The command type associated with this flag</param>
 /// <returns>A pointer to a flag if the input was a valid flag, null otherwise.</returns>
-CommandFlag* readCommandFlag(std::wstring input)
+CommandFlag* readCommandFlag(std::wstring input, CommandType commandType)
 {
 	auto list = CommandFlagInfo::getList();
 	size_t valueSeparatorPos = input.find(L'=');
@@ -128,7 +129,7 @@ CommandFlag* readCommandFlag(std::wstring input)
 		flag = new CommandFlag(*iter);
 	else
 		flag = new CommandFlag(*iter, input.substr(valueSeparatorPos));
-	if (!flag->isValid())
+	if (!flag->isValid(commandType))
 		return nullptr;
 	return flag;
 }
@@ -176,11 +177,14 @@ easy_list::list<Command> Command::makePossibleCommands(std::wstring input)
 		if (flag != nullptr)
 			flags.add(*flag);
 	}
-	if (!flags.isValid())
-		return easy_list::list<Command>();
+	
+	// Select only the command infos with the most valid flags
+	int maxValidFlags = possibleCommandInfos.transform<int>(&CommandInfo::countValidFlags, flags).max();
+	possibleCommandInfos = possibleCommandInfos.select(maxValidFlags, &CommandInfo::countValidFlags, flags);
 
+	// For each possible command info, return a command containing all provided arguments and all valid flags
 	return possibleCommandInfos.transform<Command>(
-		[args, flags](CommandInfo ci) -> Command { return Command(args, flags, ci); }
+		[args, flags](CommandInfo ci) -> Command { return Command(args, flags.getList().select(true, &CommandFlag::isValid, ci.getType()), ci); }
 	);
 }
 
@@ -209,6 +213,11 @@ Command::Command(easy_list::list<std::wstring> args, CommandFlagCollection flags
 	_flags(flags),
 	_commandInfo(commandInfo)
 {}
+
+const int CommandInfo::countValidFlags(CommandFlagCollection flags)
+{
+	return flags.getList().select(true, &CommandFlag::isValid, _type).size();
+}
 
 const easy_list::list<CommandFlagInfo>* CommandFlagInfo::getList()
 {
