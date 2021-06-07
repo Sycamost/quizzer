@@ -28,7 +28,7 @@ public:
 	const bool hasCode(const std::wstring code) const { return _codes.contains(code); }
 	const bool requiresValue() const {}
 	static const easy_list::list<CommandFlagInfo>* getList();
-	static const easy_list::list<easy_list::list<CommandFlagInfo>>* getContradictoriesList();
+	static const easy_list::list<std::pair<CommandFlagInfo, CommandFlagInfo>>* getContradictoriesList();
 	bool operator==(const CommandFlagInfo& other) const;
 private:
 	const easy_list::list<std::wstring> _codes;

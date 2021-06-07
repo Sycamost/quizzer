@@ -22,6 +22,8 @@ bool CommandFlag::contradicts(CommandFlag other) const
 {
 	if (_info == other._info && (_hasValue != other._hasValue || (_hasValue && _value != other._value)))
 		return false;
+	if (CommandFlagInfo::getContradictoriesList()->contains(std::pair(_info, other._info)))
+		return false;
 	return true;
 }
 
@@ -216,9 +218,9 @@ const easy_list::list<CommandFlagInfo>* CommandFlagInfo::getList()
 	return &list;
 }
 
-const easy_list::list<easy_list::list<CommandFlagInfo>>* CommandFlagInfo::getContradictoriesList()
+const easy_list::list<std::pair<CommandFlagInfo, CommandFlagInfo>>* CommandFlagInfo::getContradictoriesList()
 {
-	static auto list = easy_list::list<easy_list::list<CommandFlagInfo>>({
+	static auto list = easy_list::list<std::pair<CommandFlagInfo, CommandFlagInfo>>({
 		// Lists of contradictory CommandFlagInfos go here
 	});
 	return &list;
