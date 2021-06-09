@@ -208,7 +208,7 @@ bool isExponentString(std::wstring wstr)
 
 size_t countSignificantFigures(std::wstring input)
 {
-	size_t count = 0;
+	size_t count = 0u;
 	auto inputList = easy_list::list<wchar_t>(input);
 	bool leadingZero = true;
 	for (size_t i = 0; i < input.size(); i++)
