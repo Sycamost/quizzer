@@ -234,6 +234,7 @@ size_t countSignificantFigures(std::wstring input)
 		// Otherwise shut our eyes and hope nothing's wrong. It could be a decimal point.
 		// (This function assumes that we are indeed passed a valid number string.)
 	}
+	return count;
 }
 
 size_t countLeadingZeroes(std::wstring input)
