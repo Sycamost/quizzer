@@ -5,7 +5,7 @@
 SweetieJar::SweetieJar(std::wstring question, long double number, long double accuracy, size_t sigFigs, size_t leadingZeroes, bool displayAsExp, easy_list::list<std::wstring> tags) :
 	Question(QuestionType::SWEETIE_JAR, tags),
 	_question(question),
-	_questionAppendix(L" Answer accurate to within " + formatNumber(_accuracy, _sigFigs, _leadingZeroes, _displayAsExp ? 0 : SIZE_MAX) + L"."),
+	_questionAppendix(L" Answer accurate to within " + formatNumber(accuracy, sigFigs, leadingZeroes, displayAsExp ? 0 : SIZE_MAX) + L"."),
 	_number(number),
 	_accuracy(accuracy),
 	_sigFigs(sigFigs),
