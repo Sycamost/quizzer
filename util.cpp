@@ -155,13 +155,13 @@ int getLastDigitIndex(const long double number)
 
 	if (number > 1.L)
 	{
-		while (number != std::remainderl(number, std::powl(10.L, digitIndex)))
+		while (number != std::fmodl(number, std::powl(10.L, digitIndex)))
 			digitIndex++;
 	}
 
 	else // number < 1.L
 	{
-		while (number == std::remainderl(number, std::powl(10.L, digitIndex)))
+		while (number == std::fmodl(number, std::powl(10.L, digitIndex)))
 			digitIndex--;
 	}
 
@@ -197,8 +197,8 @@ wchar_t getDigit(const long double number, size_t offset)
 	}
 
 	int digitIndex = firstDigit - (int)offset;
-	long double digitAndAfter = std::remainderl(number / std::powl(10, digitIndex), 10.L);
-	long long digit = std::llroundl(digitAndAfter - std::remainderl(digitAndAfter, 1.L));
+	long double digitAndAfter = std::fmodl(number / std::powl(10, digitIndex), 10.L);
+	long long digit = std::llroundl(digitAndAfter - std::fmodl(digitAndAfter, 1.L));
 	return std::to_wstring(digit).front();
 }
 
@@ -230,7 +230,7 @@ std::wstring formatNumberSigFigs(const long double number, const size_t sigFigs,
 	// Round, and write just enough significant figures
 	int exp = firstDigitIndex + 1 - sigFigs;
 	long double sigExpFactor = std::powl(10.L, exp);
-	long double roundedNumber = number - std::remainderl(number, sigExpFactor);
+	long double roundedNumber = number - std::fmodl(number, sigExpFactor);
 	switch (getDigit(number, sigFigs))
 	{
 	case L'5':
