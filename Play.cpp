@@ -200,6 +200,9 @@ bool Play::_isCorrect = true;
 
 DEFINE_INPUT_HANDLER_FUNC(receiveAnswerInputHandler)
 {
+	if (input.empty())
+		return InputHandlerReturns::SUCCESS;
+
 	bool isCorrect = Play::updateAnswer(input);
 
 	if (isCorrect)
