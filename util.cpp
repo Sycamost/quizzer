@@ -117,11 +117,6 @@ easy_list::list<std::wstring> splitByWord(std::wstring wstr)
 	return result;
 }
 
-std::wstring formatNumber(const long long number, const size_t precision, const size_t leadingZeroes, const size_t minExp)
-{
-	return formatNumber((long double)number, precision, leadingZeroes, minExp);
-}
-
 int getFirstDigitIndex(const long double number)
 {
 	if (number < 0.L)
@@ -180,10 +175,16 @@ wchar_t getDigit(const long double number, size_t offset)
 	return std::to_wstring(digit).front();
 }
 
-std::wstring formatNumber(const long double number, const size_t sigFigs, const size_t leadingZeroes, const size_t minExp)
+std::wstring formatNumberSigFigs(const long long number, const size_t sigFigs, const size_t leadingZeroes, const size_t minExp)
+{
+	auto formattedString = formatNumberSigFigs((long double)number, sigFigs, leadingZeroes, minExp);
+	return formattedString.substr(0, formattedString.find_first_of(L'.'));
+}
+
+std::wstring formatNumberSigFigs(const long double number, const size_t sigFigs, const size_t leadingZeroes, const size_t minExp)
 {
 	if (number < 0.L)
-		return L"-" + formatNumber(-number, sigFigs, leadingZeroes, minExp);
+		return L"-" + formatNumberSigFigs(-number, sigFigs, leadingZeroes, minExp);
 
 	int firstDigitIndex = getFirstDigitIndex(number);
 
@@ -191,7 +192,7 @@ std::wstring formatNumber(const long double number, const size_t sigFigs, const 
 	if (leadingZeroes == 0 && std::abs(firstDigitIndex) >= minExp)
 	{
 		// Do exponent - pretend this number is smaller than it is, format it, then add the exponent string on the end.
-		return formatNumber(number / std::powl(10, firstDigitIndex), sigFigs) + L"e" + std::to_wstring(firstDigitIndex);
+		return formatNumberSigFigs(number / std::powl(10, firstDigitIndex), sigFigs) + L"e" + std::to_wstring(firstDigitIndex);
 	}
 
 	std::wstring result = L"";
@@ -235,6 +236,17 @@ std::wstring formatNumber(const long double number, const size_t sigFigs, const 
 	return result;
 }
 
+std::wstring formatNumberDecimalPoints(const long double number, const size_t decimalPoints = 0, const size_t leadingZeroes = 0, const size_t minExp = SIZE_MAX)
+{
+	if (number < 0.L)
+		return L"-" + formatNumberDecimalPoints(-number, decimalPoints, leadingZeroes, minExp);
+
+	// First, count the number of significant figures we'll need. Then format it by significant figures
+	auto firstDigitIndex = getFirstDigitIndex(number);
+	auto sigFigs = firstDigitIndex + decimalPoints;
+	return formatNumberSigFigs(number, sigFigs, leadingZeroes, minExp);
+}
+
 std::string wstrToStr(std::wstring wstr)
 {
 	return std::string(wstr.begin(), wstr.end());
@@ -275,10 +287,20 @@ bool isNumericalWchar(wchar_t wch)
 	return numberWchars.contains(wch);
 }
 
+easy_list::list<std::wstring> getExponentStringList()
+{
+	static auto list = easy_list::list<std::wstring>({ L"e", L"e+", L"exp", L"Exp", L"E", L"E+", L"EXP", L"x10^", L"x 10^", L"*^", L"⏨" });
+	return easy_list::list<std::wstring>(list);
+}
+
 bool isExponentString(std::wstring wstr)
 {
-	static auto expList = easy_list::list<std::wstring>({ L"e", L"e+", L"exp", L"Exp", L"E", L"E+", L"EXP", L"x10^", L"x 10^", L"*^", L"⏨" });
-	return expList.contains(wstr);
+	return getExponentStringList().contains(wstr);
+}
+
+[[nodiscard]] std::wstring removeExponentString(std::wstring wstr)
+{
+	return wstr.substr(0, getExponentStringList().transform<size_t>([wstr](std::wstring expStr) -> size_t { return wstr.find(expStr); }).min());
 }
 
 size_t countSignificantFigures(std::wstring input)
@@ -289,14 +311,7 @@ size_t countSignificantFigures(std::wstring input)
 	if (input[0] == L'-')
 		return countSignificantFigures(input.substr(1));
 
-	// Remove exponent string from the end
-	if (isExponentString(input))
-	{
-		auto substrLengths = easy_list::list<int>();
-		for (int i = 0; i < input.size(); i++) substrLengths.push_back(i);
-		auto maxExpStrLen = substrLengths.select([input](int i) -> bool { return isExponentString(input.substr(input.size() - i, i)); }).max();
-		input = input.substr(0, input.size() - maxExpStrLen);
-	}
+	input = removeExponentString(input);
 
 	// First, count every digit from the first non-zero digit
 	size_t count = 0u;
@@ -352,6 +367,12 @@ size_t countSignificantFigures(std::wstring input)
 	}
 
 	return count;
+}
+
+size_t countDecimalPoints(std::wstring input)
+{
+	input = removeExponentString(input);
+	return input.size() - input.find(L'.');
 }
 
 size_t countLeadingZeroes(std::wstring input)
