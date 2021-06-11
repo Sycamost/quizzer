@@ -158,7 +158,7 @@ namespace SweetieJarWriter
 
 	void askDecimalPoints()
 	{
-		static const std::wstring msg = L"Would you prefer to format strings by counting decimal points [d], or by counting significant figures [f]?\t";
+		static const std::wstring msg = L"Would you prefer to format strings by counting decimal points [d], or by counting significant figures [f]? (Whichever you pick, we'll take the biggest value from the two numbers you've given us.)\t";
 		stage = Stage::IS_DECIMAL_POINTS;
 		setInputHandling(msg, &decimalPointsInputHandler);
 	}
