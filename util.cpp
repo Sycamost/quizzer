@@ -141,6 +141,33 @@ int getFirstDigitIndex(const long double number)
 	return firstDigitIndex;
 }
 
+int getLastDigitIndex(const long double number)
+{
+	if (number < 0.L)
+		return getLastDigitIndex(-number);
+
+	if (number == 1.L)
+	{
+		return 0;
+	}
+
+	int digitIndex = 0;
+
+	if (number > 1.L)
+	{
+		while (number != std::remainderl(number, std::powl(10.L, digitIndex)))
+			digitIndex++;
+	}
+
+	else // number < 1.L
+	{
+		while (number == std::remainderl(number, std::powl(10.L, digitIndex)))
+			digitIndex--;
+	}
+
+	return digitIndex;
+}
+
 /// <summary>
 /// Returns the specified digit in base 10 of the given number.
 /// </summary>
@@ -187,6 +214,9 @@ std::wstring formatNumberSigFigs(const long double number, const size_t sigFigs,
 		return L"-" + formatNumberSigFigs(-number, sigFigs, leadingZeroes, minExp);
 
 	int firstDigitIndex = getFirstDigitIndex(number);
+
+	if (sigFigs == SIZE_MAX)
+		return formatNumberSigFigs(number, firstDigitIndex - getLastDigitIndex(number), leadingZeroes, minExp);
 
 	// Do exponents only if no leading zeroes were specified and we would have an exponent bigger than minExp
 	if (leadingZeroes == 0 && std::abs(firstDigitIndex) >= minExp)
@@ -238,8 +268,10 @@ std::wstring formatNumberSigFigs(const long double number, const size_t sigFigs,
 
 std::wstring formatNumberDecimalPoints(const long double number, const size_t decimalPoints, const size_t leadingZeroes, const size_t minExp)
 {
+	auto firstDigitIndex = getFirstDigitIndex(number);
+
 	if (decimalPoints == SIZE_MAX)
-		return formatNumberDecimalPoints(number, 0, leadingZeroes, minExp)
+		return formatNumberSigFigs(number, firstDigitIndex - getLastDigitIndex(number), leadingZeroes, minExp);
 
 	if (number < 0.L)
 		return L"-" + formatNumberDecimalPoints(-number, decimalPoints, leadingZeroes, minExp);
