@@ -277,7 +277,7 @@ std::wstring formatNumberDecimalPoints(const long double number, const size_t de
 		return formatNumberSigFigs(number, firstDigitIndex - getLastDigitIndex(number), leadingZeroes, minExp);
 
 	// First, count the number of significant figures we'll need. Then format it by significant figures
-	int sigFigs = firstDigitIndex + decimalPoints;
+	int sigFigs = firstDigitIndex + decimalPoints + 1;
 	return formatNumberSigFigs(number, sigFigs, leadingZeroes, minExp);
 }
 
