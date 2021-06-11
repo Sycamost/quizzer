@@ -1,6 +1,7 @@
 ﻿#include <iostream>
 #include <string>
 #include <math.h>
+#include <map>
 #include "util.h"
 #include "Command.h"
 
@@ -121,41 +122,115 @@ std::wstring formatNumber(const long long number, const size_t precision, const 
 	return formatNumber((long double)number, precision, leadingZeroes, minExp);
 }
 
+int getFirstDigitIndex(const long double number)
+{
+	if (number < 0.L)
+		return getFirstDigitIndex(-number);
+
+	if (number == 0.L)
+		return 0;
+
+	long double quotient = number;
+	int firstDigitIndex;
+	if (number < 1.L)
+	{
+		for (firstDigitIndex = 0; quotient < 1.L; firstDigitIndex--)
+			quotient *= 10;
+	}
+	else
+	{
+		for (firstDigitIndex = 0; quotient >= 10.L; firstDigitIndex++)
+			quotient /= 10;
+	}
+
+	return firstDigitIndex;
+}
+
 /// <summary>
 /// Returns the specified digit in base 10 of the given number.
 /// </summary>
 /// <param name="number">The number</param>
-/// <param name="digit">The zero-indexed digit</param>
-std::wstring getDigit(const long double number, size_t digitIndex)
+/// <param name="offset">The number of digits after the first digit to retrieve</param>
+/// <example>
+/// getDigit(1234.56789, 4) returns 5
+/// </example>
+wchar_t getDigit(const long double number, size_t offset)
 {
-	long double digitAndAfter = number / std::powl(10, digitIndex);
-	long long digit = std::llroundl(digitAndAfter - std::remainderl(digitAndAfter, 1.l));
-	return std::to_wstring(digit);
+	if (number < 0.L)
+		return getDigit(-number, offset);
+
+	// Find the index of the first digit and store it, since
+	// getDigit is usually called many times on the one number
+	static std::map<long double, int> numberFirstDigits;
+	int firstDigit;
+	auto iter = numberFirstDigits.find(number);
+	if (iter == numberFirstDigits.end())
+	{
+		firstDigit = getFirstDigitIndex(number);
+		numberFirstDigits.insert({ number, firstDigit });
+	}
+	else
+	{
+		firstDigit = iter->second;
+	}
+
+	int digitIndex = firstDigit - (int)offset;
+	long double digitAndAfter = std::remainderl(number / std::powl(10, digitIndex), 10.L);
+	long long digit = std::llroundl(digitAndAfter - std::remainderl(digitAndAfter, 1.L));
+	return std::to_wstring(digit).front();
 }
 
 std::wstring formatNumber(const long double number, const size_t sigFigs, const size_t leadingZeroes, const size_t minExp)
 {
-	size_t numDigits = 0;
-	for (long double quotient = number; quotient >= 1.0; quotient /= 10.0)
-		numDigits++;
+	if (number < 0.L)
+		return L"-" + formatNumber(-number, sigFigs, leadingZeroes, minExp);
 
-	// Plonk on leading zeroes
-	std::wstring result = std::wstring(std::max(leadingZeroes, numDigits) - numDigits, L'0');
+	int firstDigitIndex = getFirstDigitIndex(number);
 
-	// Do exponents only if no leading zeroes were specified and we have enough digits
-	if (leadingZeroes == 0 && numDigits >= minExp)
+	// Do exponents only if no leading zeroes were specified and we would have an exponent bigger than minExp
+	if (leadingZeroes == 0 && std::abs(firstDigitIndex) >= minExp)
 	{
-		// Do exponent - pretend this number is smaller than it is, format it, then add the exponent string on the end. Also, forget about leading zeroes.
-		return formatNumber(number / std::powl(10, numDigits - 1), sigFigs) + L"e" + std::to_wstring(numDigits - 1);
+		// Do exponent - pretend this number is smaller than it is, format it, then add the exponent string on the end.
+		return formatNumber(number / std::powl(10, firstDigitIndex), sigFigs) + L"e" + std::to_wstring(firstDigitIndex);
 	}
 
-	// Write just enough significant figures
+	std::wstring result = L"";
+
+	// Round, and write just enough significant figures
+	int exp = firstDigitIndex + 1 - sigFigs;
+	long double sigExpFactor = std::powl(10.L, exp);
+	long double roundedNumber = number - std::remainderl(number, sigExpFactor);
+	switch (getDigit(number, sigFigs))
+	{
+	case L'5':
+	case L'6':
+	case L'7':
+	case L'8':
+	case L'9':
+		roundedNumber = std::ceill(roundedNumber / sigExpFactor) * sigExpFactor;
+		break;
+	default:
+		roundedNumber = std::floorl(roundedNumber / sigExpFactor) * sigExpFactor;
+		break;
+	}
 	for (size_t i = 0; i < sigFigs; i++)
-	{
-		if (i == numDigits)
-			result.push_back(L'.');
-		result += getDigit(number, i);
-	}
+		result += getDigit(roundedNumber, i);
+
+	// Append zeroes as necessary after the significant figures
+	result.insert(result.size(), std::wstring(std::min(0uLL, firstDigitIndex + 1 - result.length()), L'0'));
+
+	// Decimal point?
+	// Special case - zeroes after the decimal point, i.e. 0.0[...]0ABC[...]
+	if (firstDigitIndex < 0)
+		result.insert(0, L"0." + std::wstring(-firstDigitIndex - 1, L'0'));
+	// Otherwise, just need to insert a decimal point in the right place - i.e. turn 12345 into 123.45
+	else if ((long int)sigFigs > (long int)firstDigitIndex + 1)
+		result.insert(firstDigitIndex + 1, L".");
+
+	// Leading zeroes
+	std::wstring leadingDigits = result.substr(0, leadingZeroes);
+	leadingDigits = leadingDigits.substr(0, leadingDigits.find(L'.'));
+	result.insert(0, std::wstring(leadingZeroes - leadingDigits.length(), L'0'));
 
 	return result;
 }
@@ -208,6 +283,22 @@ bool isExponentString(std::wstring wstr)
 
 size_t countSignificantFigures(std::wstring input)
 {
+	if (input.empty())
+		return 0;
+
+	if (input[0] == L'-')
+		return countSignificantFigures(input.substr(1));
+
+	// Remove exponent string from the end
+	if (isExponentString(input))
+	{
+		auto substrLengths = easy_list::list<int>();
+		for (int i = 0; i < input.size(); i++) substrLengths.push_back(i);
+		auto maxExpStrLen = substrLengths.select([input](int i) -> bool { return isExponentString(input.substr(input.size() - i, i)); }).max();
+		input = input.substr(0, input.size() - maxExpStrLen);
+	}
+
+	// First, count every digit from the first non-zero digit
 	size_t count = 0u;
 	auto inputList = easy_list::list<wchar_t>(input);
 	bool leadingZero = true;
@@ -234,11 +325,47 @@ size_t countSignificantFigures(std::wstring input)
 		// Otherwise shut our eyes and hope nothing's wrong. It could be a decimal point.
 		// (This function assumes that we are indeed passed a valid number string.)
 	}
+
+	// Now, subtract any trailing zeroes
+	for (size_t i = input.size() - 1; i < input.size(); i--)
+	{
+		switch (input[i])
+		{
+		case L'0':
+			count--;
+			break;
+		case L'1':
+		case L'2':
+		case L'3':
+		case L'4':
+		case L'5':
+		case L'6':
+		case L'7':
+		case L'8':
+		case L'9':
+			i = -1;
+			break;
+		default:
+			// Could be e.g. a decimal point
+			break;
+		}
+	}
+
 	return count;
 }
 
 size_t countLeadingZeroes(std::wstring input)
 {
+	if (input.empty())
+		return 0;
+
+	if (input[0] == L'-')
+		return countLeadingZeroes(input.substr(1));
+
+	// Special case - a fraction less than 1
+	if (input.substr(0, 2) == L"0.")
+		return 0;
+
 	size_t count = 0;
 	for (int i = 0; i < input.size(); i++)
 	{
