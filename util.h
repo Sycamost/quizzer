@@ -33,7 +33,7 @@ const YesNo getYesNo(std::wstring wstr);
 easy_list::list<std::wstring> splitByWord(std::wstring wstr);
 std::wstring formatNumberSigFigs(const long long number, const size_t sigFigs = SIZE_MAX, const size_t leadingZeroes = 0, const size_t minExp = SIZE_MAX);
 std::wstring formatNumberSigFigs(const long double number, const size_t sigFigs = SIZE_MAX, const size_t leadingZeroes = 0, const size_t minExp = SIZE_MAX);
-std::wstring formatNumberDecimalPoints(const long double number, const size_t decimalPoints = -1, const size_t leadingZeroes = 0, const size_t minExp = SIZE_MAX);
+std::wstring formatNumberDecimalPoints(const long double number, const size_t decimalPoints = SIZE_MAX, const size_t leadingZeroes = 0, const size_t minExp = SIZE_MAX);
 std::string wstrToStr(std::wstring);
 std::wstring strToWstr(std::string);
 bool interpretLongDouble(std::wstring input, long double* result);

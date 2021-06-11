@@ -238,6 +238,9 @@ std::wstring formatNumberSigFigs(const long double number, const size_t sigFigs,
 
 std::wstring formatNumberDecimalPoints(const long double number, const size_t decimalPoints, const size_t leadingZeroes, const size_t minExp)
 {
+	if (decimalPoints == SIZE_MAX)
+		return formatNumberDecimalPoints(number, 0, leadingZeroes, minExp)
+
 	if (number < 0.L)
 		return L"-" + formatNumberDecimalPoints(-number, decimalPoints, leadingZeroes, minExp);
 
