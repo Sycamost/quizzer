@@ -21,8 +21,10 @@ namespace SweetieJarWriter
 	size_t leadingZeroes{ 0ull };
 	bool displayAsExp{ false };
 	bool decimalPoints{ false };
-	std::wstring numberString{ L"" };
-	std::wstring accuracyString{ L"" };
+	size_t sigFigsNumber{ 0 };
+	size_t sigFigsAccuracy{ 0 };
+	size_t decimalPointsNumber{ 0 };
+	size_t decimalPointsAccuracy{ 0 };
 
 	enum class Stage {
 		QUESTION,
@@ -58,7 +60,8 @@ namespace SweetieJarWriter
 			return InputHandlerReturns::SUCCESS;
 		}
 
-		numberString = input;
+		sigFigsNumber = countSignificantFigures(input);
+		decimalPointsNumber = countDecimalPoints(input);
 
 		// Always prefer the answer (over the accuracy) for leading zeroes
 		leadingZeroes = countLeadingZeroes(input);
@@ -80,22 +83,21 @@ namespace SweetieJarWriter
 			return InputHandlerReturns::SUCCESS;
 		}
 
-		accuracyString = input;
+		sigFigsAccuracy = countSignificantFigures(input);
+		decimalPointsAccuracy = countDecimalPoints(input);
 
 		// If the two provided number-strings agree in either sig figs or decimal points, we can infer how to format them...
-		int sigFigsNumber = countSignificantFigures(numberString);
-		int sigFigsAccuracy = countSignificantFigures(accuracyString);
 		if (sigFigsNumber == sigFigsAccuracy)
 		{
 			decimalPoints = false;
+			sigFigsOrDecimalPoints = sigFigsNumber;
 		}
 		else
 		{
-			int decimalPointsNumber = countDecimalPoints(numberString);
-			int decimalPointsAccuracy = countDecimalPoints(accuracyString);
 			if (decimalPointsNumber == decimalPointsAccuracy)
 			{
 				decimalPoints = true;
+				sigFigsOrDecimalPoints = decimalPointsNumber;
 			}
 			// ... otherwise, we'll have to just ask!
 			else
@@ -115,10 +117,12 @@ namespace SweetieJarWriter
 		if (input == L"d")
 		{
 			decimalPoints = true;
+			sigFigsOrDecimalPoints = max(sigFigsNumber, sigFigsAccuracy);
 		}
 		else if (input == L"f")
 		{
 			decimalPoints = false;
+			sigFigsOrDecimalPoints = max(decimalPointsNumber, decimalPointsAccuracy);
 		}
 		else
 		{
@@ -168,6 +172,10 @@ namespace SweetieJarWriter
 		leadingZeroes = 0ull;
 		displayAsExp = false;
 		decimalPoints = false;
+		sigFigsNumber = 0;
+		sigFigsAccuracy = 0;
+		decimalPointsNumber = 0;
+		decimalPointsAccuracy = 0;
 		stage = Stage::QUESTION;
 
 		std::wcout <<
