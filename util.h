@@ -41,4 +41,5 @@ bool interpretSize(std::wstring input, size_t* result);
 bool isNumericalWchar(wchar_t wch);
 bool isExponentString(std::wstring wstr);
 size_t countSignificantFigures(std::wstring input);
+size_t countDecimalPoints(std::wstring input);
 size_t countLeadingZeroes(std::wstring input);
