@@ -11,17 +11,19 @@ namespace SweetieJarReader
 	std::wstring question{ L"" };
 	long double number{ 0.l };
 	long double accuracy{ 0.l };
-	size_t sigFigs{ 0ull };
+	size_t sigFigsOrDecimalPoints{ 0ull };
 	size_t leadingZeroes{ 0ull };
-	size_t displayAsExp{ false };
+	bool displayAsExp{ false };
+	bool decimalPoints{ false };
 
 	enum class Stage {
 		QUESTION,
 		NUMBER,
 		ACCURACY,
-		SIG_FIGS,
+		SIG_FIGS_OR_DECIMAL_POINTS,
 		ZEROES,
-		EXP,
+		IS_EXP,
+		IS_DECIMAL_POINTS,
 		NONE
 	} stage;
 
@@ -30,9 +32,10 @@ namespace SweetieJarReader
 		question = L"";
 		number = 0.l;
 		accuracy = 0.l;
-		sigFigs = 0ull;
+		sigFigsOrDecimalPoints = 0ull;
 		leadingZeroes = 0ull;
 		displayAsExp = false;
+		decimalPoints = false;
 		stage = Stage::QUESTION;
 	}
 
@@ -56,32 +59,47 @@ namespace SweetieJarReader
 		else if (stage == Stage::ACCURACY)
 		{
 			if (interpretLongDouble(line, &accuracy))
-				stage = Stage::SIG_FIGS;
+				stage = Stage::SIG_FIGS_OR_DECIMAL_POINTS;
 			return;
 		}
-		else if (stage == Stage::SIG_FIGS)
+		else if (stage == Stage::SIG_FIGS_OR_DECIMAL_POINTS)
 		{
-			if (interpretSize(line, &sigFigs))
+			if (interpretSize(line, &sigFigsOrDecimalPoints))
 				stage = Stage::ZEROES;
 			return;
 		}
 		else if (stage == Stage::ZEROES)
 		{
 			if (interpretSize(line, &leadingZeroes))
-				stage = Stage::EXP;
+				stage = Stage::IS_EXP;
 			return;
 		}
-		else if (stage == Stage::EXP)
+		else if (stage == Stage::IS_EXP)
 		{
 			auto yesNo = getYesNo(line);
 			if (yesNo)
 			{
 				displayAsExp = true;
-				stage = Stage::NONE;
+				stage = Stage::IS_DECIMAL_POINTS;
 			}
 			else if (!yesNo)
 			{
 				displayAsExp = false;
+				stage = Stage::IS_DECIMAL_POINTS;
+			}
+			return;
+		}
+		else if (stage == Stage::IS_DECIMAL_POINTS)
+		{
+			auto yesNo = getYesNo(line);
+			if (yesNo)
+			{
+				decimalPoints = true;
+				stage = Stage::NONE;
+			}
+			else if (!yesNo)
+			{
+				decimalPoints = false;
 				stage = Stage::NONE;
 			}
 			return;
@@ -92,7 +110,7 @@ namespace SweetieJarReader
 	{
 		if (stage != Stage::NONE)
 			return nullptr;
-		return new SweetieJar(question, number, accuracy, sigFigs, leadingZeroes, displayAsExp, tags);
+		return new SweetieJar(question, number, accuracy, sigFigsOrDecimalPoints, leadingZeroes, displayAsExp, decimalPoints, tags);
 	}
 
 	QuestionReader& get()
