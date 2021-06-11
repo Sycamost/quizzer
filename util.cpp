@@ -268,13 +268,13 @@ std::wstring formatNumberSigFigs(const long double number, const size_t sigFigs,
 
 std::wstring formatNumberDecimalPoints(const long double number, const size_t decimalPoints, const size_t leadingZeroes, const size_t minExp)
 {
+	if (number < 0.L)
+		return L"-" + formatNumberDecimalPoints(-number, decimalPoints, leadingZeroes, minExp);
+
 	int firstDigitIndex = getFirstDigitIndex(number);
 
 	if (decimalPoints == SIZE_MAX)
 		return formatNumberSigFigs(number, firstDigitIndex - getLastDigitIndex(number), leadingZeroes, minExp);
-
-	if (number < 0.L)
-		return L"-" + formatNumberDecimalPoints(-number, decimalPoints, leadingZeroes, minExp);
 
 	// First, count the number of significant figures we'll need. Then format it by significant figures
 	int sigFigs = firstDigitIndex + decimalPoints;
