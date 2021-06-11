@@ -268,7 +268,7 @@ std::wstring formatNumberSigFigs(const long double number, const size_t sigFigs,
 
 std::wstring formatNumberDecimalPoints(const long double number, const size_t decimalPoints, const size_t leadingZeroes, const size_t minExp)
 {
-	auto firstDigitIndex = getFirstDigitIndex(number);
+	int firstDigitIndex = getFirstDigitIndex(number);
 
 	if (decimalPoints == SIZE_MAX)
 		return formatNumberSigFigs(number, firstDigitIndex - getLastDigitIndex(number), leadingZeroes, minExp);
@@ -277,8 +277,7 @@ std::wstring formatNumberDecimalPoints(const long double number, const size_t de
 		return L"-" + formatNumberDecimalPoints(-number, decimalPoints, leadingZeroes, minExp);
 
 	// First, count the number of significant figures we'll need. Then format it by significant figures
-	auto firstDigitIndex = getFirstDigitIndex(number);
-	auto sigFigs = firstDigitIndex + decimalPoints;
+	int sigFigs = firstDigitIndex + decimalPoints;
 	return formatNumberSigFigs(number, sigFigs, leadingZeroes, minExp);
 }
 
@@ -349,7 +348,7 @@ size_t countSignificantFigures(std::wstring input)
 	input = removeExponentString(input);
 
 	// First, count every digit from the first non-zero digit
-	size_t count = 0u;
+	size_t count = 0ull;
 	auto inputList = easy_list::list<wchar_t>(input);
 	bool leadingZero = true;
 	for (size_t i = 0; i < input.size(); i++)
@@ -382,6 +381,8 @@ size_t countSignificantFigures(std::wstring input)
 		switch (input[i])
 		{
 		case L'0':
+			if (count == 0ull)
+				return 0ull;	// Catches the case where all the digits are trailing zeroes
 			count--;
 			break;
 		case L'1':
@@ -407,7 +408,10 @@ size_t countSignificantFigures(std::wstring input)
 size_t countDecimalPoints(std::wstring input)
 {
 	input = removeExponentString(input);
-	return input.size() - input.find(L'.');
+	auto decimalPointIndex = input.find_first_of(L'.');
+	if (decimalPointIndex == input.npos)
+		return 0;
+	return input.size() - decimalPointIndex;
 }
 
 size_t countLeadingZeroes(std::wstring input)
