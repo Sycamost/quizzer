@@ -36,7 +36,7 @@ namespace SweetieJarWriter
 	{
 		if (input.empty())
 		{
-			askNumber();
+			askQuestion();
 			return InputHandlerReturns::SUCCESS;
 		}
 
@@ -47,7 +47,7 @@ namespace SweetieJarWriter
 
 	DEFINE_INPUT_HANDLER_FUNC(numberInputHandler)
 	{
-		if (!interpretLongDouble(input, &number))
+		if (input.empty() || !interpretLongDouble(input, &number))
 		{
 			askNumber();
 			return InputHandlerReturns::SUCCESS;
@@ -68,7 +68,7 @@ namespace SweetieJarWriter
 
 	DEFINE_INPUT_HANDLER_FUNC(accuracyInputHandler)
 	{
-		if (!interpretLongDouble(input, &accuracy))
+		if (input.empty() || !interpretLongDouble(input, &accuracy))
 		{
 			askAccuracy();
 			return InputHandlerReturns::SUCCESS;
