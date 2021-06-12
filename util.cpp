@@ -229,21 +229,13 @@ std::wstring formatNumberSigFigs(const long double number, const size_t sigFigs,
 
 	// Round, and write just enough significant figures
 	int exp = firstDigitIndex + 1 - sigFigs;
-	long double sigExpFactor = std::powl(10.L, exp);
-	long double roundedNumber = number - std::fmodl(number, sigExpFactor);
-	switch (getDigit(number, sigFigs))
-	{
-	case L'5':
-	case L'6':
-	case L'7':
-	case L'8':
-	case L'9':
-		roundedNumber = std::ceill(roundedNumber / sigExpFactor) * sigExpFactor;
-		break;
-	default:
-		roundedNumber = std::floorl(roundedNumber / sigExpFactor) * sigExpFactor;
-		break;
-	}
+	long long expFactor = 1L;
+	for (int i = 0; i < std::abs(exp); i++) expFactor *= 10;
+	long long roundedNumber;
+	if (exp >= 0)
+		roundedNumber = std::floorl((number / (long double)expFactor) + .5L);
+	else
+		roundedNumber = std::floorl((number * (long double)expFactor) + .5L);
 	for (size_t i = 0; i < sigFigs; i++)
 		result += getDigit(roundedNumber, i);
 
