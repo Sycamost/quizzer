@@ -10,12 +10,18 @@
 #include "MultipleChoiceReader.h"
 #include "SweetieJarWriter.h"
 #include "SweetieJarReader.h"
+#include "TrueOrFalseWriter.h"
+#include "TrueOrFalseReader.h"
 #include "util.h"
+#include <functional>
 
 const std::string makeFileName(std::wstring displaySingular)
 {
 	// Get type name into list form
 	auto fileAddress = easy_list::list<wchar_t>(displaySingular.begin(), displaySingular.end());
+
+	// Replace any non-alphanumeric characters with _ (sorry!)
+	fileAddress = fileAddress.replace([](wchar_t _) -> wchar_t { return L'_'; }, std::not1(std::function<bool(wchar_t)>(iswalnum)));
 
 	// If type name ends with " question", remove that bit!
 	static const easy_list::list<wchar_t> question{ L' ', L'q', L'u', L'e', L's', L't', L'i', L'o', L'n' };
@@ -118,7 +124,15 @@ const easy_list::list<QuestionTypeInfo>* QuestionTypeInfo::getList()
 			L"sweetiejar",
 			SweetieJarWriter::get(),
 			SweetieJarReader::get()
-		}
+		},
+		QuestionTypeInfo{
+			QuestionType::TRUE_OR_FALSE,
+			L"true/false question",
+			L"true/false questions",
+			L"trueorfalse",
+			TrueOrFalseWriter::get(),
+			TrueOrFalseReader::get()
+		},
 	});
 	return &list;
 }

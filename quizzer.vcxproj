@@ -108,12 +108,15 @@
     <ClCompile>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <GenerateXMLDocumentationFiles>true</GenerateXMLDocumentationFiles>
+      <PreprocessorDefinitions>CONFIG_DEBUG</PreprocessorDefinitions>
+      <UndefinePreprocessorDefinitions>CONFIG_RELEASE</UndefinePreprocessorDefinitions>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <PreprocessorDefinitions>CONFIG_RELEASE</PreprocessorDefinitions>
+      <UndefinePreprocessorDefinitions>CONFIG_DEBUG</UndefinePreprocessorDefinitions>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -154,6 +157,9 @@
       <SubType>
       </SubType>
     </ClCompile>
+    <ClCompile Include="TrueOrFalse.cpp" />
+    <ClCompile Include="TrueOrFalseReader.cpp" />
+    <ClCompile Include="TrueOrFalseWriter.cpp" />
     <ClCompile Include="util.cpp" />
     <ClCompile Include="Write.cpp" />
     <ClCompile Include="FlashcardWriter.cpp" />
@@ -199,6 +205,9 @@
       <SubType>
       </SubType>
     </ClInclude>
+    <ClInclude Include="TrueOrFalse.h" />
+    <ClInclude Include="TrueOrFalseReader.h" />
+    <ClInclude Include="TrueOrFalseWriter.h" />
     <ClInclude Include="util.h" />
     <ClInclude Include="Write.h" />
     <ClInclude Include="FlashcardWriter.h" />

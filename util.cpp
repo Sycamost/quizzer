@@ -81,9 +81,9 @@ std::wstring indent(std::wstring wstr, int numTabs)
 const YesNo getYesNo(std::wstring str)
 {
 	str = toLower(str);
-	if (str == L"y" || str == L"yes" || str == L"1" || str == L"T" || str == L"true")
+	if (str == L"y" || str == L"yes" || str == L"1" || str == L"t" || str == L"true")
 		return YesNo::YES;
-	if (str == L"n" || str == L"no" || str == L"0" || str == L"F" || str == L"false")
+	if (str == L"n" || str == L"no" || str == L"0" || str == L"f" || str == L"false")
 		return YesNo::NO;
 	if (!Command::makePossibleCommands(str).empty())
 		return YesNo::COMMAND;
