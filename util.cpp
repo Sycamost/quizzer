@@ -202,7 +202,7 @@ wchar_t getDigit(const long double number, size_t offset)
 	return std::to_wstring(digit).front();
 }
 
-std::wstring formatNumberSigFigs(const long long number, const size_t sigFigs, const size_t leadingZeroes, const size_t minExp)
+std::wstring formatIntegerSigFigs(const long long number, const size_t sigFigs, const size_t leadingZeroes, const size_t minExp)
 {
 	auto formattedString = formatNumberSigFigs((long double)number, sigFigs, leadingZeroes, minExp);
 	return formattedString.substr(0, formattedString.find_first_of(L'.'));

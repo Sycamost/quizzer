@@ -7,9 +7,10 @@
 class SweetieJar : public Question
 {
 private:
-	std::wstring _question;
-	std::wstring _questionAppendix;
+	size_t _questionLength;
+	std::wstring _questionMsg;
 	long double _number;
+	std::wstring _numberMsg;
 	long double _accuracy;
 	size_t _sigFigsOrDecimalPoints;
 	size_t _leadingZeroes;
