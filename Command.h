@@ -75,7 +75,7 @@ public:
 	bool contradicts(CommandFlag other) const;
 	bool operator==(const CommandFlag& rhs) const;
 	std::wstring toString() const {
-		if (isValid())
+		if (_hasValue)
 			return _info.getFirstCode() + L"=" + _value;
 		return _info.getFirstCode();
 	}
@@ -117,7 +117,7 @@ public:
 	const CommandType getType() const { return _type; }
 	const std::wstring getFirstCode() const { return _codes[0]; }
 	const bool hasCode(const std::wstring code) const { return _codes.contains(code); }
-	const int countValidFlags(CommandFlagCollection flags);
+	int countValidFlags(CommandFlagCollection flags);
 	const CommandFunc getFunc() const { return _func; }
 	DEFINE_CMD_FUNC(callFunc) const { return _func(args, flags); }
 	static const easy_list::list<CommandInfo>* getList();

@@ -26,11 +26,8 @@ const std::string makeFileName(std::wstring displaySingular)
 	// Replace " " with "_"
 	fileAddress = fileAddress.replace(L'_', L' ');
 
-	// Make narrow, convert to string
-	std::string narrowStrFileAddress = fileAddress.transform<char>().toString();
-
 	// Add prefix and file extension and return
-	return "userdata_" + narrowStrFileAddress + ".txt";
+	return "userdata_" + wstrToStr(fileAddress.toString()) + ".txt";
 }
 
 const std::string initDirectory()

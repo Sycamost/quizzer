@@ -85,9 +85,11 @@ CommandHandlerReturns CommandHandler::call(std::wstring input)
 	if (possibleCommands.empty())
 		return CommandHandlerReturns::INVALID_STATE;
 
+#ifdef CONFIG_DEBUG
 	std::wcout << L"Command type:\t" << possibleCommands[0].getCommandInfo().getFirstCode() << L"\n"
 		<< L"Command arguments:" << possibleCommands[0].getArgs().transform<std::wstring>([](std::wstring arg) -> std::wstring { return L"\t" + arg; }) << L"\n"
 		<< L"Command flags:\t" << possibleCommands[0].getFlags().toString() << L"\n";
+#endif
 
 	return possibleCommands[0].doCommandFunc();
 }

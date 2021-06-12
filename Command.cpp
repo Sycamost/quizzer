@@ -103,9 +103,8 @@ const std::wstring CommandInfo::getFirstCode(const CommandType ct)
 /// Attempts to read the given input as a flag, returns null if it fails.
 /// </summary>
 /// <param name="input">The user input, not including any preceding flag markers such as '-'</param>
-/// <param name="commandType">The command type associated with this flag</param>
 /// <returns>A pointer to a flag if the input was a valid flag, null otherwise.</returns>
-CommandFlag* readCommandFlag(std::wstring input, CommandType commandType)
+CommandFlag* readCommandFlag(std::wstring input)
 {
 	auto list = CommandFlagInfo::getList();
 	size_t valueSeparatorPos = input.find(L'=');
@@ -123,14 +122,12 @@ CommandFlag* readCommandFlag(std::wstring input, CommandType commandType)
 	if (iter == list->npos())
 		return nullptr;
 
-	// Construct the flag, check it's valid, then return!
+	// Construct the flag, then return!
 	CommandFlag* flag;
 	if (!hasValue)
 		flag = new CommandFlag(*iter);
 	else
 		flag = new CommandFlag(*iter, input.substr(valueSeparatorPos));
-	if (!flag->isValid(commandType))
-		return nullptr;
 	return flag;
 }
 
@@ -173,13 +170,13 @@ easy_list::list<Command> Command::makePossibleCommands(std::wstring input)
 		auto word = words[i];
 		if (word[0] != L'-')
 			break;
-		auto flag = readCommandFlag(word.substr(1));
+		CommandFlag* flag = readCommandFlag(word.substr(1));
 		if (flag != nullptr)
 			flags.add(*flag);
 	}
 	
 	// Select only the command infos with the most valid flags
-	int maxValidFlags = possibleCommandInfos.transform<int>(&CommandInfo::countValidFlags, flags).max();
+	int maxValidFlags = possibleCommandInfos.transform<int>([flags](CommandInfo ci) -> int { return ci.countValidFlags(flags); }).max();
 	possibleCommandInfos = possibleCommandInfos.select(maxValidFlags, &CommandInfo::countValidFlags, flags);
 
 	// For each possible command info, return a command containing all provided arguments and all valid flags
@@ -214,7 +211,7 @@ Command::Command(easy_list::list<std::wstring> args, CommandFlagCollection flags
 	_commandInfo(commandInfo)
 {}
 
-const int CommandInfo::countValidFlags(CommandFlagCollection flags)
+int CommandInfo::countValidFlags(CommandFlagCollection flags)
 {
 	return flags.getList().select(true, &CommandFlag::isValid, _type).size();
 }
