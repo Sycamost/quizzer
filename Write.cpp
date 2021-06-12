@@ -71,7 +71,7 @@ DEFINE_CMD_FUNC(Write::cmdFuncQuitWrite)
 
 void Write::startWriting(const QuestionTypeInfo qti)
 {
-	std::wcout << "Writing new " << qti.getDisplayPlural() << L"...\n\n";
+	std::wcout << "\nWriting new " << qti.getDisplayPlural() << L"...\n";
 	_typeInfo = qti;
 	_typeInfo.getWriter()->writeQuestion();
 }
@@ -94,7 +94,10 @@ easy_list::list<Question*> Write::writeToFile()
 	}
 
 	for (Question* question : _newQuestions)
+	{
+		file << L"\n\n";
 		question->write(file);
+	}
 
 	file.close();
 	return _newQuestions;

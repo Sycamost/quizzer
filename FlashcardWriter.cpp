@@ -48,6 +48,12 @@ namespace FlashcardWriter
 
 	DEFINE_INPUT_HANDLER_FUNC(caseSensitiveInputHandlerFunc)
 	{
+		if (input.empty())
+		{
+			askCaseSensitive();
+			return InputHandlerReturns::SUCCESS;
+		}
+
 		auto yesNo = getYesNo(input);
 
 		if (yesNo || !yesNo)

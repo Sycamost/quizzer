@@ -2,6 +2,7 @@
 #include "Read.h"
 #include "QuestionTypeInfo.h"
 #include "QuestionList.h"
+#include "util.h"
 
 void read()
 {
@@ -11,7 +12,7 @@ void read()
 	{
 		std::wifstream file;
 		auto fileAddress = qti.getFileAddress();
-		auto wFileAddress = std::wstring(fileAddress.begin(), fileAddress.end());
+		auto wFileAddress = strToWstr(fileAddress);
 		int countRead = 0;
 		try
 		{

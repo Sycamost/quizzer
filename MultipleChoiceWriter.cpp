@@ -24,7 +24,7 @@ namespace MultipleChoiceWriter
 
 	DEFINE_INPUT_HANDLER_FUNC(questionInputHandler)
 	{
-		if (input == L"")
+		if (input.empty())
 		{
 			askQuestion();
 			return InputHandlerReturns::SUCCESS;
@@ -37,7 +37,7 @@ namespace MultipleChoiceWriter
 
 	DEFINE_INPUT_HANDLER_FUNC(correctAnswerInputHandler)
 	{
-		if (input == L"")
+		if (input.empty())
 		{
 			askCorrectAnswer();
 			return InputHandlerReturns::SUCCESS;
@@ -50,7 +50,7 @@ namespace MultipleChoiceWriter
 
 	DEFINE_INPUT_HANDLER_FUNC(wrongAnswerInputHandler)
 	{
-		if (input == L"")
+		if (input.empty())
 		{
 			wrongAnswers.push_back(input);
 			QuestionWriter::writeTags();

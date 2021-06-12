@@ -26,10 +26,9 @@ Question::Question(QuestionType type, easy_list::list<std::wstring> tags) :
 void Question::write(std::wofstream& stream)
 {
 	writeChildData(stream);
-	stream << Globals::fileEscapeChar << L"tags\n";
+	stream << Globals::fileEscapeChar << L"tags";
 	for (auto tag : _tags)
-		stream << tag << L"\n";
-	stream << L"\n";
+		stream << L"\n" << tag;
 }
 
 easy_list::list<std::wstring> Question::getTags()
