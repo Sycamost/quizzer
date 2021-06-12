@@ -16,7 +16,7 @@ SweetieJar::SweetieJar(std::wstring question, long double number, long double ac
 			)
 		),
 	_number(number),
-	_numberMsg((_decimalPoints ? formatNumberDecimalPoints : formatNumberSigFigs)(_number, _sigFigsOrDecimalPoints, _leadingZeroes, _displayAsExp ? 0 : SIZE_MAX)),
+	_numberMsg((decimalPoints ? formatNumberDecimalPoints : formatNumberSigFigs)(number, sigFigsOrDecimalPoints, leadingZeroes, displayAsExp ? 0 : SIZE_MAX)),
 	_accuracy(accuracy),
 	_sigFigsOrDecimalPoints(sigFigsOrDecimalPoints),
 	_leadingZeroes(leadingZeroes),
@@ -38,7 +38,7 @@ SweetieJar::SweetieJar(std::wstring question, long long number, long long accura
 			)
 		),
 	_number((long double)number),
-	_numberMsg((_decimalPoints ? formatNumberDecimalPoints : formatNumberSigFigs)(_number, _sigFigsOrDecimalPoints, _leadingZeroes, _displayAsExp ? 0 : SIZE_MAX)),
+	_numberMsg((decimalPoints ? formatNumberDecimalPoints : formatNumberSigFigs)(number, sigFigsOrDecimalPoints, leadingZeroes, displayAsExp ? 0 : SIZE_MAX)),
 	_accuracy((long double)accuracy),
 	_sigFigsOrDecimalPoints(sigFigsOrDecimalPoints),
 	_leadingZeroes(leadingZeroes),
