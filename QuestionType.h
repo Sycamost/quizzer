@@ -3,5 +3,6 @@
 enum class QuestionType {
 	FLASHCARD,
 	MULTIPLE_CHOICE,
-	SWEETIE_JAR
+	SWEETIE_JAR,
+	TRUE_OR_FALSE,
 };

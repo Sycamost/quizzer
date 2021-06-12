@@ -48,7 +48,7 @@ What children are there of <code>Question</code>?
 | [SweetieJar](#SweetieJar)         | The user must guess a number to some specified accuracy.                  | :heavy_check_mark: |
 | Birthday                          | The user must guess a date to some given accuracy.                        | :x:                |
 | Partition                         | The user must correctly partition given items into given categories.      | :x:                |
-| TrueOrFalse                       | The user must correctly guess whether a given statement is true or false. | :x:                |
+| [TrueOrFalse](#TrueOrFalse)       | The user must correctly guess whether a given statement is true or false. | :heavy_check_mark: |
 
 ## Write
 
@@ -75,3 +75,7 @@ Multiple choice questions come with a question, a correct answer, and a collecti
 ### SweetieJar
 
 A SweetieJar question asks the user to guess a certain number to within a specified degree of error.
+
+### TrueOrFalse
+
+Like it says on the tin - the user is given a statement, or prompt, and must guess whether the prompt is true or false.

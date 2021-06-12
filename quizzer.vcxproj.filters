@@ -108,6 +108,15 @@
     <ClCompile Include="SweetieJarWriter.cpp">
       <Filter>Source Files\Write</Filter>
     </ClCompile>
+    <ClCompile Include="TrueOrFalseWriter.cpp">
+      <Filter>Source Files\Write</Filter>
+    </ClCompile>
+    <ClCompile Include="TrueOrFalseReader.cpp">
+      <Filter>Source Files\Read</Filter>
+    </ClCompile>
+    <ClCompile Include="TrueOrFalse.cpp">
+      <Filter>Source Files\Question</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="util.h">
@@ -184,6 +193,15 @@
     </ClInclude>
     <ClInclude Include="SweetieJarWriter.h">
       <Filter>Header Files\Write</Filter>
+    </ClInclude>
+    <ClInclude Include="TrueOrFalseWriter.h">
+      <Filter>Header Files\Write</Filter>
+    </ClInclude>
+    <ClInclude Include="TrueOrFalseReader.h">
+      <Filter>Header Files\Read</Filter>
+    </ClInclude>
+    <ClInclude Include="TrueOrFalse.h">
+      <Filter>Header Files\Question</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
