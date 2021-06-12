@@ -50,5 +50,8 @@ Question* QuestionReader::read(std::wifstream& stream)
 		}
 	}
 
-	return nullptr;
+	if (stage == Stage::TAGS)
+		return _constructCurrent(options, tags);
+	else
+		return nullptr;
 }
