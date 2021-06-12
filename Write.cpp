@@ -94,7 +94,10 @@ easy_list::list<Question*> Write::writeToFile()
 	}
 
 	for (Question* question : _newQuestions)
+	{
+		file << L"\n\n";
 		question->write(file);
+	}
 
 	file.close();
 	return _newQuestions;
