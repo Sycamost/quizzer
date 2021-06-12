@@ -117,6 +117,48 @@ easy_list::list<std::wstring> splitByWord(std::wstring wstr)
 	return result;
 }
 
+easy_list::list<std::wstring> splitByWordOrQuotes(std::wstring wstr)
+{
+	easy_list::list<std::wstring> result = easy_list::list<std::wstring>();
+
+	std::wstring currentStr = L"";
+	bool waitingForEndQuote = false;
+	for (unsigned int i = 0; i < wstr.length(); i++)
+	{
+		if (wstr[i] == L'\"')
+		{
+			if (waitingForEndQuote)
+			{
+				result.push_back(currentStr);
+				currentStr = L"";
+				waitingForEndQuote = false;
+			}
+			else
+				waitingForEndQuote = true;
+			continue;
+		}
+
+		else if (wstr[i] == L' ')
+		{
+			if (!currentStr.empty())
+			{
+				result.push_back(currentStr);
+				currentStr = L"";
+			}
+			continue;
+		}
+
+		currentStr.push_back(wstr[i]);
+	}
+	if (!currentStr.empty())
+	{
+		result.push_back(currentStr);
+		currentStr = L"";
+	}
+
+	return result;
+}
+
 int getFirstDigitIndex(const long double number)
 {
 	if (number < 0.L)
