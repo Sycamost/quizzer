@@ -36,7 +36,7 @@ const std::string makeFileName(std::wstring displaySingular)
 const std::string initDirectory()
 {
 #if defined CONFIG_DEBUG
-	static const std::string directory = "";
+	static const std::string directory = ".\\";
 #elif defined CONFIG_RELEASE
 	static const std::string directory = std::getenv("APPDATA") + std::string("\\Quizzer\\");
 #endif
