@@ -8,6 +8,8 @@
 #include "FlashcardReader.h"
 #include "MultipleChoiceWriter.h"
 #include "MultipleChoiceReader.h"
+#include "SweetieJarWriter.h"
+#include "SweetieJarReader.h"
 #include "util.h"
 
 const std::string makeFileName(std::wstring displaySingular)
@@ -24,11 +26,11 @@ const std::string makeFileName(std::wstring displaySingular)
 	// Replace " " with "_"
 	fileAddress = fileAddress.replace(L'_', L' ');
 
-	// Make narrow
-	auto narrowFileAddress = fileAddress.transform<char>();
+	// Make narrow, convert to string
+	std::string narrowStrFileAddress = fileAddress.transform<char>().toString();
 
-	// Make string, prefix and file extension and return
-	return "userdata_" + std::string(narrowFileAddress.begin(), narrowFileAddress.end()) + ".txt";
+	// Add prefix and file extension and return
+	return "userdata_" + narrowStrFileAddress + ".txt";
 }
 
 const std::string initDirectory()
@@ -112,6 +114,13 @@ const easy_list::list<QuestionTypeInfo>* QuestionTypeInfo::getList()
 			L"multiplechoice",
 			MultipleChoiceWriter::get(),
 			MultipleChoiceReader::get()
+		},
+		QuestionTypeInfo{
+			QuestionType::SWEETIE_JAR,
+			L"sweetie jar",
+			L"sweetiejar",
+			SweetieJarWriter::get(),
+			SweetieJarReader::get()
 		}
 	});
 	return &list;

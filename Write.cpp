@@ -71,7 +71,7 @@ DEFINE_CMD_FUNC(Write::cmdFuncQuitWrite)
 
 void Write::startWriting(const QuestionTypeInfo qti)
 {
-	std::wcout << "Writing new " << qti.getDisplayPlural() << L"...\n\n";
+	std::wcout << "\nWriting new " << qti.getDisplayPlural() << L"...\n";
 	_typeInfo = qti;
 	_typeInfo.getWriter()->writeQuestion();
 }

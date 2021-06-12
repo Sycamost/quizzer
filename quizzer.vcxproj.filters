@@ -99,6 +99,15 @@
     <ClCompile Include="MultipleChoiceWriter.cpp">
       <Filter>Source Files\Write</Filter>
     </ClCompile>
+    <ClCompile Include="SweetieJar.cpp">
+      <Filter>Source Files\Question</Filter>
+    </ClCompile>
+    <ClCompile Include="SweetieJarReader.cpp">
+      <Filter>Source Files\Read</Filter>
+    </ClCompile>
+    <ClCompile Include="SweetieJarWriter.cpp">
+      <Filter>Source Files\Write</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="util.h">
@@ -165,6 +174,15 @@
       <Filter>Header Files\Read</Filter>
     </ClInclude>
     <ClInclude Include="MultipleChoiceWriter.h">
+      <Filter>Header Files\Write</Filter>
+    </ClInclude>
+    <ClInclude Include="SweetieJar.h">
+      <Filter>Header Files\Question</Filter>
+    </ClInclude>
+    <ClInclude Include="SweetieJarReader.h">
+      <Filter>Header Files\Read</Filter>
+    </ClInclude>
+    <ClInclude Include="SweetieJarWriter.h">
       <Filter>Header Files\Write</Filter>
     </ClInclude>
   </ItemGroup>
