@@ -41,14 +41,14 @@ Every <code>Question</code> must be able to return its question string, be able 
 
 What children are there of <code>Question</code>?
 
-| Name           | Description                                                               | Implemented?       |
-| :------------- | :-----------------------------------------------------------------------  | :----------------- |
-| Flashcard      | Shows the user the front, they have to guess what's on the back.          | :heavy_check_mark: |
-| MultipleChoice | Asks the user a multiple-choice question, they have to guess the option.  | :heavy_check_mark: |
-| SweetieJar     | The user must guess a number to some specified accuracy.                  | :x:                |
-| Birthday       | The user must guess a date to some given accuracy.                        | :x:                |
-| Partition      | The user must correctly partition given items into given categories.      | :x:                |
-| TrueOrFalse    | The user must correctly guess whether a given statement is true or false. | :x:                |
+| Name                              | Description                                                               | Implemented?       |
+| :-------------------------------- | :------------------------------------------------------------------------ | :----------------- |
+| [Flashcard](#Flashcard)           | Shows the user the front, they have to guess what's on the back.          | :heavy_check_mark: |
+| [MultipleChoice](#MultipleChoice) | Asks the user a multiple-choice question, they have to guess the option.  | :heavy_check_mark: |
+| [SweetieJar](#SweetieJar)         | The user must guess a number to some specified accuracy.                  | :heavy_check_mark: |
+| Birthday                          | The user must guess a date to some given accuracy.                        | :x:                |
+| Partition                         | The user must correctly partition given items into given categories.      | :x:                |
+| TrueOrFalse                       | The user must correctly guess whether a given statement is true or false. | :x:                |
 
 ## Write
 
@@ -64,10 +64,14 @@ There is no way to delete questions in-app. The user may do so manually. Questio
 
 ## Implementations of Question
 
-### Flashcards
+### Flashcard
 
 In this program, each flashcard has a string value for the front, a string value for the back, and a list of zero or more string tags.
 
-### Multiple Choice
+### MultipleChoice
 
 Multiple choice questions come with a question, a correct answer, and a collection of incorrect answers. The user is presented with the question and all the alternative answers and asked which answer is the correct one.
+
+### SweetieJar
+
+A SweetieJar question asks the user to guess a certain number to within a specified degree of error.

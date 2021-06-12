@@ -32,6 +32,7 @@ QuestionWriter::QuestionWriter(
 
 void QuestionWriter::writeQuestion()
 {
+	std::wcout << L"\n";
 	_writeChildData();
 }
 

@@ -26,8 +26,10 @@ Question* QuestionReader::read(std::wifstream& stream)
 	{
 		std::wstring line = getInputLine(stream);
 
-		if (line == L"")
-			break;
+		if (line == L"" || stream.eof())
+		{
+			return _constructCurrent(options, tags);
+		}
 
 		else if (line == Globals::fileStartOfTags)
 		{

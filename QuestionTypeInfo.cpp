@@ -1,13 +1,18 @@
 #include <easy_list.h>
 #include <algorithm>
+#include <cstdlib>
+#include <filesystem>
+#include <fstream>
 #include "QuestionTypeInfo.h"
 #include "FlashcardWriter.h"
 #include "FlashcardReader.h"
 #include "MultipleChoiceWriter.h"
 #include "MultipleChoiceReader.h"
+#include "SweetieJarWriter.h"
+#include "SweetieJarReader.h"
 #include "util.h"
 
-const std::string makeFileAddress(std::wstring displaySingular)
+const std::string makeFileName(std::wstring displaySingular)
 {
 	// Get type name into list form
 	auto fileAddress = easy_list::list<wchar_t>(displaySingular.begin(), displaySingular.end());
@@ -21,11 +26,43 @@ const std::string makeFileAddress(std::wstring displaySingular)
 	// Replace " " with "_"
 	fileAddress = fileAddress.replace(L'_', L' ');
 
-	// Make narrow
-	auto narrowFileAddress = fileAddress.transform<char>();
+	// Make narrow, convert to string
+	std::string narrowStrFileAddress = fileAddress.transform<char>().toString();
 
-	// Make string, add prefix and file extension and return
-	return "userdata_" + std::string(narrowFileAddress.begin(), narrowFileAddress.end()) + ".txt";
+	// Add prefix and file extension and return
+	return "userdata_" + narrowStrFileAddress + ".txt";
+}
+
+const std::string initDirectory()
+{
+#if defined CONFIG_DEBUG
+	static const std::string directory = ".\\";
+#elif defined CONFIG_RELEASE
+	static const std::string directory = std::getenv("APPDATA") + std::string("\\Quizzer\\");
+#endif
+	if (!std::filesystem::exists(directory))
+	{
+		std::filesystem::create_directory(directory);
+	}
+	return directory;
+}
+
+const std::string getDirectory()
+{
+	static const std::string directory = initDirectory();
+	return directory;
+}
+
+const std::string initFileAddress(std::string fileAddress)
+{
+	using namespace std::filesystem;
+	if (!exists(fileAddress))
+	{
+		std::wofstream file = std::wofstream();
+		file.open(fileAddress, std::ios::app);
+		file.close();
+	}
+	return fileAddress;
 }
 
 QuestionTypeInfo::QuestionTypeInfo(
@@ -41,7 +78,7 @@ QuestionTypeInfo::QuestionTypeInfo(
 	_code(code),
 	_writer(writer),
 	_reader(reader),
-	_fileAddress(makeFileAddress(_displaySingular))
+	_fileAddress(initFileAddress(getDirectory() + makeFileName(_displaySingular)))
 {}
 
 QuestionTypeInfo::QuestionTypeInfo(
@@ -58,7 +95,7 @@ QuestionTypeInfo::QuestionTypeInfo(
 	_code(code),
 	_writer(writer),
 	_reader(reader),
-	_fileAddress(makeFileAddress(_displaySingular))
+	_fileAddress(initFileAddress(getDirectory() + makeFileName(_displaySingular)))
 {}
 
 const easy_list::list<QuestionTypeInfo>* QuestionTypeInfo::getList()
@@ -77,6 +114,13 @@ const easy_list::list<QuestionTypeInfo>* QuestionTypeInfo::getList()
 			L"multiplechoice",
 			MultipleChoiceWriter::get(),
 			MultipleChoiceReader::get()
+		},
+		QuestionTypeInfo{
+			QuestionType::SWEETIE_JAR,
+			L"sweetie jar",
+			L"sweetiejar",
+			SweetieJarWriter::get(),
+			SweetieJarReader::get()
 		}
 	});
 	return &list;
