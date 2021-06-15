@@ -121,6 +121,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Command.cpp" />
+    <ClCompile Include="CommandFlag.cpp" />
     <ClCompile Include="Flashcard.cpp" />
     <ClCompile Include="FlashcardReader.cpp" />
     <ClCompile Include="globals.cpp" />
@@ -163,6 +164,8 @@
     <ClCompile Include="QuestionWriter.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="CommandFlag.h" />
+    <ClInclude Include="CommandType.h" />
     <ClInclude Include="HandlerReturns.h" />
     <ClInclude Include="Handlers.h" />
     <ClInclude Include="Command.h" />
