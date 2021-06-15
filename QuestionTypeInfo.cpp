@@ -101,21 +101,21 @@ const easy_list::list<QuestionTypeInfo>* QuestionTypeInfo::getList()
 		QuestionTypeInfo{
 			QuestionType::FLASHCARD,
 			L"flashcard",
-			{ L"flashcard" },
+			{ L"flashcard", L"fc" },
 			FlashcardWriter::get(),
 			FlashcardReader::get()
 		},
 		QuestionTypeInfo{
 			QuestionType::MULTIPLE_CHOICE,
 			L"multiple choice question",
-			{ L"multiplechoice" },
+			{ L"multiplechoice", L"mc" },
 			MultipleChoiceWriter::get(),
 			MultipleChoiceReader::get()
 		},
 		QuestionTypeInfo{
 			QuestionType::SWEETIE_JAR,
 			L"sweetie jar",
-			{ L"sweetiejar" },
+			{ L"sweetiejar", L"sj" },
 			SweetieJarWriter::get(),
 			SweetieJarReader::get()
 		}
