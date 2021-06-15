@@ -13,7 +13,7 @@ DEFINE_BEFORE_HANDLER_FUNC(defaultBeforeHandlerFunc) {}
 InputHandlerFunc InputHandler::_handlerFunc{ &defaultInputHandlerFunc };
 BeforeHandlerFunc InputHandler::_beforeHandlerFunc{ &defaultBeforeHandlerFunc };
 std::wstring InputHandler::_beforeHandlerMsg{ L"" };
-easy_list::list<CommandType> CommandHandler::_validCommandTypes{ easy_list::list<CommandType>({ DEFAULT_VALID_COMMAND_TYPES }) };
+easy_list::list<CommandType> CommandHandler::_validCommandTypes{ easy_list::list<CommandType>({ DEFAULT_VALID_COMMAND_TYPES, CommandType::HELP }) };
 
 /// <summary>
 /// Sets the state of input handling.
@@ -53,10 +53,10 @@ void setInputHandling(const std::wstring beforeHandlerMsg, const InputHandlerFun
 /// <summary>
 /// Sets the state of command handling.
 /// </summary>
-/// <param name="validCommandTypes">These command types precisely will be executed until this function is called again.</param>
+/// <param name="validCommandTypes">These command types precisely, plus the help command, will be executable until this function is called again.</param>
 void setCommandHandling(const easy_list::list<CommandType> validCommandTypes)
 {
-	CommandHandler::_validCommandTypes = validCommandTypes;
+	CommandHandler::_validCommandTypes = validCommandTypes.unify({ CommandType::HELP });
 }
 
 void setHandlingDefault()

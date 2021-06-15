@@ -1,6 +1,7 @@
 #pragma once
 
 enum class CommandType {
+	HELP,
 	CANCEL,
 	QUIT_MAIN,
 	QUIT_PLAY,
@@ -8,5 +9,5 @@ enum class CommandType {
 	WRITE,
 	BOOST,
 	CONCEDE,
-	PLAY
+	PLAY,
 };

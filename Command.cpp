@@ -18,6 +18,7 @@ const easy_list::list<CommandInfo>* CommandInfo::getList()
 {
 	static const easy_list::list<std::wstring> quitCodes{ L"quit", L"exit" };
 	static const auto list = easy_list::list<CommandInfo>({
+		CommandInfo(CommandType::HELP, { L"help", L"h" }, &CommandInfo::cmdFuncHelp),
 		CommandInfo(CommandType::QUIT_MAIN, quitCodes, &cmdFuncQuit),
 		CommandInfo(CommandType::WRITE, { L"write" }, &Write::cmdFuncWrite),
 		CommandInfo(CommandType::CANCEL, { L"cancel" }, &Write::cmdFuncCancel),
@@ -37,6 +38,16 @@ const std::wstring CommandInfo::getFirstCode(const CommandType ct)
 	if (iter == list->npos())
 		return L"!ERROR!";
 	return iter->getFirstCode();
+}
+
+DEFINE_CMD_FUNC(CommandInfo::cmdFuncHelp)
+{
+	// List all commands
+	std::wcout << L"\n";
+	for (CommandInfo cmdInfo : *getList())
+		std::wcout << cmdInfo.getFirstCode() << L"\n";
+	std::wcout << L"\n";
+	return CommandHandlerReturns::SUCCESS;
 }
 
 /// <summary>

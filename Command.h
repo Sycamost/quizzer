@@ -22,6 +22,7 @@ public:
 	DEFINE_CMD_FUNC(callFunc) const { return _func(args, flags); }
 	static const easy_list::list<CommandInfo>* getList();
 	static const std::wstring getFirstCode(const CommandType ct);
+	static DECLARE_CMD_FUNC(cmdFuncHelp);
 	bool operator==(const CommandInfo& other);
 private:
 	const CommandType _type;
