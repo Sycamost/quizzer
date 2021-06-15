@@ -108,12 +108,15 @@
     <ClCompile>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <GenerateXMLDocumentationFiles>true</GenerateXMLDocumentationFiles>
+      <PreprocessorDefinitions>CONFIG_DEBUG</PreprocessorDefinitions>
+      <UndefinePreprocessorDefinitions>CONFIG_RELEASE</UndefinePreprocessorDefinitions>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <PreprocessorDefinitions>CONFIG_RELEASE</PreprocessorDefinitions>
+      <UndefinePreprocessorDefinitions>CONFIG_DEBUG</UndefinePreprocessorDefinitions>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
