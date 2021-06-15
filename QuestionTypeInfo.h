@@ -10,7 +10,7 @@ public:
 	const QuestionType getType() const { return _type; }
 	const std::wstring getDisplaySingular() const { return _displaySingular; }
 	const std::wstring getDisplayPlural() const { return _displayPlural; }
-	const std::wstring getCode() const { return _code; }
+	const bool hasCode(std::wstring code) const { return _codes.contains(code); }
 	const std::string getFileAddress() const;
 	QuestionWriter* getWriter() { return &_writer; }
 	QuestionReader* getReader() { return &_reader; }
@@ -25,21 +25,21 @@ private:
 	QuestionType _type;
 	std::wstring _displaySingular;
 	std::wstring _displayPlural;
-	std::wstring _code;
+	easy_list::list<std::wstring> _codes;
 	QuestionWriter _writer;
 	QuestionReader _reader;
 	std::string _fileAddress;
 	QuestionTypeInfo(
 		QuestionType type,
 		std::wstring display,
-		std::wstring code,
+		easy_list::list<std::wstring> codes,
 		QuestionWriter writer,
 		QuestionReader reader);
 	QuestionTypeInfo(
 		QuestionType type,
 		std::wstring displaySingular,
 		std::wstring displayPlural,
-		std::wstring code,
+		easy_list::list<std::wstring> codes,
 		QuestionWriter writer,
 		QuestionReader reader);
 };
