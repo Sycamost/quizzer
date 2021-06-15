@@ -108,6 +108,9 @@
     <ClCompile Include="SweetieJarWriter.cpp">
       <Filter>Source Files\Write</Filter>
     </ClCompile>
+    <ClCompile Include="CommandFlag.cpp">
+      <Filter>Source Files\UI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="util.h">
@@ -184,6 +187,12 @@
     </ClInclude>
     <ClInclude Include="SweetieJarWriter.h">
       <Filter>Header Files\Write</Filter>
+    </ClInclude>
+    <ClInclude Include="CommandFlag.h">
+      <Filter>Header Files\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="CommandType.h">
+      <Filter>Header Files\UI</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
