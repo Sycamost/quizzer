@@ -17,6 +17,7 @@ public:
 	const CommandType getType() const { return _type; }
 	const std::wstring getFirstCode() const { return _codes[0]; }
 	const bool hasCode(const std::wstring code) const { return _codes.contains(code); }
+	std::wstring getHelp() const { return _help; }
 	int countValidFlags(CommandFlagCollection flags);
 	const CommandFunc getFunc() const { return _func; }
 	DEFINE_CMD_FUNC(callFunc) const { return _func(args, flags); }
@@ -28,9 +29,11 @@ private:
 	const CommandType _type;
 	const easy_list::list<std::wstring> _codes;
 	const CommandFunc _func;
-	CommandInfo(const CommandType type, easy_list::list<std::wstring> codes, const CommandFunc func) :
+	const std::wstring _help;
+	CommandInfo(const CommandType type, easy_list::list<std::wstring> codes, const std::wstring help, const CommandFunc func) :
 		_type(type),
 		_codes(codes),
+		_help(help),
 		_func(func)
 	{}
 };

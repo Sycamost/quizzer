@@ -18,15 +18,51 @@ const easy_list::list<CommandInfo>* CommandInfo::getList()
 {
 	static const easy_list::list<std::wstring> quitCodes{ L"quit", L"exit" };
 	static const auto list = easy_list::list<CommandInfo>({
-		CommandInfo(CommandType::HELP, { L"help", L"h" }, &CommandInfo::cmdFuncHelp),
-		CommandInfo(CommandType::QUIT_MAIN, quitCodes, &cmdFuncQuit),
-		CommandInfo(CommandType::WRITE, { L"write" }, &Write::cmdFuncWrite),
-		CommandInfo(CommandType::CANCEL, { L"cancel" }, &Write::cmdFuncCancel),
-		CommandInfo(CommandType::QUIT_WRITE, quitCodes, &Write::cmdFuncQuitWrite),
-		CommandInfo(CommandType::PLAY, { L"play" }, &Play::cmdFuncPlay),
-		CommandInfo(CommandType::BOOST, { L"boost" }, &Play::cmdFuncBoost),
-		CommandInfo(CommandType::CONCEDE, { L"concede" }, &Play::cmdFuncConcede),
-		CommandInfo(CommandType::QUIT_PLAY, quitCodes, &Play::cmdFuncQuitPlay)
+		CommandInfo(
+			CommandType::HELP,
+			{ L"help", L"h" },
+			L"lists all commands",
+			&CommandInfo::cmdFuncHelp),
+		CommandInfo(
+			CommandType::QUIT_MAIN,
+			quitCodes,
+			L"quits the program (from the main loop)",
+			&cmdFuncQuit),
+		CommandInfo(
+			CommandType::WRITE,
+			{ L"write" },
+			L"starts writing new questions",
+			&Write::cmdFuncWrite),
+		CommandInfo(
+			CommandType::CANCEL,
+			{ L"cancel" },
+			L"when writing questions, cancels writing the current question",
+			&Write::cmdFuncCancel),
+		CommandInfo(
+			CommandType::QUIT_WRITE,
+			quitCodes,
+			L"quits the program (from the main loop)",
+			&Write::cmdFuncQuitWrite),
+		CommandInfo(
+			CommandType::PLAY,
+			{ L"play" },
+			L"starts play",
+			&Play::cmdFuncPlay),
+		CommandInfo(
+			CommandType::BOOST,
+			{ L"boost" },
+			L"when playing, if the last question was marked incorrect, re-marks it as correct",
+			&Play::cmdFuncBoost),
+		CommandInfo(
+			CommandType::CONCEDE,
+			{ L"concede" },
+			L"when playing, quits play early, skipping all remaining questions",
+			&Play::cmdFuncConcede),
+		CommandInfo(
+			CommandType::QUIT_PLAY,
+			quitCodes,
+			L"quits the program (from play)",
+			&Play::cmdFuncQuitPlay)
 	});
 	return &list;
 }
@@ -45,7 +81,7 @@ DEFINE_CMD_FUNC(CommandInfo::cmdFuncHelp)
 	// List all commands
 	std::wcout << L"\n";
 	for (CommandInfo cmdInfo : *getList())
-		std::wcout << cmdInfo.getFirstCode() << L"\n";
+		std::wcout << cmdInfo.getFirstCode() << L" --- " << cmdInfo.getHelp() << L"\n";
 	std::wcout << L"\n";
 	return CommandHandlerReturns::SUCCESS;
 }
