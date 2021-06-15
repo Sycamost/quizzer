@@ -65,14 +65,14 @@ const std::string initFileAddress(std::string fileAddress)
 QuestionTypeInfo::QuestionTypeInfo(
 	QuestionType type,
 	std::wstring display,
-	std::wstring code,
+	easy_list::list<std::wstring> codes,
 	QuestionWriter writer,
 	QuestionReader reader)
 	:
 	_type(type),
 	_displaySingular(display),
 	_displayPlural(display + L"s"),
-	_code(code),
+	_codes(codes),
 	_writer(writer),
 	_reader(reader),
 	_fileAddress(initFileAddress(getDirectory() + makeFileName(_displaySingular)))
@@ -82,14 +82,14 @@ QuestionTypeInfo::QuestionTypeInfo(
 	QuestionType type,
 	std::wstring displaySingular,
 	std::wstring displayPlural,
-	std::wstring code,
+	easy_list::list<std::wstring> codes,
 	QuestionWriter writer,
 	QuestionReader reader)
 	:
 	_type(type),
 	_displaySingular(displaySingular),
 	_displayPlural(displayPlural),
-	_code(code),
+	_codes(codes),
 	_writer(writer),
 	_reader(reader),
 	_fileAddress(initFileAddress(getDirectory() + makeFileName(_displaySingular)))
@@ -101,21 +101,21 @@ const easy_list::list<QuestionTypeInfo>* QuestionTypeInfo::getList()
 		QuestionTypeInfo{
 			QuestionType::FLASHCARD,
 			L"flashcard",
-			L"flashcard",
+			{ L"flashcard" },
 			FlashcardWriter::get(),
 			FlashcardReader::get()
 		},
 		QuestionTypeInfo{
 			QuestionType::MULTIPLE_CHOICE,
 			L"multiple choice question",
-			L"multiplechoice",
+			{ L"multiplechoice" },
 			MultipleChoiceWriter::get(),
 			MultipleChoiceReader::get()
 		},
 		QuestionTypeInfo{
 			QuestionType::SWEETIE_JAR,
 			L"sweetie jar",
-			L"sweetiejar",
+			{ L"sweetiejar" },
 			SweetieJarWriter::get(),
 			SweetieJarReader::get()
 		}
@@ -130,7 +130,7 @@ const easy_list::list<QuestionTypeInfo>::const_iterator QuestionTypeInfo::get(Qu
 
 const easy_list::list<QuestionTypeInfo>::const_iterator QuestionTypeInfo::get(std::wstring code)
 {
-	return getList()->search(code, &QuestionTypeInfo::getCode);
+	return getList()->search(true, &QuestionTypeInfo::hasCode, code);
 }
 
 const std::string QuestionTypeInfo::getFileAddress() const
